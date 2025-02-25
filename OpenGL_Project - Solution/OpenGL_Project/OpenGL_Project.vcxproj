@@ -149,8 +149,12 @@
     <ClCompile Include="ShaderLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PositionOnly.vert" />
     <None Include="Resources\Shaders\FixedColor.frag" />
     <None Include="Resources\Shaders\FixedTriangle.vert" />
+    <None Include="VertexColor.frag" />
+    <None Include="VertexColour.vert" />
+    <None Include="VertexColourFade.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShaderLoader.h" />

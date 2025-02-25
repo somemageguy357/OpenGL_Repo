@@ -13,14 +13,17 @@ GLuint uiProgramFixedTri = 0;
 
 GLfloat fTriVertices[] = 
 {
-	0.0f, 0.0f, 0.0f,
-	-0.5f, 0.8f, 0.0f,
-	0.5f, 0.8f, 0.0f,
+	//Position				//Colour
+	0.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,
+	-0.5f, 0.8f, 0.0f,		0.0f, 1.0f, 0.0f,
+	0.5f, 0.8f, 0.0f,		0.0f, 0.0f, 1.0f,
 };
 
 GLuint uiProgramPositionOnly;
 GLuint uiVBOTri;
 GLuint uiVAOTri;
+
+GLuint uiProgramColouredTri;
 //----------------------------
 
 GLFWwindow* InitializeGLSetup();
@@ -36,18 +39,17 @@ int main()
 	{
 		bCloseProgram = true;
 	}
-	//asdasd
-	uiProgramFixedTri = ShaderLoader::CreateProgram("Resources/Shaders/FixedTriangle.vert", "Resources/Shaders/FixedColor.frag");
-	uiProgramPositionOnly = ShaderLoader::CreateProgram("Resources/Shaders/PositionOnly.vert", "Resources/Shaders/FixedColor.frag");
+
+	//uiProgramFixedTri = ShaderLoader::CreateProgram("Resources/Shaders/FixedTriangle.vert", "Resources/Shaders/FixedColor.frag");
+	//uiProgramPositionOnly = ShaderLoader::CreateProgram("Resources/Shaders/PositionOnly.vert", "Resources/Shaders/FixedColor.frag");
+	uiProgramColouredTri = ShaderLoader::CreateProgram("Resources/Shaders/VertexColour.vert", "Resources/Shaders/VertexColor.frag");
 
 	//---------------------------
 	//Generate the VAO for a triangle.
 	//---------------------------
 	//(n: number of vertex array objects to be generated, arrays: the array the objects are stored in)
 	glGenVertexArrays(1, &uiVAOTri);
-
-	//(array: the VAO to bind)
-	glBindVertexArray(uiVAOTri);
+	glBindVertexArray(uiVAOTri); //bind array
 
 	//---------------------------
 	//Generate VBO for a triangle.
@@ -66,8 +68,22 @@ int main()
 	//----------------------------------------------------------
 	//Set the Vertex Attribute information (how to interpret the vertex data).
 	//----------------------------------------------------------
-	//index: 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	//index: index of the Vertex Attribute to be modified, also maps to the layout location on the vertex shader.
+	//size: number of components for the vertex attribute. position is vector3.
+	//type: the data type of each component.
+	//normalized: specifies if the data values should be normalized and/or converted directly as they are.
+	//stride: the byte offset between consecutive vertex points.
+	//pointer: the offset of this attribute from the beginning of the vertex point.
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+
+	//Enables the vertex attribute array. uses the same index given in glVertexAttribPointer.
+	glEnableVertexAttribArray(0);
+
+	//For colour
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+	//Enables the vertex attribute array. uses the same index given in glVertexAttribPointer.
+	glEnableVertexAttribArray(1);
 
 	//Main loop.
 	while (bCloseProgram == false && glfwWindowShouldClose(poWindow) == false)
@@ -136,8 +152,12 @@ void Render(GLFWwindow* _poWindow)
 	glClear(GL_COLOR_BUFFER_BIT); //Buffers currently enabled for color writing.
 	//glClear(GL_DEPTH_BUFFER_BIT); //The depth buffer.
 
-	glUseProgram(uiProgramFixedTri);
+	//glUseProgram(uiProgramFixedTri);
+	//glUseProgram(uiProgramPositionOnly);
+	glUseProgram(uiProgramColouredTri);
+	glBindVertexArray(uiVAOTri); //bind array
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0); //unbind array
 	glUseProgram(0);
 
 	//Swaps the current buffer with the pre-loaded buffer.
