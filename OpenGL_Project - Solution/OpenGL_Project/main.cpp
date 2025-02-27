@@ -9,21 +9,42 @@
 const int kiWindowWidth = 800;
 const int kiWindowHeight = 800;
 
-GLuint uiProgramFixedTri = 0;
+float fCurrentTime = 0.0f;
 
-GLfloat fTriVertices[] = 
+GLuint uiProgramFixedTri = 0;
+GLuint uiProgramPositionOnly = 0;
+GLuint uiProgramColouredTri = 0;
+GLuint uiProgramColourFade = 0;
+
+GLfloat fQuad1[] = 
 {
 	//Position				//Colour
-	0.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,
-	-0.5f, 0.8f, 0.0f,		0.0f, 1.0f, 0.0f,
-	0.5f, 0.8f, 0.0f,		0.0f, 0.0f, 1.0f,
+	-0.5f, 0.5f, 0.0f,		1.0f, 0.0f, 0.0f,
+	0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,
+
+	0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,
+	0.5f, 0.0f, 0.0f,		1.0f, 1.0f, 1.0f,
 };
 
-GLuint uiProgramPositionOnly;
-GLuint uiVBOTri;
-GLuint uiVAOTri;
+GLfloat fQuad2[] =
+{
+	//Position				//Colour
+	-0.5f, -0.25f, 0.0f,	1.0f, 1.0f, 1.0f,
+	0.5f, -0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
+	-0.5f, -0.75f, 0.0f,	0.0f, 1.0f, 0.0f,
 
-GLuint uiProgramColouredTri;
+	0.5f, -0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
+	-0.5f, -0.75f, 0.0f,	0.0f, 1.0f, 0.0f,
+	0.5f, -0.75f, 0.0f,		1.0f, 0.0f, 0.0f,
+};
+
+GLuint uiVBOQuad1 = 0;
+GLuint uiVAOQuad1 = 0;
+
+GLuint uiVBOQuad2 = 0;
+GLuint uiVAOQuad2 = 0;
 //----------------------------
 
 GLFWwindow* InitializeGLSetup();
@@ -40,50 +61,44 @@ int main()
 		bCloseProgram = true;
 	}
 
-	//uiProgramFixedTri = ShaderLoader::CreateProgram("Resources/Shaders/FixedTriangle.vert", "Resources/Shaders/FixedColor.frag");
-	//uiProgramPositionOnly = ShaderLoader::CreateProgram("Resources/Shaders/PositionOnly.vert", "Resources/Shaders/FixedColor.frag");
-	uiProgramColouredTri = ShaderLoader::CreateProgram("Resources/Shaders/VertexColour.vert", "Resources/Shaders/VertexColor.frag");
+	uiProgramColourFade = ShaderLoader::CreateProgram("Resources/Shaders/VertexColour.vert", "Resources/Shaders/VertexColourFade.frag");
 
-	//---------------------------
-	//Generate the VAO for a triangle.
-	//---------------------------
-	//(n: number of vertex array objects to be generated, arrays: the array the objects are stored in)
-	glGenVertexArrays(1, &uiVAOTri);
-	glBindVertexArray(uiVAOTri); //bind array
+	#pragma region Quad1
+	//Generate the VAO.
+	glGenVertexArrays(1, &uiVAOQuad1);
+	glBindVertexArray(uiVAOQuad1);
 
-	//---------------------------
-	//Generate VBO for a triangle.
-	//---------------------------
-	//(n: number of buffer objects to be generated, buffers: the array the objects are stored in)
-	glGenBuffers(1, &uiVBOTri);
+	//Generate the VBO.
+	glGenBuffers(1, &uiVBOQuad1);
+	glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad1), fQuad1, GL_STATIC_DRAW);
 
-	//(target: bound target for buffer, buffer: buffer to bind)
-	glBindBuffer(GL_ARRAY_BUFFER, uiVBOTri); //vertex buffer object
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiVBOTri); //element buffer object
-
-	//(target: bound target for buffer, size: byte size of the object, data: pointer to data that is to be copied into buffer, usage: expected usage pattern)
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fTriVertices), fTriVertices, GL_STATIC_DRAW); //Created and modified once and used many times.
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(fTriVertices), fTriVertices, GL_DYNAMIC_DRAW); //Modified and repeatedly used many times.
-
-	//----------------------------------------------------------
-	//Set the Vertex Attribute information (how to interpret the vertex data).
-	//----------------------------------------------------------
-	//index: index of the Vertex Attribute to be modified, also maps to the layout location on the vertex shader.
-	//size: number of components for the vertex attribute. position is vector3.
-	//type: the data type of each component.
-	//normalized: specifies if the data values should be normalized and/or converted directly as they are.
-	//stride: the byte offset between consecutive vertex points.
-	//pointer: the offset of this attribute from the beginning of the vertex point.
+	//Set the Vertex Attribute information (colour).
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-
-	//Enables the vertex attribute array. uses the same index given in glVertexAttribPointer.
 	glEnableVertexAttribArray(0);
 
-	//For colour
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-
-	//Enables the vertex attribute array. uses the same index given in glVertexAttribPointer.
 	glEnableVertexAttribArray(1);
+	#pragma endregion
+
+	#pragma region Quad2
+	//Generate the VAO.
+	glGenVertexArrays(1, &uiVAOQuad2);
+	glBindVertexArray(uiVAOQuad2);
+
+	//Generate the VBO.
+	glGenBuffers(1, &uiVBOQuad2);
+	glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad2), fQuad2, GL_STATIC_DRAW);
+
+	//Set the Vertex Attribute information.
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	//Set the Vertex Attribute information (colour).
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	#pragma endregion
 
 	//Main loop.
 	while (bCloseProgram == false && glfwWindowShouldClose(poWindow) == false)
@@ -144,20 +159,27 @@ GLFWwindow* InitializeGLSetup()
 void Update(GLFWwindow* _poWindow)
 {
 	glfwPollEvents();
+
+	fCurrentTime = (float)glfwGetTime();
 }
 
 void Render(GLFWwindow* _poWindow)
 {
 	//Indicates the buffers to be cleared.
 	glClear(GL_COLOR_BUFFER_BIT); //Buffers currently enabled for color writing.
-	//glClear(GL_DEPTH_BUFFER_BIT); //The depth buffer.
 
-	//glUseProgram(uiProgramFixedTri);
-	//glUseProgram(uiProgramPositionOnly);
-	glUseProgram(uiProgramColouredTri);
-	glBindVertexArray(uiVAOTri); //bind array
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0); //unbind array
+	glUseProgram(uiProgramColourFade);
+
+	GLint iCurrentTimeLocation = glGetUniformLocation(uiProgramColourFade, "fCurrentTime");
+	glUniform1f(iCurrentTimeLocation, fCurrentTime);
+
+	glBindVertexArray(uiVAOQuad1);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(uiVAOQuad2);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(0);
 	glUseProgram(0);
 
 	//Swaps the current buffer with the pre-loaded buffer.

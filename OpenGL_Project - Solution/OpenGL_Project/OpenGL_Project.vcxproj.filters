@@ -26,28 +26,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ShaderLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\Shaders\FixedColor.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="Resources\Shaders\FixedTriangle.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="PositionOnly.vert">
+    <None Include="Resources\Shaders\PositionOnly.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="VertexColour.vert">
+    <None Include="Resources\Shaders\VertexColor.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="VertexColor.frag">
+    <None Include="Resources\Shaders\VertexColour.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="VertexColourFade.frag">
+    <None Include="Resources\Shaders\VertexColourFade.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
