@@ -49,5 +49,8 @@
     <None Include="Resources\Shaders\VertexColourFade.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="Resources\Shaders\WorldSpace.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

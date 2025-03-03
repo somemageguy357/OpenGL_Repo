@@ -1,6 +1,10 @@
 #include <glew.h>
 #include <glfw3.h>
 
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include <gtc/type_ptr.hpp>
+
 #include <iostream>
 #include <string>
 #include "ShaderLoader.h"
@@ -11,9 +15,6 @@ const int kiWindowHeight = 800;
 
 float fCurrentTime = 0.0f;
 
-GLuint uiProgramFixedTri = 0;
-GLuint uiProgramPositionOnly = 0;
-GLuint uiProgramColouredTri = 0;
 GLuint uiProgramColourFade = 0;
 
 GLfloat fQuad1[] = 
@@ -31,13 +32,16 @@ GLfloat fQuad1[] =
 GLfloat fQuad2[] =
 {
 	//Position				//Colour
-	-0.5f, -0.25f, 0.0f,	1.0f, 1.0f, 1.0f,
-	0.5f, -0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
-	-0.5f, -0.75f, 0.0f,	0.0f, 1.0f, 0.0f,
+	-0.25f, 0.25f, 0.0f,	1.0f, 1.0f, 1.0f,
+	0.25f, 0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
+	0.25f, -0.25f, 0.0f,	0.0f, 1.0f, 0.0f,
+	-0.25f, -0.25f, 0.0f,	1.0f, 0.0f, 0.0f,
+};
 
-	0.5f, -0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
-	-0.5f, -0.75f, 0.0f,	0.0f, 1.0f, 0.0f,
-	0.5f, -0.75f, 0.0f,		1.0f, 0.0f, 0.0f,
+GLuint iQuad2Indices[] =
+{
+	0, 1, 2,
+	0, 2, 3,
 };
 
 GLuint uiVBOQuad1 = 0;
@@ -45,6 +49,17 @@ GLuint uiVAOQuad1 = 0;
 
 GLuint uiVBOQuad2 = 0;
 GLuint uiVAOQuad2 = 0;
+
+GLuint uiEBOQuad2 = 0;
+
+glm::vec3 QuadPosition = glm::vec3(0.5f, 0.5f, 0.0f);
+glm::mat4 TranslationMatrix;
+
+float QuadRotation = 45.0f;
+glm::mat4 RotationMatrix;
+
+glm::vec3 QuadScale = glm::vec3(0.5f, 0.5f, 1.0f);
+glm::mat4 ScaleMatrix;
 //----------------------------
 
 GLFWwindow* InitializeGLSetup();
@@ -61,30 +76,35 @@ int main()
 		bCloseProgram = true;
 	}
 
-	uiProgramColourFade = ShaderLoader::CreateProgram("Resources/Shaders/VertexColour.vert", "Resources/Shaders/VertexColourFade.frag");
+	uiProgramColourFade = ShaderLoader::CreateProgram("Resources/Shaders/WorldSpace.vert", "Resources/Shaders/VertexColourFade.frag");
 
 	#pragma region Quad1
 	//Generate the VAO.
-	glGenVertexArrays(1, &uiVAOQuad1);
-	glBindVertexArray(uiVAOQuad1);
+	//glGenVertexArrays(1, &uiVAOQuad1);
+	//glBindVertexArray(uiVAOQuad1);
 
-	//Generate the VBO.
-	glGenBuffers(1, &uiVBOQuad1);
-	glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad1);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad1), fQuad1, GL_STATIC_DRAW);
+	////Generate the VBO.
+	//glGenBuffers(1, &uiVBOQuad1);
+	//glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad1);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad1), fQuad1, GL_STATIC_DRAW);
 
-	//Set the Vertex Attribute information (colour).
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	////Set the Vertex Attribute information (colour).
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	//glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
 	#pragma endregion
 
 	#pragma region Quad2
 	//Generate the VAO.
 	glGenVertexArrays(1, &uiVAOQuad2);
 	glBindVertexArray(uiVAOQuad2);
+
+	//Generate the EBO.
+	glGenBuffers(1, &uiEBOQuad2);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiEBOQuad2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(iQuad2Indices), iQuad2Indices, GL_STATIC_DRAW);
 
 	//Generate the VBO.
 	glGenBuffers(1, &uiVBOQuad2);
@@ -160,6 +180,10 @@ void Update(GLFWwindow* _poWindow)
 {
 	glfwPollEvents();
 
+	TranslationMatrix = glm::translate(glm::mat4(1.0f), QuadPosition);
+	RotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(QuadRotation), glm::vec3(0.0f, 0.0f, 1.0f));
+	ScaleMatrix = glm::scale(glm::mat4(1.0f), QuadScale);
+
 	fCurrentTime = (float)glfwGetTime();
 }
 
@@ -173,11 +197,25 @@ void Render(GLFWwindow* _poWindow)
 	GLint iCurrentTimeLocation = glGetUniformLocation(uiProgramColourFade, "fCurrentTime");
 	glUniform1f(iCurrentTimeLocation, fCurrentTime);
 
-	glBindVertexArray(uiVAOQuad1);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	GLint TranslationMatrixLocation = glGetUniformLocation(uiProgramColourFade, "TranslationMatrix");
+	glUniformMatrix4fv(TranslationMatrixLocation, 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
 
+	GLint RotationMatrixLocation = glGetUniformLocation(uiProgramColourFade, "RotationMatrix");
+	glUniformMatrix4fv(RotationMatrixLocation, 1, GL_FALSE, glm::value_ptr(RotationMatrix));
+
+	GLint ScaleMatrixLocation = glGetUniformLocation(uiProgramColourFade, "ScaleMatrix");
+	glUniformMatrix4fv(ScaleMatrixLocation, 1, GL_FALSE, glm::value_ptr(ScaleMatrix));
+
+	//Two Tris
+	//glBindVertexArray(uiVAOQuad1);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//glBindVertexArray(uiVAOQuad2);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	//Quad
 	glBindVertexArray(uiVAOQuad2);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
