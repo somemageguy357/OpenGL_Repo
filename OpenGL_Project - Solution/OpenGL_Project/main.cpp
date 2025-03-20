@@ -1,69 +1,61 @@
-#include <glew.h>
-#include <glfw3.h>
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : main.cpp
+Description : Entry point for the program and contains the main program loop.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
 
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
-#include <iostream>
 #include <string>
+
 #include "ShaderLoader.h"
+#include "Hexagon.h"
+#include "Quad.h"
 
 //------GLOBAL VARIABLES------
 const int kiWindowWidth = 800;
 const int kiWindowHeight = 800;
 
 float fCurrentTime = 0.0f;
+float fDeltaTime = 0.0f;
 
-GLuint uiProgramColourFade = 0;
+GLuint uiProgram = 0;
+GLuint uiTexProgram = 0;
 
-GLfloat fQuad1[] = 
-{
-	//Position				//Colour
-	-0.5f, 0.5f, 0.0f,		1.0f, 0.0f, 0.0f,
-	0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f,
-	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,
+GLuint uiPotionTex = 0;
 
-	0.5f, 0.5f, 0.0f,		0.0f, 1.0f, 0.0f,
-	-0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,
-	0.5f, 0.0f, 0.0f,		1.0f, 1.0f, 1.0f,
-};
+std::vector<CShape*> poVecShapes;
 
-GLfloat fQuad2[] =
-{
-	//Position				//Colour
-	-0.25f, 0.25f, 0.0f,	1.0f, 1.0f, 1.0f,
-	0.25f, 0.25f, 0.0f,		0.0f, 0.0f, 1.0f,
-	0.25f, -0.25f, 0.0f,	0.0f, 1.0f, 0.0f,
-	-0.25f, -0.25f, 0.0f,	1.0f, 0.0f, 0.0f,
-};
-
-GLuint iQuad2Indices[] =
-{
-	0, 1, 2,
-	0, 2, 3,
-};
-
-GLuint uiVBOQuad1 = 0;
-GLuint uiVAOQuad1 = 0;
-
-GLuint uiVBOQuad2 = 0;
-GLuint uiVAOQuad2 = 0;
-
-GLuint uiEBOQuad2 = 0;
-
-glm::vec3 QuadPosition = glm::vec3(0.5f, 0.5f, 0.0f);
-glm::mat4 TranslationMatrix;
-
-float QuadRotation = 45.0f;
-glm::mat4 RotationMatrix;
-
-glm::vec3 QuadScale = glm::vec3(0.5f, 0.5f, 1.0f);
-glm::mat4 ScaleMatrix;
+float fRotationSpeed = 45.0f;
 //----------------------------
 
+/// <summary>
+/// Sets up the OpenGL framework and attempts to create the window that the program renders to.
+/// </summary>
+/// <returns>The window the program renders to, nullptr if the process fails.</returns>
 GLFWwindow* InitializeGLSetup();
-void Update(GLFWwindow* _poWindow);
+
+/// <summary>
+/// Creates a shape and adds it to the vector containing them (poVecShapes).
+/// </summary>
+void CreateShape();
+
+/// <summary>
+/// Updates any transform changes made to any chosen objects.
+/// </summary>
+void Update();
+
+/// <summary>
+/// Renders all objects to the window and swaps the buffers.
+/// </summary>
+/// <param name="_poWindow:">The window that buffers are swapped to.</param>
 void Render(GLFWwindow* _poWindow);
 
 int main()
@@ -76,56 +68,64 @@ int main()
 		bCloseProgram = true;
 	}
 
-	uiProgramColourFade = ShaderLoader::CreateProgram("Resources/Shaders/WorldSpace.vert", "Resources/Shaders/VertexColourFade.frag");
+	else
+	{
+		//-------------------------------------------Texture
+		uiTexProgram = ShaderLoader::CreateProgram("Resources/Shaders/Texture.vert", "Resources/Shaders/Texture.frag");
 
-	#pragma region Quad1
-	//Generate the VAO.
-	//glGenVertexArrays(1, &uiVAOQuad1);
-	//glBindVertexArray(uiVAOQuad1);
+		int iImageWidth;
+		int iImageHeight;
+		int iImageComponents;
+		unsigned char* pucImageData = stbi_load("Resources/Textures/Run.png", &iImageWidth, &iImageHeight, &iImageComponents, 0);
 
-	////Generate the VBO.
-	//glGenBuffers(1, &uiVBOQuad1);
-	//glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad1);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad1), fQuad1, GL_STATIC_DRAW);
+		//Create and bind a new texture variable.
+		glGenTextures(1, &uiPotionTex);
+		glBindTexture(GL_TEXTURE_2D, uiPotionTex);
 
-	////Set the Vertex Attribute information (colour).
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	//glEnableVertexAttribArray(0);
+		//Check how many components the loaded image has (RGBA or RGB).
+		GLint uiLoadedComponents = GL_RGBA;
 
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(1);
-	#pragma endregion
+		if (iImageComponents != 4)
+		{
+			uiLoadedComponents = GL_RGB;
+		}
 
-	#pragma region Quad2
-	//Generate the VAO.
-	glGenVertexArrays(1, &uiVAOQuad2);
-	glBindVertexArray(uiVAOQuad2);
+		//Populate the texture with image data.
+		glTexImage2D(GL_TEXTURE_2D, 0, uiLoadedComponents, iImageWidth, iImageHeight, 0, uiLoadedComponents, GL_UNSIGNED_BYTE, pucImageData);
 
-	//Generate the EBO.
-	glGenBuffers(1, &uiEBOQuad2);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, uiEBOQuad2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(iQuad2Indices), iQuad2Indices, GL_STATIC_DRAW);
+		//Generate the mipmaps, free the memory and unbind the texture.
+		glGenerateMipmap(GL_TEXTURE_2D);
+		stbi_image_free(pucImageData);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
-	//Generate the VBO.
-	glGenBuffers(1, &uiVBOQuad2);
-	glBindBuffer(GL_ARRAY_BUFFER, uiVBOQuad2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(fQuad2), fQuad2, GL_STATIC_DRAW);
+		//--------------------------------------------------
 
-	//Set the Vertex Attribute information.
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+		//uiProgram = ShaderLoader::CreateProgram("Resources/Shaders/Transform.vert", "Resources/Shaders/VertexColourFade.frag");
 
-	//Set the Vertex Attribute information (colour).
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	#pragma endregion
+		for (int i = 0; i < 1; i++)
+		{
+			CreateShape();
+		}
+
+		//Reposition the shapes from their starting positions.
+		//poVecShapes[0]->SetPosition({ 0.5f, 0.5f, 0.0f });
+		//poVecShapes[1]->SetPosition({ -0.5f, -0.5f, 0.0f });
+	}
 
 	//Main loop.
 	while (bCloseProgram == false && glfwWindowShouldClose(poWindow) == false)
 	{
-		Update(poWindow);
+		Update();
 		Render(poWindow);
 	}
+
+	//Clean up the program. Delete pointers and terminate the render window.
+	for (int i = 0; i < poVecShapes.size(); i++)
+	{
+		delete poVecShapes[i];
+	}
+
+	poVecShapes.clear();
 
 	glfwTerminate();
 }
@@ -135,13 +135,11 @@ GLFWwindow* InitializeGLSetup()
 	//Title of the window.
 	std::string sWindowTitle = "Main Window (" + std::to_string(kiWindowWidth) + "x" + std::to_string(kiWindowHeight) + ")";
 
-	//GLFW inits.
-	glfwInit(); //Initializes the GLFW library. Required before other GLFW functions can be used.
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE); //Indicates the OpenGL profile used by the context.
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); //API version number that the context must be compatible with. "4.x".
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6); //API version number that the context must be compatible with. "x.6".
+	glfwInit();
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
-	//Second to last NULL determines the monitor to display on. NULL for windowed mode.
 	GLFWwindow* poWindow = glfwCreateWindow(kiWindowWidth, kiWindowHeight, sWindowTitle.c_str(), NULL, NULL);
 
 	//If the window fails to create: terminate it.
@@ -149,7 +147,7 @@ GLFWwindow* InitializeGLSetup()
 	{
 		std::cout << "GLFW failed. Ending program..." << std::endl;
 		system("pause");
-		glfwTerminate(); //glfwInit() must be called again to use GLFW functions after this is called.
+		glfwTerminate();
 		return nullptr;
 	}
 
@@ -176,50 +174,74 @@ GLFWwindow* InitializeGLSetup()
 	return poWindow;
 }
 
-void Update(GLFWwindow* _poWindow)
+void CreateShape()
+{
+	//CHexagon* poHexagon = new CHexagon();
+	//poVecShapes.push_back(poHexagon);
+
+	CQuad* poQuad = new CQuad();
+	poVecShapes.push_back(poQuad);
+}
+
+void Update()
 {
 	glfwPollEvents();
-
-	TranslationMatrix = glm::translate(glm::mat4(1.0f), QuadPosition);
-	RotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(QuadRotation), glm::vec3(0.0f, 0.0f, 1.0f));
-	ScaleMatrix = glm::scale(glm::mat4(1.0f), QuadScale);
-
+	fDeltaTime = (float)glfwGetTime() - fCurrentTime;
 	fCurrentTime = (float)glfwGetTime();
+
+	//Cycles through each shape and updates their rotation and scale.
+	for (int i = 0; i < poVecShapes.size(); i++)
+	{
+		//poVecShapes[i]->AddRotation(fRotationSpeed * fDeltaTime, { 0.0f, 0.0f, 1.0f });
+		//poVecShapes[i]->SetScale((sin(fCurrentTime) * 0.5f) + 1.0f);
+	}
 }
 
 void Render(GLFWwindow* _poWindow)
 {
-	//Indicates the buffers to be cleared.
-	glClear(GL_COLOR_BUFFER_BIT); //Buffers currently enabled for color writing.
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUseProgram(uiProgramColourFade);
+	glUseProgram(uiTexProgram);
 
-	GLint iCurrentTimeLocation = glGetUniformLocation(uiProgramColourFade, "fCurrentTime");
-	glUniform1f(iCurrentTimeLocation, fCurrentTime);
+	//Activate and bind the texture.
+	glActiveTexture(GL_TEXTURE0); //<-- num must match below.
+	glBindTexture(GL_TEXTURE_2D, uiPotionTex);
+	glUniform1i(glGetUniformLocation(uiTexProgram, "oTexture0"), 0); //<- num must match above.
 
-	GLint TranslationMatrixLocation = glGetUniformLocation(uiProgramColourFade, "TranslationMatrix");
-	glUniformMatrix4fv(TranslationMatrixLocation, 1, GL_FALSE, glm::value_ptr(TranslationMatrix));
+	////Binds the VAO of the first shape only.
+	//glBindVertexArray(*poVecShapes[0]->GetVAO());
 
-	GLint RotationMatrixLocation = glGetUniformLocation(uiProgramColourFade, "RotationMatrix");
-	glUniformMatrix4fv(RotationMatrixLocation, 1, GL_FALSE, glm::value_ptr(RotationMatrix));
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-	GLint ScaleMatrixLocation = glGetUniformLocation(uiProgramColourFade, "ScaleMatrix");
-	glUniformMatrix4fv(ScaleMatrixLocation, 1, GL_FALSE, glm::value_ptr(ScaleMatrix));
+	//glUseProgram(uiProgram);
 
-	//Two Tris
-	//glBindVertexArray(uiVAOQuad1);
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	//GLint iCurrentTimeLocation = glGetUniformLocation(uiProgram, "fCurrentTime");
+	//glUniform1f(iCurrentTimeLocation, fCurrentTime);
 
-	//glBindVertexArray(uiVAOQuad2);
-	//glDrawArrays(GL_TRIANGLES, 0, 6);
+	//Binds the VAO of the first shape only.
+	glBindVertexArray(*poVecShapes[0]->GetVAO());
 
-	//Quad
-	glBindVertexArray(uiVAOQuad2);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	//Cycles through each shape, renders their transformation matrices, and draws it to the window.
+	for (int i = 0; i < poVecShapes.size(); i++)
+	{
+		GLint iTranslationMatrixLocation = glGetUniformLocation(uiTexProgram, "matModel");
+		glUniformMatrix4fv(iTranslationMatrixLocation, 1, GL_FALSE, glm::value_ptr(*poVecShapes[i]->GetTranslationMatrix()));
+
+		//GLint iTranslationMatrixLocation = glGetUniformLocation(uiProgram, "matTranslation");
+		//glUniformMatrix4fv(iTranslationMatrixLocation, 1, GL_FALSE, glm::value_ptr(*poVecShapes[i]->GetTranslationMatrix()));
+
+		//GLint iRotationMatrixLocation = glGetUniformLocation(uiProgram, "matRotation");
+		//glUniformMatrix4fv(iRotationMatrixLocation, 1, GL_FALSE, glm::value_ptr(*poVecShapes[i]->GetRotationMatrix()));
+
+		//GLint iScaleMatrixLocation = glGetUniformLocation(uiProgram, "matScale");
+		//glUniformMatrix4fv(iScaleMatrixLocation, 1, GL_FALSE, glm::value_ptr(*poVecShapes[i]->GetScaleMatrix()));
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	}
 
 	glBindVertexArray(0);
 	glUseProgram(0);
 
 	//Swaps the current buffer with the pre-loaded buffer.
-	glfwSwapBuffers(_poWindow); //The window whose buffers are to be swapped.
+	glfwSwapBuffers(_poWindow);
 }

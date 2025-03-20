@@ -1,11 +1,11 @@
 #version 460 core
 
-in vec3 FragColour;
+in vec3 v3FragColour;
 uniform float fCurrentTime;
 
-out vec4 FinalColour;
+out vec4 v4FinalColour;
 
 void main()
 {
-	FinalColour = vec4(FragColour, 1.0f) * abs(sin(fCurrentTime));;
+	v4FinalColour = mix(vec4(v3FragColour, 1.0f), vec4(0.0f, 1.0f, 0.0f, 1.0f), ((sin(fCurrentTime) * 0.5f) + 0.5f));
 }

@@ -38,10 +38,10 @@ GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)
 	// Create the shader ID and create pointers for source code string and length
 	GLuint shaderID = glCreateShader(shaderType);
 
-	const char* pcShaderSource = sShaderSource.c_str();
-	const GLint piSourceLength = sShaderSource.size();
+	const char* pkcShaderSource = sShaderSource.c_str();
+	const GLint pkiSourceLength = (GLuint)sShaderSource.size();
 
-	glShaderSource(shaderID, 1, &pcShaderSource, &piSourceLength);
+	glShaderSource(shaderID, 1, &pkcShaderSource, &pkiSourceLength);
 
 	// Populate the Shader Object (ID) and compile
 	glCompileShader(shaderID);
