@@ -17,17 +17,17 @@ CQuad::CQuad() : CShape()
 	ShapeSetup();
 }
 
-CQuad::CQuad(TVector3f _v3fPosition) : CShape(_v3fPosition)
+CQuad::CQuad(glm::vec3 _v3fPosition) : CShape(_v3fPosition)
 {
 	ShapeSetup();
 }
 
-CQuad::CQuad(TVector3f _v3fPosition, TVector3f _v3fRotation) : CShape(_v3fPosition, _v3fRotation)
+CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation) : CShape(_v3fPosition, _v3fRotation)
 {
 	ShapeSetup();
 }
 
-CQuad::CQuad(TVector3f _v3fPosition, TVector3f _v3fRotation, TVector3f _v3fScale) : CShape(_v3fPosition, _v3fRotation, _v3fScale)
+CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale) : CShape(_v3fPosition, _v3fRotation, _v3fScale)
 {
 	ShapeSetup();
 }

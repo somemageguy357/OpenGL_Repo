@@ -20,9 +20,9 @@ class CHexagon : public CShape
 {
 public:
 	CHexagon();
-	CHexagon(TVector3f _v3fPosition);
-	CHexagon(TVector3f _v3fPosition, TVector3f _v3fRotation);
-	CHexagon(TVector3f _v3fPosition, TVector3f _v3fRotation, TVector3f _v3fScale);
+	CHexagon(glm::vec3 _v3fPosition);
+	CHexagon(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	CHexagon(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 	~CHexagon();
 
 private:

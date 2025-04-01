@@ -22,12 +22,15 @@
     <Filter Include="Source Files\Shapes">
       <UniqueIdentifier>{d167a239-0c0e-4c1d-a6f1-4716b45ecf21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Loaders">
+      <UniqueIdentifier>{0313ced2-70a1-4f97-8569-55225f835763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Loaders">
+      <UniqueIdentifier>{f6392454-e760-4d33-aee8-9dfb55b146d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hexagon.cpp">
@@ -39,11 +42,20 @@
     <ClCompile Include="Shape.cpp">
       <Filter>Source Files\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderLoader.cpp">
+      <Filter>Source Files\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ShaderLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Hexagon.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
@@ -53,6 +65,18 @@
     <ClInclude Include="Shape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderLoader.h">
+      <Filter>Header Files\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\Transform.vert">
@@ -61,10 +85,19 @@
     <None Include="Resources\Shaders\VertexColourFade.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="Texture.vert">
+    <None Include="Texture.frag">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="Texture.frag">
+    <None Include="Resources\Shaders\TextureMix.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\Texture.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\TextureMix2.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Resources\Shaders\ClipSpace.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>

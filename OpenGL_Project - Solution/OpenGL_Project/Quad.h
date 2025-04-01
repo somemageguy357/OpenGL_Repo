@@ -17,9 +17,9 @@ class CQuad : public CShape
 {
 public:
 	CQuad();
-	CQuad(TVector3f _v3fPosition);
-	CQuad(TVector3f _v3fPosition, TVector3f _v3fRotation);
-	CQuad(TVector3f _v3fPosition, TVector3f _v3fRotation, TVector3f _v3fScale);
+	CQuad(glm::vec3 _v3fPosition);
+	CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 	~CQuad();
 
 private:

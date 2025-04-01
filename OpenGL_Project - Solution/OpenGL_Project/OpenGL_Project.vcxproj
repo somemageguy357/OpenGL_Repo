@@ -19,23 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Shaders\ClipSpace.vert" />
+    <None Include="Resources\Shaders\Texture.vert" />
+    <None Include="Resources\Shaders\TextureMix.frag" />
+    <None Include="Resources\Shaders\TextureMix2.frag" />
     <None Include="Resources\Shaders\Transform.vert" />
     <None Include="Resources\Shaders\VertexColourFade.frag" />
     <None Include="Texture.frag" />
-    <None Include="Texture.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

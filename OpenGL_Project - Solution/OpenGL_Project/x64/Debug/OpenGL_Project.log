@@ -1,2 +1,8 @@
-﻿  main.cpp
+﻿  Camera.cpp
+  Hexagon.cpp
+  Quad.cpp
+  Shape.cpp
+  Transform.cpp
+  main.cpp
+  Generating Code...
   OpenGL_Project.vcxproj -> C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\x64\Debug\OpenGL_Project.exe
