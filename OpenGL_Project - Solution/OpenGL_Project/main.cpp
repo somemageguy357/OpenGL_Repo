@@ -23,10 +23,8 @@ const int kiWindowHeight = 800;
 float fCurrentTime = 0.0f;
 float fDeltaTime = 0.0f;
 
-GLuint uiProgramTexTiling = 0;
+GLuint uiProgramTex = 0;
 GLuint uiProgramTexMix = 0;
-GLuint uiProgramTexFlip = 0;
-GLuint uiProgramTexBlend = 0;
 
 CCamera* poCamera = nullptr;
 std::vector<CTexture*> poVecTextures;
@@ -50,8 +48,10 @@ void Update();
 /// <param name="_poWindow:">The window that buffers are swapped to.</param>
 void Render(GLFWwindow* _poWindow);
 
-void UseProgram(GLuint _uiProgram);
-
+/// <summary>
+/// Creates a CTexture which gets its texture data from the given file path.
+/// </summary>
+/// <param name="_sFilePath:">The file path of the image file.</param>
 void CreateTexture(std::string _sFilePath);
 
 int main()
@@ -59,26 +59,31 @@ int main()
 	bool bCloseProgram = false;
 	GLFWwindow* poWindow = InitializeGLSetup();
 
+	//If the setup process failed: prepare to close/terminate the program
 	if (poWindow == nullptr)
 	{
 		bCloseProgram = true;
 	}
 
+	//Else: proceed with the program.
 	else
 	{
+		//Create camera.
 		poCamera = new CCamera(kiWindowWidth, kiWindowHeight, { 0.0f, 0.0f, 3.0f });
 
-		//Enable texture blending. (NOT mixing).
+		//Enable texture blending.
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		//Create programs.
+		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Texture.frag");
 		uiProgramTexMix = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/TextureMix.frag");
-		//uiProgramCameraMatrix = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Texture.frag");
 
+		//Create textures.
 		CreateTexture("Resources/Textures/Run.png");
-		CreateTexture("Resources/Textures/Run (2).png");
-		//CreateTexture("Resources/Textures/Run (3).png");
+		CreateTexture("Resources/Textures/Run (3).png");
 
+		//Create quads.
 		for (int i = 0; i < 4; i++)
 		{
 			CQuad* poQuad = new CQuad();
@@ -86,6 +91,7 @@ int main()
 			poQuad->SetScale({ 500.0f, 500.0f, 1.0f });
 		}
 
+		//Reposition quads, add textures to them, and change tex coords for some.
 		poVecShapes[0]->SetPosition({ -200.0f, 200.0f, 0.0f });
 		poVecShapes[1]->SetPosition({ 200.0f, 200.0f, 0.0f });
 		poVecShapes[2]->SetPosition({ 200.0f, -200.0f, 0.0f });
@@ -93,9 +99,12 @@ int main()
 
 		poVecShapes[0]->AddTexture(poVecTextures[0]);
 		poVecShapes[1]->AddTexture(poVecTextures[0]);
-		poVecShapes[1]->AddTexture(poVecTextures[1]);
+		poVecShapes[1]->AddTexture(poVecTextures[1]); //Second texture for mixing
 		poVecShapes[2]->AddTexture(poVecTextures[0]);
 		poVecShapes[3]->AddTexture(poVecTextures[0]);
+
+		poVecShapes[0]->SetNewQuadTexCoords({ -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f }); //Tiling
+		poVecShapes[2]->SetNewQuadTexCoords({ 0.0f, 1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f }); //Vertical Flip
 	}
 
 	//Main loop.
@@ -175,7 +184,7 @@ void Update()
 	fDeltaTime = (float)glfwGetTime() - fCurrentTime;
 	fCurrentTime = (float)glfwGetTime();
 
-	poCamera->SetPosition({ sin(fCurrentTime) * 100.0f, poCamera->GetPosition()->y, poCamera->GetPosition()->z });
+	poCamera->SetPosition({ sin(fCurrentTime) * 90.0f, poCamera->GetPosition()->y, poCamera->GetPosition()->z });
 	poCamera->Update();
 }
 
@@ -183,31 +192,11 @@ void Render(GLFWwindow* _poWindow)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	poCamera->Render(uiProgramTexMix, poVecShapes[0]);
-	//poCamera->Render(uiProgramTexMix, poVecShapes[1]);
-	//poCamera->Render(uiProgramCameraMatrix, poVecShapes[2]);
-	//poCamera->Render(uiProgramCameraMatrix, poVecShapes[3]);
+	poCamera->Render(uiProgramTex, poVecShapes[0], fCurrentTime); //Tiling
+	poCamera->Render(uiProgramTexMix, poVecShapes[1], fCurrentTime); //Mixing
+	poCamera->Render(uiProgramTex, poVecShapes[2], fCurrentTime); //Flip
+	poCamera->Render(uiProgramTex, poVecShapes[3], fCurrentTime); //Blend
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(_poWindow);
-}
-
-void UseProgram(GLuint _uiProgram)
-{
-	glUseProgram(_uiProgram);
-
-	glActiveTexture(GL_TEXTURE0); //<-- num must match below.
-	glBindTexture(GL_TEXTURE_2D, poVecTextures[0]->GetTexture());
-	glUniform1i(glGetUniformLocation(_uiProgram, "oTexture0"), 0); //<- num must match above.
-
-	glBindVertexArray(*poVecShapes[0]->GetVAO());
-
-	//glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*poVecShapes[0]->GetModelMatrix()));
-	//glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*poCamera->GetViewMatrix()));
-	//glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*poCamera->GetProjectionMatrix()));
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	//glBindVertexArray(0);
-	//glUseProgram(0);
 }

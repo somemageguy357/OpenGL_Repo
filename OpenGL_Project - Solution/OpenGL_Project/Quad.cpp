@@ -11,6 +11,7 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "Quad.h"
+#include <iostream>
 
 CQuad::CQuad() : CShape() 
 {
@@ -36,9 +37,60 @@ CQuad::~CQuad() {}
 
 void CQuad::ShapeSetup()
 {
-	SetVertexData();
-	SetTriIndices();
+	GenerateVertexData();
+	GenerateTriIndices();
+	GenerateShape();
+}
 
+void CQuad::GenerateVertexData()
+{
+	//Positions and colours of the quad's vertices.
+	std::vector<float> fVecVertexData =
+	{
+		//Positions							//Colours				//Tex Coords (x, y)
+		-0.25f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		0.0f, 1.0f,
+		0.25f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 1.0f,
+		0.25f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f,
+		-0.25f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		0.0f, 0.0f,
+	};
+
+	m_fVecVertexData.insert(m_fVecVertexData.end(), fVecVertexData.begin(), fVecVertexData.end());
+}
+
+void CQuad::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
+{
+	//Requires 8 elements as there are 8 texture coordinate values.
+	if (_fVecNewTexCoords.size() != 8)
+	{
+		std::cout << "Attempt to set new texture coordinates for a quad failed: incorrect number of elements supplied in vector (expecting 8)." << std::endl;
+		return;
+	}
+
+	//Index positions of the tex coords: 6,7	14,15	22,23	30,31
+	for (size_t iRows = 0; iRows < 4; iRows++)
+	{
+		m_fVecVertexData[6 + (iRows * 8)] = _fVecNewTexCoords[iRows * 2];
+		m_fVecVertexData[7 + (iRows * 8)] = _fVecNewTexCoords[(iRows * 2) + 1];
+	}
+
+	//Regenerate the shape with the updated vertex data.
+	GenerateShape();
+}
+
+void CQuad::GenerateTriIndices()
+{
+	//Indices of the vertices for the triangles that make up the quad.
+	std::vector<unsigned int> uiVecTriIndices =
+	{
+		0, 1, 2,
+		0, 2, 3,
+	};
+
+	m_uiVecTriIndices.insert(m_uiVecTriIndices.end(), uiVecTriIndices.begin(), uiVecTriIndices.end());
+}
+
+void CQuad::GenerateShape()
+{
 	//Converting the quads's vertex data and joints into arrays from vectors to pass into generation.
 	float fHexVertexData[32];
 
@@ -46,7 +98,7 @@ void CQuad::ShapeSetup()
 	{
 		fHexVertexData[i] = m_fVecVertexData[i];
 	}
-	
+
 	unsigned int uiHexIndices[6];
 
 	for (int i = 0; i < 6; i++)
@@ -79,31 +131,4 @@ void CQuad::ShapeSetup()
 	//Set the Vertex Attribute information (tex coords).
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(2);
-}
-
-void CQuad::SetVertexData()
-{
-	//Positions and colours of the quad's vertices.
-	std::vector<float> fVecVertexData =
-	{
-		//Positions							//Colours				//Tex Coords (x, y)
-		-0.25f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		0.0f, 1.0f,
-		0.25f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 1.0f,
-		0.25f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		1.0f, 0.0f,
-		-0.25f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,		0.0f, 0.0f,
-	};
-
-	m_fVecVertexData.insert(m_fVecVertexData.end(), fVecVertexData.begin(), fVecVertexData.end());
-}
-
-void CQuad::SetTriIndices()
-{
-	//Indices of the vertices for the triangles that make up the quad.
-	std::vector<unsigned int> uiVecTriIndices =
-	{
-		0, 1, 2,
-		0, 2, 3,
-	};
-
-	m_uiVecTriIndices.insert(m_uiVecTriIndices.end(), uiVecTriIndices.begin(), uiVecTriIndices.end());
 }

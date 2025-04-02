@@ -11,6 +11,7 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "Shape.h"
+#include <iostream>
 
 CShape::CShape() : CTransform::CTransform () {}
 
@@ -65,4 +66,10 @@ void CShape::BindTextures(GLuint _uiProgram)
 		glBindTexture(GL_TEXTURE_2D, m_poVecTextures[i]->GetTexture());
 		glUniform1i(glGetUniformLocation(_uiProgram, std::string("oTexture" + std::to_string(i)).c_str()), i);
 	}
+}
+
+void CShape::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
+{
+	//If the deriving class is not a CQuad (the only class that overrides this function), this will instead run.
+	std::cout << "Attempt to set new texture coordinates for a shape failed: the shape is not a quad." << std::endl;
 }

@@ -37,9 +37,44 @@ CHexagon::~CHexagon() {}
 
 void CHexagon::ShapeSetup()
 {
-	SetVertexData();
-	SetTriIndices();
+	GenerateVertexData();
+	GenerateTriIndices();
+	GenerateShape();
+}
 
+void CHexagon::GenerateVertexData()
+{
+	//Positions and colours of the hexagon's vertices.
+	std::vector<float> fVecVertexData =
+	{
+		//Positions							//Colours
+		0.0f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,
+		0.215f,		0.125f,		0.0f,		1.0f, 1.0f, 1.0f,
+		0.215f,		-0.125f,	0.0f,		1.0f, 1.0f, 1.0f,
+		0.0f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,
+		-0.215f,	-0.125f,	0.0f,		1.0f, 1.0f, 1.0f,
+		-0.215f,	0.125f,		0.0f,		1.0f, 1.0f, 1.0f,
+	};
+
+	m_fVecVertexData.insert(m_fVecVertexData.end(), fVecVertexData.begin(), fVecVertexData.end());
+}
+
+void CHexagon::GenerateTriIndices()
+{
+	//Indices of the vertices for the triangles that make up the hexagon.
+	std::vector<unsigned int> uiVecTriIndices =
+	{
+		0, 1, 2,
+		2, 3, 4,
+		4, 5, 0,
+		0, 2, 4,
+	};
+
+	m_uiVecTriIndices.insert(m_uiVecTriIndices.end(), uiVecTriIndices.begin(), uiVecTriIndices.end());
+}
+
+void CHexagon::GenerateShape()
+{
 	//Converting the hexagon's vertex data and joints into arrays from vectors to pass into generation.
 	float fHexVertexData[36];
 
@@ -76,35 +111,4 @@ void CHexagon::ShapeSetup()
 	//Set the Vertex Attribute information (colour).
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
-}
-
-void CHexagon::SetVertexData()
-{
-	//Positions and colours of the hexagon's vertices.
-	std::vector<float> fVecVertexData =
-	{
-		//Positions							//Colours
-		0.0f,		0.25f,		0.0f,		1.0f, 1.0f, 1.0f,
-		0.215f,		0.125f,		0.0f,		1.0f, 1.0f, 1.0f,
-		0.215f,		-0.125f,	0.0f,		1.0f, 1.0f, 1.0f,
-		0.0f,		-0.25f,		0.0f,		1.0f, 1.0f, 1.0f,
-		-0.215f,	-0.125f,	0.0f,		1.0f, 1.0f, 1.0f,
-		-0.215f,	0.125f,		0.0f,		1.0f, 1.0f, 1.0f,
-	};
-
-	m_fVecVertexData.insert(m_fVecVertexData.end(), fVecVertexData.begin(), fVecVertexData.end());
-}
-
-void CHexagon::SetTriIndices()
-{
-	//Indices of the vertices for the triangles that make up the hexagon.
-	std::vector<unsigned int> uiVecTriIndices =
-	{
-		0, 1, 2,
-		2, 3, 4,
-		4, 5, 0,
-		0, 2, 4,
-	};
-
-	m_uiVecTriIndices.insert(m_uiVecTriIndices.end(), uiVecTriIndices.begin(), uiVecTriIndices.end());
 }

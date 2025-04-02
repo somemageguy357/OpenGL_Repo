@@ -39,11 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ClipSpace.vert" />
-    <None Include="Resources\Shaders\Texture.vert" />
     <None Include="Resources\Shaders\TextureMix.frag" />
-    <None Include="Resources\Shaders\TextureMix2.frag" />
-    <None Include="Resources\Shaders\Transform.vert" />
-    <None Include="Resources\Shaders\VertexColourFade.frag" />
     <None Include="Texture.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

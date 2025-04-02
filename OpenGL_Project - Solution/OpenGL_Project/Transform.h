@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Transform.h
+Description : Contains matrices and vectors for an object's transform values. Objects of this type specifically cannot be created.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #pragma once
 #include <glew.h>
 #include <glfw3.h>
@@ -5,15 +17,10 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+//Contains matrices and vectors for an object's transform values. Objects of this type specifically cannot be created.
 class CTransform
 {
 public:
-	CTransform();
-	CTransform(glm::vec3 _v3fPosition);
-	CTransform(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
-	CTransform(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
-	~CTransform();
-
 	/// <summary>
 	/// Returns the transform's translation matrix.
 	/// </summary>
@@ -50,6 +57,10 @@ public:
 	/// <param name="_v3fPositionChange:">The change in position to add to the transform.</param>
 	void AddPosition(glm::vec3 _v3fPositionChange);
 
+	/// <summary>
+	/// Returns the Vector3 positon of the transform.
+	/// </summary>
+	/// <returns>The Vector3 positon of the transform.</returns>
 	glm::vec3* GetPosition();
 
 	/// <summary>
@@ -66,6 +77,10 @@ public:
 	/// <param name="_v3fRotationAxes:">The axes that the change in rotation is to be applied to.</param>
 	void AddRotation(float _fRotationDegrees, glm::vec3 _v3fRotationAxes);
 
+	/// <summary>
+	/// Returns the Vector3 rotation of the transform.
+	/// </summary>
+	/// <returns>The Vector3 rotation of the transform.</returns>
 	glm::vec3* GetRotation();
 
 	/// <summary>
@@ -86,6 +101,10 @@ public:
 	/// <param name="_v3fScaleChange:">The change in scale to add to the transform.</param>
 	void AddScale(glm::vec3 _v3fScaleChange);
 
+	/// <summary>
+	/// Returns the Vector3 scale of the transform.
+	/// </summary>
+	/// <returns>The Vector3 scale of the transform.</returns>
 	glm::vec3* GetScale();
 
 protected:
@@ -109,4 +128,35 @@ protected:
 
 	//The transform's model matrix.
 	glm::mat4 m_matModel = glm::mat4(1.0f);
+
+	/// <summary>
+	/// Sets the transform of the object with default values. Position: (0.0f, 0.0f, 0.0f). Rotation: (0.0f, 0.0f, 0.0f). 
+	/// Scale: (1.0f, 1.0f, 1.0f).
+	/// </summary>
+	CTransform();
+
+	/// <summary>
+	/// Sets the transform of the object with the given position. Sets rotation (0.0f, 0.0f, 0.0f) and scale (1.0f, 1.0f, 1.0f) 
+	/// to their default values.
+	/// </summary>
+	/// <param name="_v3fPosition:">Starting position of the transform.</param>
+	CTransform(glm::vec3 _v3fPosition);
+
+	/// <summary>
+	/// Sets the transform of the object with the given position and rotation. Sets scale (1.0f, 1.0f, 1.0f) 
+	/// to its default value.
+	/// </summary>
+	/// <param name="_v3fPosition:">Starting position of the transform.</param>
+	/// <param name="_v3fRotation:">Starting rotation of the transform.</param>
+	CTransform(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+
+	/// <summary>
+	/// Sets the transform of the object with the given position, rotation, and scale values.
+	/// </summary>
+	/// <param name="_v3fPosition:">Starting position of the transform.</param>
+	/// <param name="_v3fRotation:">Starting rotation of the transform.</param>
+	/// <param name="_v3fScale:">Starting scale of the transform.</param>
+	CTransform(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
+
+	~CTransform();
 };
