@@ -64,8 +64,7 @@ public:
 	/// </summary>
 	/// <param name="_uiProgram:">The shader program to use.</param>
 	/// <param name="_poShape:">The shape to render.</param>
-	/// <param name="_fCurrentTime:">The current lifetime of the program.</param>
-	void Render(GLuint _uiProgram, CShape* _poShape, float _fCurrentTime);
+	void Render(GLuint _uiProgram, CShape* _poShape);
 
 	/// <summary>
 	/// Sets the target position of the camera.

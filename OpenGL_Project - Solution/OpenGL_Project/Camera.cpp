@@ -11,6 +11,7 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "Camera.h"
+#include "TimeManager.h"
 
 CCamera::CCamera(const int _kiWindowWidth, const int _kiWindowHeight) : CTransform()
 {
@@ -34,13 +35,13 @@ void CCamera::Update()
 	m_matView = glm::lookAt(m_v3fPosition, m_v3fPosition + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
 }
 
-void CCamera::Render(GLuint _uiProgram, CShape* _poShape, float _fCurrentTime)
+void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
 {
 	glUseProgram(_uiProgram);
 
 	//Supplies the programs current lifetime to the shader program (if it requires it).
 	GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
-	glUniform1f(iCurrentTimeLocation, _fCurrentTime);
+	glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
 
 	glBindVertexArray(*_poShape->GetVAO());
 

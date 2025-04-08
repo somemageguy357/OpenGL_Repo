@@ -10,6 +10,7 @@ Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
+#include "TimeManager.h"
 #include "ShaderLoader.h"
 #include "Camera.h"
 #include "Texture.h"
@@ -19,9 +20,6 @@ Mail : Connor.Galvin@mds.ac.nz
 //------GLOBAL VARIABLES------
 const int kiWindowWidth = 800;
 const int kiWindowHeight = 800;
-
-float fCurrentTime = 0.0f;
-float fDeltaTime = 0.0f;
 
 GLuint uiProgramTex = 0;
 GLuint uiProgramTexMix = 0;
@@ -54,6 +52,16 @@ void Render(GLFWwindow* _poWindow);
 /// <param name="_sFilePath:">The file path of the image file.</param>
 void CreateTexture(std::string _sFilePath);
 
+/// <summary>
+/// Creates an animated CTexture which gets its texture data from the given file path.
+/// </summary>
+/// <param name="_sFilePath:">The file path of the image file.</param>
+/// <param name="_iFrames:">The total number of frames in the spritesheet.</param>
+/// <param name="_iRows:">The number of rows in the spritesheet.</param>
+/// <param name="_iColumns:">The number of columns in the spritesheet.</param>
+/// <param name="_iFrameRate:">The frame rate of the texture's animation.</param>
+void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColumns, int _iFrameRate);
+
 int main()
 {
 	bool bCloseProgram = false;
@@ -81,27 +89,30 @@ int main()
 
 		//Create textures.
 		CreateTexture("Resources/Textures/Run.png");
-		CreateTexture("Resources/Textures/Run (3).png");
+		CreateTexture("Resources/Textures/Jump_Attack__000.png");
+		CreateTexture("Resources/Textures/RobotSpriteSheet2D.png", 16, 2, 8, 3);
 
 		//Create quads.
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			CQuad* poQuad = new CQuad();
 			poVecShapes.push_back(poQuad);
-			poQuad->SetScale({ 500.0f, 500.0f, 1.0f });
+			poQuad->SetScale({ 400.0f, 400.0f, 1.0f });
 		}
 
 		//Reposition quads, add textures to them, and change tex coords for some.
-		poVecShapes[0]->SetPosition({ -200.0f, 200.0f, 0.0f });
-		poVecShapes[1]->SetPosition({ 200.0f, 200.0f, 0.0f });
-		poVecShapes[2]->SetPosition({ 200.0f, -200.0f, 0.0f });
-		poVecShapes[3]->SetPosition({ -200.0f, -200.0f, 0.0f });
+		poVecShapes[0]->SetPosition({ -250.0f, 250.0f, 0.0f });
+		poVecShapes[1]->SetPosition({ 250.0f, 250.0f, 0.0f });
+		poVecShapes[2]->SetPosition({ 250.0f, -250.0f, 0.0f });
+		poVecShapes[3]->SetPosition({ -250.0f, -250.0f, 0.0f });
+		poVecShapes[4]->SetPosition({ 0.0f, 0.0f, 0.0f });
 
 		poVecShapes[0]->AddTexture(poVecTextures[0]);
 		poVecShapes[1]->AddTexture(poVecTextures[0]);
 		poVecShapes[1]->AddTexture(poVecTextures[1]); //Second texture for mixing
 		poVecShapes[2]->AddTexture(poVecTextures[0]);
 		poVecShapes[3]->AddTexture(poVecTextures[0]);
+		poVecShapes[4]->AddTexture(poVecTextures[2]);
 
 		poVecShapes[0]->SetNewQuadTexCoords({ -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f }); //Tiling
 		poVecShapes[2]->SetNewQuadTexCoords({ 0.0f, 1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f }); //Vertical Flip
@@ -177,14 +188,20 @@ void CreateTexture(std::string _sFilePath)
 	poVecTextures.push_back(poTexture);
 }
 
+void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColumns, int _iFrameRate)
+{
+	CTexture* poTexture = new CTexture(_sFilePath, _iFrames, _iRows, _iColumns, _iFrameRate);
+	poVecTextures.push_back(poTexture);
+}
+
 void Update()
 {
 	glfwPollEvents();
 
-	fDeltaTime = (float)glfwGetTime() - fCurrentTime;
-	fCurrentTime = (float)glfwGetTime();
-
-	poCamera->SetPosition({ sin(fCurrentTime) * 90.0f, poCamera->GetPosition()->y, poCamera->GetPosition()->z });
+	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
+	CTimeManager::SetCurrentTime((float)glfwGetTime());
+;
+	poCamera->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 50.0f, poCamera->GetPosition()->y, poCamera->GetPosition()->z });
 	poCamera->Update();
 }
 
@@ -192,10 +209,11 @@ void Render(GLFWwindow* _poWindow)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	poCamera->Render(uiProgramTex, poVecShapes[0], fCurrentTime); //Tiling
-	poCamera->Render(uiProgramTexMix, poVecShapes[1], fCurrentTime); //Mixing
-	poCamera->Render(uiProgramTex, poVecShapes[2], fCurrentTime); //Flip
-	poCamera->Render(uiProgramTex, poVecShapes[3], fCurrentTime); //Blend
+	poCamera->Render(uiProgramTex, poVecShapes[0]); //Tiling
+	poCamera->Render(uiProgramTexMix, poVecShapes[1]); //Mixing
+	poCamera->Render(uiProgramTex, poVecShapes[2]); //Flip
+	poCamera->Render(uiProgramTex, poVecShapes[3]); //Blend
+	poCamera->Render(uiProgramTex, poVecShapes[4]); //Animation
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(_poWindow);
