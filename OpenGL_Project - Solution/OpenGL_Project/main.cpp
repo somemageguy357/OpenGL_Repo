@@ -11,16 +11,15 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "TimeManager.h"
+#include "WindowManager.h"
 #include "ShaderLoader.h"
+
 #include "Camera.h"
 #include "Texture.h"
 #include "Hexagon.h"
 #include "Quad.h"
 
 //------GLOBAL VARIABLES------
-const int kiWindowWidth = 800;
-const int kiWindowHeight = 800;
-
 GLuint uiProgramTex = 0;
 GLuint uiProgramTexMix = 0;
 
@@ -64,8 +63,13 @@ void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColum
 
 int main()
 {
-	bool bCloseProgram = false;
+	//Set window size values.
+	CWindowManager::SetSize(800, 800);
+
+	//Attempt to initialize OpenGL setup.
 	GLFWwindow* poWindow = InitializeGLSetup();
+
+	bool bCloseProgram = false;
 
 	//If the setup process failed: prepare to close/terminate the program
 	if (poWindow == nullptr)
@@ -77,7 +81,7 @@ int main()
 	else
 	{
 		//Create camera.
-		poCamera = new CCamera(kiWindowWidth, kiWindowHeight, { 0.0f, 0.0f, 3.0f });
+		poCamera = new CCamera(true, { 0.0f, 0.0f, 3.0f });
 
 		//Enable texture blending.
 		glEnable(GL_BLEND);
@@ -97,14 +101,19 @@ int main()
 		{
 			CQuad* poQuad = new CQuad();
 			poVecShapes.push_back(poQuad);
-			poQuad->GetTransform()->SetScale({ 400.0f, 400.0f, 1.0f });
+
+			//Increase the scale of the quad if the camera is using orthographic projection.
+			if (poCamera->GetProjectionSpace() == false)
+			{
+				poQuad->GetTransform()->SetScaleMultiplier(400.0f);
+			}
 		}
 
 		//Reposition quads, add textures to them, and change tex coords for some.
-		poVecShapes[0]->GetTransform()->SetPosition({ -250.0f, 250.0f, 0.0f });
-		poVecShapes[1]->GetTransform()->SetPosition({ 250.0f, 250.0f, 0.0f });
-		poVecShapes[2]->GetTransform()->SetPosition({ 250.0f, -250.0f, 0.0f });
-		poVecShapes[3]->GetTransform()->SetPosition({ -250.0f, -250.0f, 0.0f });
+		poVecShapes[0]->GetTransform()->SetPosition({ -0.5f, 0.5f, 0.0f });
+		poVecShapes[1]->GetTransform()->SetPosition({ 0.5f, 0.5f, 0.0f });
+		poVecShapes[2]->GetTransform()->SetPosition({ 0.5f, -0.5f, 0.0f });
+		poVecShapes[3]->GetTransform()->SetPosition({ -0.5f, -0.5f, 0.0f });
 		poVecShapes[4]->GetTransform()->SetPosition({ 0.0f, 0.0f, 0.0f });
 
 		poVecShapes[0]->AddTexture(poVecTextures[0]);
@@ -141,14 +150,14 @@ int main()
 GLFWwindow* InitializeGLSetup()
 {
 	//Title of the window.
-	std::string sWindowTitle = "Main Window (" + std::to_string(kiWindowWidth) + "x" + std::to_string(kiWindowHeight) + ")";
+	std::string sWindowTitle = "Main Window (" + std::to_string(CWindowManager::GetWidth()) + "x" + std::to_string(CWindowManager::GetHeight()) + ")";
 
 	glfwInit();
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
-	GLFWwindow* poWindow = glfwCreateWindow(kiWindowWidth, kiWindowHeight, sWindowTitle.c_str(), NULL, NULL);
+	GLFWwindow* poWindow = glfwCreateWindow(CWindowManager::GetWidth(), CWindowManager::GetHeight(), sWindowTitle.c_str(), NULL, NULL);
 
 	//If the window fails to create: terminate it.
 	if (poWindow == nullptr)
@@ -177,7 +186,7 @@ GLFWwindow* InitializeGLSetup()
 
 	//Maps the range of the window size to NDC (Normalized Device Coordinates). Range is -1 to 1.
 	//Needs to be called again if the window is resized.
-	glViewport(0, 0, kiWindowWidth, kiWindowHeight);
+	glViewport(0, 0, CWindowManager::GetWidth(), CWindowManager::GetHeight());
 
 	return poWindow;
 }
@@ -200,8 +209,8 @@ void Update()
 
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
-;
-	poCamera->GetTransform()->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 50.0f, poCamera->GetTransform()->GetPosition()->y, poCamera->GetTransform()->GetPosition()->z });
+
+	//poCamera->GetTransform()->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 2.0f, poCamera->GetTransform()->GetPosition()->y, poCamera->GetTransform()->GetPosition()->z });
 	poCamera->Update();
 }
 

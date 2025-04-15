@@ -4,7 +4,7 @@ Media Design School
 Auckland
 New Zealand
 (c) 2025 Media Design School
-File Name : CTimeManager.h
+File Name : TimeManager.h
 Description : Contains the programs current and delta time values.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz

@@ -59,14 +59,14 @@ void CTransform::SetPosition(glm::vec3 _v3fNewPosition)
 {
 	m_v3fPosition = _v3fNewPosition;
 
-	m_matTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(m_v3fPosition.x, m_v3fPosition.y, m_v3fPosition.z));
+	m_matTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(m_v3fPosition.x * m_fScaleMultiplier, m_v3fPosition.y * m_fScaleMultiplier, m_v3fPosition.z));
 }
 
 void CTransform::AddPosition(glm::vec3 _v3fPositionChange)
 {
 	m_v3fPosition += _v3fPositionChange;
 
-	m_matTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(m_v3fPosition.x, m_v3fPosition.y, m_v3fPosition.z));
+	m_matTranslation = glm::translate(glm::mat4(1.0f), glm::vec3(m_v3fPosition.x * m_fScaleMultiplier, m_v3fPosition.y * m_fScaleMultiplier, m_v3fPosition.z));
 }
 
 glm::vec3* CTransform::GetPosition()
@@ -101,24 +101,31 @@ void CTransform::SetScale(glm::vec3 _v3fNewScale)
 {
 	m_v3fScale = _v3fNewScale;
 
-	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x, m_v3fScale.y, m_v3fScale.z));
+	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x * m_fScaleMultiplier, m_v3fScale.y * m_fScaleMultiplier, m_v3fScale.z * m_fScaleMultiplier));
 }
 
 void CTransform::SetScale(float _fNewScale)
 {
 	m_v3fScale = glm::vec3(_fNewScale, _fNewScale, _fNewScale);
 
-	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x, m_v3fScale.y, m_v3fScale.z));
+	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x * m_fScaleMultiplier, m_v3fScale.y * m_fScaleMultiplier, m_v3fScale.z * m_fScaleMultiplier));
 }
 
 void CTransform::AddScale(glm::vec3 _v3fScaleChange)
 {
 	m_v3fScale += _v3fScaleChange;
 
-	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x, m_v3fScale.y, m_v3fScale.z));
+	m_matScale = glm::scale(glm::mat4(1.0f), glm::vec3(m_v3fScale.x * m_fScaleMultiplier, m_v3fScale.y * m_fScaleMultiplier, m_v3fScale.z * m_fScaleMultiplier));
 }
 
 glm::vec3* CTransform::GetScale()
 {
 	return &m_v3fScale;
+}
+
+void CTransform::SetScaleMultiplier(float _fScaleMultiplier)
+{
+	m_fScaleMultiplier = _fScaleMultiplier;
+	SetPosition(m_v3fPosition);
+	SetScale(m_v3fScale);
 }

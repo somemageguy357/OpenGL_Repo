@@ -4,8 +4,8 @@ Media Design School
 Auckland
 New Zealand
 (c) 2025 Media Design School
-File Name : CTimeManager.cpp
-Description : Contains function definitions for CTimeManager.h.
+File Name : TimeManager.cpp
+Description : Contains function definitions for TimeManager.h.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

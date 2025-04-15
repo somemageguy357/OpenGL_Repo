@@ -12,22 +12,26 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "Camera.h"
 #include "TimeManager.h"
+#include "WindowManager.h"
 
-CCamera::CCamera(const int _kiWindowWidth, const int _kiWindowHeight)
+CCamera::CCamera(const bool _kbIsPerspective)
 {
-	CameraSetup(_kiWindowWidth, _kiWindowHeight);
+	m_bIsPerspective = _kbIsPerspective;
+	CameraSetup();
 }
 
-CCamera::CCamera(const int _kiWindowWidth, const int _kiWindowHeight, glm::vec3 _v3fPosition)
+CCamera::CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition)
 {
+	m_bIsPerspective = _kbIsPerspective;
 	m_oTransform = CTransform(_v3fPosition);
-	CameraSetup(_kiWindowWidth, _kiWindowHeight);
+	CameraSetup();
 }
 
-CCamera::CCamera(const int _kiWindowWidth, const int _kiWindowHeight, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
+CCamera::CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
 {
+	m_bIsPerspective = _kbIsPerspective;
 	m_oTransform = CTransform(_v3fPosition, _v3fRotation);
-	CameraSetup(_kiWindowWidth, _kiWindowHeight);
+	CameraSetup();
 }
 
 CCamera::~CCamera() {}
@@ -70,6 +74,39 @@ CTransform* CCamera::GetTransform()
 	return &m_oTransform;
 }
 
+void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _poVecShapePtrs)
+{
+	if (m_bIsPerspective != _bIsPerspective)
+	{
+		m_bIsPerspective = _bIsPerspective;
+
+		if (m_bIsPerspective == true)
+		{
+			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)
+			{
+				(*_poVecShapePtrs)[i]->GetTransform()->SetScaleMultiplier(1.0f);
+			}
+
+			CameraSetup();
+		}
+
+		else
+		{
+			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)
+			{
+				(*_poVecShapePtrs)[i]->GetTransform()->SetScaleMultiplier(400.0f);
+			}
+
+			CameraSetup();
+		}
+	}
+}
+
+bool CCamera::GetProjectionSpace()
+{
+	return m_bIsPerspective;
+}
+
 //glm::mat4* CCamera::GetViewMatrix()
 //{
 //	return &matView;
@@ -80,10 +117,18 @@ CTransform* CCamera::GetTransform()
 //	return &matProjection;
 //}
 
-void CCamera::CameraSetup(const int _kiWindowWidth, const int _kiWindowHeight)
+void CCamera::CameraSetup()
 {
 	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
 	//matView = glm::lookAt(v3fCamPosition, v3fCamTargetPosition, v3fCamUpDir); //Look at target.
 
-	m_matProjection = glm::ortho(-(float)_kiWindowWidth * 0.5f, (float)_kiWindowWidth * 0.5f, -(float)_kiWindowHeight * 0.5f, (float)_kiWindowHeight * 0.5f, 0.1f, 100.0f);
+	if (m_bIsPerspective == true)
+	{
+		m_matProjection = glm::perspective(glm::radians(45.0f), (float)CWindowManager::GetWidth() / (float)CWindowManager::GetHeight(), 0.1f, 100.0f);
+	}
+
+	else
+	{
+		m_matProjection = glm::ortho(-(float)CWindowManager::GetWidth() * 0.5f, (float)CWindowManager::GetWidth() * 0.5f, -(float)CWindowManager::GetHeight() * 0.5f, (float)CWindowManager::GetHeight() * 0.5f, 0.1f, 100.0f);
+	}
 }

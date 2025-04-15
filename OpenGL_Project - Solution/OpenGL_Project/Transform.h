@@ -138,6 +138,14 @@ public:
 	/// <returns>The Vector3 scale of the transform.</returns>
 	glm::vec3* GetScale();
 
+	/// <summary>
+	/// Sets the multipler for the transform's scale and position. Used for adjusting the visual scale and position of the object based 
+	/// on the camera's projection space (perspective vs orthographic). This also updates the transform's current position and
+	/// scale matrices using this value.
+	/// </summary>
+	/// <param name="_fScaleMultiplier:">The multiplier for the transform's scale and position.</param>
+	void SetScaleMultiplier(float _fScaleMultiplier);
+
 private:
 	//Position of the transform.
 	glm::vec3 m_v3fPosition = { 0.0f, 0.0f, 0.0f };
@@ -147,6 +155,9 @@ private:
 
 	//Scale of the transform.
 	glm::vec3 m_v3fScale = { 1.0f, 1.0f, 1.0f };
+
+	//How much the scale is multiplied by. Used for camera projection spaces.
+	float m_fScaleMultiplier = 1.0f;
 
 	//The transform's translation matrix.
 	glm::mat4 m_matTranslation = glm::mat4(1.0f);

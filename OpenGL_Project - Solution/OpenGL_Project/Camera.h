@@ -27,30 +27,27 @@ public:
 	CCamera() = delete;
 
 	/// <summary>
-	/// Creates a camera whose view frustrum is set using the given window width and height values. The position (0.0f, 0.0f, 0.0f)
+	/// Creates a camera whose view frustrum is set using the window's width and height values. The position (0.0f, 0.0f, 0.0f)
 	/// and rotation (0.0f, 0.0f, 0.0f) of the camera are set to their default values.
 	/// </summary>
-	/// <param name="_kiWindowWidth:">The pixel width of the window.</param>
-	/// <param name="_kiWindowHeight:">The pixel height of the window.</param>
-	CCamera(const int _kiWindowWidth, const int _kiWindowHeight);
+	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
+	CCamera(const bool _kbIsPerspective);
 
 	/// <summary>
-	/// Creates a camera whose view frustrum is set using the given window width and height values as well as its position. 
+	/// Creates a camera whose view frustrum is set using the window's width and height values as well as the given position. 
 	/// The rotation (0.0f, 0.0f, 0.0f) of the camera is set to its default value.
 	/// </summary>
-	/// <param name="_kiWindowWidth:">The pixel width of the window.</param>
-	/// <param name="_kiWindowHeight:">The pixel height of the window.</param>
+	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
 	/// <param name="_v3fPosition:">The starting position of the camera.</param>
-	CCamera(const int _kiWindowWidth, const int _kiWindowHeight, glm::vec3 _v3fPosition);
+	CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition);
 
 	/// <summary>
-	/// Creates a camera whose view frustrum is set using the given window width and height values as well as its position and rotation. 
+	/// Creates a camera whose view frustrum is set using the window's width and height values as well as the given position and rotation. 
 	/// </summary>
-	/// <param name="_kiWindowWidth:">The pixel width of the window.</param>
-	/// <param name="_kiWindowHeight:">The pixel height of the window.</param>
+	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
 	/// <param name="_v3fPosition:">The starting position of the camera.</param>
 	/// <param name="_v3fRotation:">The starting rotation of the camera.</param>
-	CCamera(const int _kiWindowWidth, const int _kiWindowHeight, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
 
 	~CCamera();
 
@@ -82,10 +79,21 @@ public:
 	/// <returns>The camera's transform.</returns>
 	CTransform* GetTransform();
 
+	void SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _poVecShapePtrs);
+
+	/// <summary>
+	/// Returns the camera's projection space.
+	/// </summary>
+	/// <returns>True for perspective, false for orthographic.</returns>
+	bool GetProjectionSpace();
+
 
 private:
 	//The camera's transform.
 	CTransform m_oTransform;
+
+	//The camera's projection space. True for perspective, false for orthographic.
+	bool m_bIsPerspective;
 
 	//The camera's forward/view direction.
 	glm::vec3 m_v3fCamForwardDir = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -103,5 +111,5 @@ private:
 	glm::mat4 m_matProjection;
 
 	//Sets up the camera's view and projection matrices. Called from the constructors.
-	void CameraSetup(const int _kiWindowWidth, const int _kiWindowHeight);
+	void CameraSetup();
 };
