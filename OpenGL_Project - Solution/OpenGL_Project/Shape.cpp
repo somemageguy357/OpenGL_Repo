@@ -13,13 +13,22 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Shape.h"
 #include <iostream>
 
-CShape::CShape() : CTransform::CTransform () {}
+CShape::CShape() {}
 
-CShape::CShape(glm::vec3 _v3fPosition) : CTransform(_v3fPosition) {}
+CShape::CShape(glm::vec3 _v3fPosition)
+{
+	m_oTransform = CTransform(_v3fPosition);
+}
 
-CShape::CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation) : CTransform(_v3fPosition, _v3fRotation) {}
+CShape::CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
+{
+	m_oTransform = CTransform(_v3fPosition, _v3fRotation);
+}
 
-CShape::CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale) : CTransform(_v3fPosition, _v3fRotation, _v3fScale) {}
+CShape::CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale)
+{
+	m_oTransform = CTransform(_v3fPosition, _v3fRotation, _v3fScale);
+}
 
 CShape::~CShape() {}
 
@@ -36,6 +45,11 @@ GLuint* CShape::GetVAO()
 GLuint* CShape::GetEBO()
 {
 	return &m_uiEBO;
+}
+
+CTransform* CShape::GetTransform()
+{
+	return &m_oTransform;
 }
 
 std::vector<float> CShape::GetVertexData()

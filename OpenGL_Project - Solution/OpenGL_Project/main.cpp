@@ -97,15 +97,15 @@ int main()
 		{
 			CQuad* poQuad = new CQuad();
 			poVecShapes.push_back(poQuad);
-			poQuad->SetScale({ 400.0f, 400.0f, 1.0f });
+			poQuad->GetTransform()->SetScale({ 400.0f, 400.0f, 1.0f });
 		}
 
 		//Reposition quads, add textures to them, and change tex coords for some.
-		poVecShapes[0]->SetPosition({ -250.0f, 250.0f, 0.0f });
-		poVecShapes[1]->SetPosition({ 250.0f, 250.0f, 0.0f });
-		poVecShapes[2]->SetPosition({ 250.0f, -250.0f, 0.0f });
-		poVecShapes[3]->SetPosition({ -250.0f, -250.0f, 0.0f });
-		poVecShapes[4]->SetPosition({ 0.0f, 0.0f, 0.0f });
+		poVecShapes[0]->GetTransform()->SetPosition({ -250.0f, 250.0f, 0.0f });
+		poVecShapes[1]->GetTransform()->SetPosition({ 250.0f, 250.0f, 0.0f });
+		poVecShapes[2]->GetTransform()->SetPosition({ 250.0f, -250.0f, 0.0f });
+		poVecShapes[3]->GetTransform()->SetPosition({ -250.0f, -250.0f, 0.0f });
+		poVecShapes[4]->GetTransform()->SetPosition({ 0.0f, 0.0f, 0.0f });
 
 		poVecShapes[0]->AddTexture(poVecTextures[0]);
 		poVecShapes[1]->AddTexture(poVecTextures[0]);
@@ -201,7 +201,7 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 ;
-	poCamera->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 50.0f, poCamera->GetPosition()->y, poCamera->GetPosition()->z });
+	poCamera->GetTransform()->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 50.0f, poCamera->GetTransform()->GetPosition()->y, poCamera->GetTransform()->GetPosition()->z });
 	poCamera->Update();
 }
 

@@ -21,7 +21,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <gtc/type_ptr.hpp>
 
 //Used to render objects to in a 3D space. 
-class CCamera : public CTransform
+class CCamera
 {
 public:
 	CCamera() = delete;
@@ -76,8 +76,17 @@ public:
 
 	//glm::mat4* GetProjectionMatrix();
 
+	/// <summary>
+	/// Returns the camera's transform.
+	/// </summary>
+	/// <returns>The camera's transform.</returns>
+	CTransform* GetTransform();
+
 
 private:
+	//The camera's transform.
+	CTransform m_oTransform;
+
 	//The camera's forward/view direction.
 	glm::vec3 m_v3fCamForwardDir = glm::vec3(0.0f, 0.0f, -1.0f);
 

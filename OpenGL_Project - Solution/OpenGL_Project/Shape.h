@@ -5,7 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Shape.h
-Description : Base class for all shape types. Contains vertex, rendering object, and texture data for the shape.
+Description : Base class for all shape types. Contains vertex, rendering object, and texture data for the shape as well as its transform.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
@@ -17,10 +17,10 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <vector>
 
 /// <summary>
-/// Base class for all shape types (Quads, Hexagons, etc). Contains a shape's vertex data, rendering object data, and textures.
-/// Objects of this type specifically cannot be created.
+/// Base class for all shape types (Quads, Hexagons, etc). Contains a shape's vertex data, rendering object data, and textures
+/// as well as its transform. Objects of this type specifically cannot be created.
 /// </summary>
-class CShape : public CTransform
+class CShape
 {
 public:
 	~CShape();
@@ -42,6 +42,12 @@ public:
 	/// </summary>
 	/// <returns>The shape's EBO.</returns>
 	GLuint* GetEBO();
+
+	/// <summary>
+	/// Returns the shape's transform.
+	/// </summary>
+	/// <returns>The shape's transform.</returns>
+	CTransform* GetTransform();
 
 	/// <summary>
 	/// Returns the vector of floats containing vertex position and colour data.
@@ -81,6 +87,9 @@ public:
 	virtual void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords);
 
 protected:
+	//The shape's transform.
+	CTransform m_oTransform;
+
 	//Positions, colours, and texture coordinates of the shapes's vertices.
 	std::vector<float> m_fVecVertexData;
 

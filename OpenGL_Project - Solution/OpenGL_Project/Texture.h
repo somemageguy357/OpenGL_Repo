@@ -62,6 +62,10 @@ public:
 	/// <returns>True if the current frame is ready to change, false if not.</returns>
 	bool GetNextFrameReady();
 
+	/// <summary>
+	/// Calculates the texture coordinates that are to display the current frame in the spritesheet and returns them.
+	/// </summary>
+	/// <returns>The texture coordinates displaying the current animation frame.</returns>
 	std::vector<float>* GetCurrentFrameTexCoords();
 
 private:
@@ -78,9 +82,14 @@ private:
 	int m_iCurrentFrame = 0;
 	int m_iTotalFrames = 0;
 	int m_iFrameRate = 0;
+
+	//The time remaining until the next frame starts.
 	float m_fCurrentFrameDuration = 0.0f;
+
 	int m_iSpritesheetRows = 0;
 	int m_iSpritesheetColumns = 0;
+
+	//The width and height of each frame/cell in the spritesheet in texture coordinate values.
 	float m_fFrameTexCoordWidth = 0.0f;
 	float m_fFrameTexCoordHeight = 0.0f;
 };
