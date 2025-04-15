@@ -40,16 +40,22 @@
     <Filter Include="Source Files\Misc">
       <UniqueIdentifier>{52bdbf06-1324-43c7-b0d6-981d825e61d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shapes\2D">
+      <UniqueIdentifier>{085b2b9e-4771-48fe-b803-816a1717c6fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shapes\3D">
+      <UniqueIdentifier>{4d2d5532-f979-4253-889f-223a3df65ac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shapes\2D">
+      <UniqueIdentifier>{9ddb9bd4-425d-42c0-873f-9d301e158eba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shapes\3D">
+      <UniqueIdentifier>{d7d70234-7f71-4113-8d4b-447479827c64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Hexagon.cpp">
-      <Filter>Source Files\Shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="Quad.cpp">
-      <Filter>Source Files\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
       <Filter>Source Files\Shapes</Filter>
@@ -72,14 +78,17 @@
     <ClCompile Include="WindowManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files\Shapes\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Hexagon.cpp">
+      <Filter>Source Files\Shapes\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Quad.cpp">
+      <Filter>Source Files\Shapes\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Hexagon.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="Quad.h">
-      <Filter>Header Files\Shapes</Filter>
-    </ClInclude>
     <ClInclude Include="Shape.h">
       <Filter>Header Files\Shapes</Filter>
     </ClInclude>
@@ -100,6 +109,15 @@
     </ClInclude>
     <ClInclude Include="WindowManager.h">
       <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Shapes\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Hexagon.h">
+      <Filter>Header Files\Shapes\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Quad.h">
+      <Filter>Header Files\Shapes\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

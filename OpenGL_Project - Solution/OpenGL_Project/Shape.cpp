@@ -64,7 +64,7 @@ std::vector <unsigned int> CShape::GetTriIndices()
 
 void CShape::AddTexture(CTexture* _poTexture)
 {
-	m_poVecTextures.push_back(_poTexture);
+	m_oVecTexturePtrs.push_back(_poTexture);
 
 	if (_poTexture->GetAnimated() == true)
 	{
@@ -74,21 +74,21 @@ void CShape::AddTexture(CTexture* _poTexture)
 
 std::vector<CTexture*> CShape::GetTextures()
 {
-	return m_poVecTextures;
+	return m_oVecTexturePtrs;
 }
 
 void CShape::BindTextures(GLuint _uiProgram)
 {
-	for (int i = 0; i < m_poVecTextures.size(); i++)
+	for (int i = 0; i < m_oVecTexturePtrs.size(); i++)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, m_poVecTextures[i]->GetTexture());
+		glBindTexture(GL_TEXTURE_2D, m_oVecTexturePtrs[i]->GetTexture());
 		glUniform1i(glGetUniformLocation(_uiProgram, std::string("oTexture" + std::to_string(i)).c_str()), i);
 
 		//If the texture is animated: change the quads's texture coordinates to match the right frame to display.
-		if (m_poVecTextures[i]->GetAnimated() == true && m_poVecTextures[i]->GetNextFrameReady() == true)
+		if (m_oVecTexturePtrs[i]->GetAnimated() == true && m_oVecTexturePtrs[i]->GetNextFrameReady() == true)
 		{
-			SetNewQuadTexCoords(*m_poVecTextures[i]->GetCurrentFrameTexCoords());
+			SetNewQuadTexCoords(*m_oVecTexturePtrs[i]->GetCurrentFrameTexCoords());
 		}
 	}
 }

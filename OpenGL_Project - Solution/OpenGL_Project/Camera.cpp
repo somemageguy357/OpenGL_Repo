@@ -58,7 +58,7 @@ void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(m_matView));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(m_matProjection));
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -80,6 +80,7 @@ void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _po
 	{
 		m_bIsPerspective = _bIsPerspective;
 
+		//Perspective
 		if (m_bIsPerspective == true)
 		{
 			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)
@@ -90,6 +91,7 @@ void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _po
 			CameraSetup();
 		}
 
+		//Orthographic
 		else
 		{
 			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)

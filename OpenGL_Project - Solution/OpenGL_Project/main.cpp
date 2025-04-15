@@ -18,14 +18,15 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Texture.h"
 #include "Hexagon.h"
 #include "Quad.h"
+#include "Cube.h"
 
 //------GLOBAL VARIABLES------
 GLuint uiProgramTex = 0;
 GLuint uiProgramTexMix = 0;
 
 CCamera* poCamera = nullptr;
-std::vector<CTexture*> poVecTextures;
-std::vector<CShape*> poVecShapes;
+std::vector<CTexture*> oVecTexturePtrs;
+std::vector<CShape*> oVecShapePtrs;
 //----------------------------
 
 /// <summary>
@@ -87,44 +88,40 @@ int main()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		//Enable depth testing.
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+
+		//Enable face culling.
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+
+		//Enable wireframe.
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 		//Create programs.
 		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Texture.frag");
-		uiProgramTexMix = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/TextureMix.frag");
+		//uiProgramTexMix = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/TextureMix.frag");
 
 		//Create textures.
-		CreateTexture("Resources/Textures/Run.png");
-		CreateTexture("Resources/Textures/Jump_Attack__000.png");
-		CreateTexture("Resources/Textures/RobotSpriteSheet2D.png", 16, 2, 8, 3);
+		CreateTexture("Resources/Textures/testtex.png");
 
-		//Create quads.
-		for (int i = 0; i < 5; i++)
+		//Create cube.
+		for (int i = 0; i < 1; i++)
 		{
-			CQuad* poQuad = new CQuad();
-			poVecShapes.push_back(poQuad);
+			CCube* poCube = new CCube();
+			oVecShapePtrs.push_back(poCube);
 
 			//Increase the scale of the quad if the camera is using orthographic projection.
 			if (poCamera->GetProjectionSpace() == false)
 			{
-				poQuad->GetTransform()->SetScaleMultiplier(400.0f);
+				poCube->GetTransform()->SetScaleMultiplier(400.0f);
 			}
 		}
 
-		//Reposition quads, add textures to them, and change tex coords for some.
-		poVecShapes[0]->GetTransform()->SetPosition({ -0.5f, 0.5f, 0.0f });
-		poVecShapes[1]->GetTransform()->SetPosition({ 0.5f, 0.5f, 0.0f });
-		poVecShapes[2]->GetTransform()->SetPosition({ 0.5f, -0.5f, 0.0f });
-		poVecShapes[3]->GetTransform()->SetPosition({ -0.5f, -0.5f, 0.0f });
-		poVecShapes[4]->GetTransform()->SetPosition({ 0.0f, 0.0f, 0.0f });
-
-		poVecShapes[0]->AddTexture(poVecTextures[0]);
-		poVecShapes[1]->AddTexture(poVecTextures[0]);
-		poVecShapes[1]->AddTexture(poVecTextures[1]); //Second texture for mixing
-		poVecShapes[2]->AddTexture(poVecTextures[0]);
-		poVecShapes[3]->AddTexture(poVecTextures[0]);
-		poVecShapes[4]->AddTexture(poVecTextures[2]);
-
-		poVecShapes[0]->SetNewQuadTexCoords({ -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f }); //Tiling
-		poVecShapes[2]->SetNewQuadTexCoords({ 0.0f, 1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f }); //Vertical Flip
+		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
+		oVecShapePtrs[0]->AddTexture(oVecTexturePtrs[0]);
 	}
 
 	//Main loop.
@@ -135,12 +132,19 @@ int main()
 	}
 
 	//Clean up the program. Delete pointers and terminate the render window.
-	for (int i = 0; i < poVecShapes.size(); i++)
+	for (int i = 0; i < oVecShapePtrs.size(); i++)
 	{
-		delete poVecShapes[i];
+		delete oVecShapePtrs[i];
 	}
 
-	poVecShapes.clear();
+	oVecShapePtrs.clear();
+
+	for (int i = 0; i < oVecTexturePtrs.size(); i++)
+	{
+		delete oVecTexturePtrs[i];
+	}
+
+	oVecTexturePtrs.clear();
 
 	delete poCamera;
 
@@ -194,13 +198,13 @@ GLFWwindow* InitializeGLSetup()
 void CreateTexture(std::string _sFilePath)
 {
 	CTexture* poTexture = new CTexture(_sFilePath);
-	poVecTextures.push_back(poTexture);
+	oVecTexturePtrs.push_back(poTexture);
 }
 
 void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColumns, int _iFrameRate)
 {
 	CTexture* poTexture = new CTexture(_sFilePath, _iFrames, _iRows, _iColumns, _iFrameRate);
-	poVecTextures.push_back(poTexture);
+	oVecTexturePtrs.push_back(poTexture);
 }
 
 void Update()
@@ -210,19 +214,16 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 
+	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, 1.0f, 0.0f });
 	//poCamera->GetTransform()->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 2.0f, poCamera->GetTransform()->GetPosition()->y, poCamera->GetTransform()->GetPosition()->z });
 	poCamera->Update();
 }
 
 void Render(GLFWwindow* _poWindow)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	poCamera->Render(uiProgramTex, poVecShapes[0]); //Tiling
-	poCamera->Render(uiProgramTexMix, poVecShapes[1]); //Mixing
-	poCamera->Render(uiProgramTex, poVecShapes[2]); //Flip
-	poCamera->Render(uiProgramTex, poVecShapes[3]); //Blend
-	poCamera->Render(uiProgramTex, poVecShapes[4]); //Animation
+	poCamera->Render(uiProgramTex, oVecShapePtrs[0]);
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(_poWindow);

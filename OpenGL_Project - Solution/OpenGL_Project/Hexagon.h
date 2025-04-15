@@ -13,9 +13,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #pragma once
 #include "Shape.h"
 
-/// <summary>
-/// Deriving class of CShape. Contains the hexagon's vertex data, rendering object data, and textures.
-/// </summary>
+// Deriving class of CShape. Contains the hexagon's vertex data, rendering object data, and textures.
 class CHexagon : public CShape
 {
 public:

@@ -17,7 +17,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <vector>
 
 /// <summary>
-/// Base class for all shape types (Quads, Hexagons, etc). Contains a shape's vertex data, rendering object data, and textures
+/// Base class for all 2D and 3D shape types. Contains a shape's vertex data, rendering object data, and textures
 /// as well as its transform. Objects of this type specifically cannot be created.
 /// </summary>
 class CShape
@@ -146,5 +146,5 @@ protected:
 
 private:
 	//The vector containing the shape's CTextures.
-	std::vector<CTexture*> m_poVecTextures;
+	std::vector<CTexture*> m_oVecTexturePtrs;
 };
