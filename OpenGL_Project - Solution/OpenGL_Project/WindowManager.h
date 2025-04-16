@@ -5,12 +5,17 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : WindowManager.h
-Description : Contains the window's width and height values.
+Description : contains the render window and its properties.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
-//Static class that holds the size valeus of the window.
+#pragma once
+#include <glew.h>
+#include <glfw3.h>
+#include <glm.hpp>
+
+//Static class that contains the render window and its properties.
 class CWindowManager
 {
 public:
@@ -45,9 +50,17 @@ public:
 	/// <param name="_iHeight:">The height value of the window.</param>
 	static void SetSize(int _iWidth, int _iHeight);
 
+	static void SetWindow(GLFWwindow* _poWindow);
+
+	static GLFWwindow* GetWindow();
+
+	static void Update();
+
 private:
 	CWindowManager() {};
 	~CWindowManager() {};
+
+	static GLFWwindow* m_poWindow;
 
 	static int m_iWidth;
 	static int m_iHeight;

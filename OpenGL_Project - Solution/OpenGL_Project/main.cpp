@@ -12,7 +12,9 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "TimeManager.h"
 #include "WindowManager.h"
+#include "InputManager.h"
 #include "ShaderLoader.h"
+#include "ProgramSettings.h"
 
 #include "Camera.h"
 #include "Texture.h"
@@ -43,8 +45,7 @@ void Update();
 /// <summary>
 /// Renders all objects to the window and swaps the buffers.
 /// </summary>
-/// <param name="_poWindow:">The window that buffers are swapped to.</param>
-void Render(GLFWwindow* _poWindow);
+void Render();
 
 /// <summary>
 /// Creates a CTexture which gets its texture data from the given file path.
@@ -68,37 +69,20 @@ int main()
 	CWindowManager::SetSize(800, 800);
 
 	//Attempt to initialize OpenGL setup.
-	GLFWwindow* poWindow = InitializeGLSetup();
+	CWindowManager::SetWindow(InitializeGLSetup());
 
-	bool bCloseProgram = false;
-
-	//If the setup process failed: prepare to close/terminate the program
-	if (poWindow == nullptr)
-	{
-		bCloseProgram = true;
-	}
-
-	//Else: proceed with the program.
-	else
+	//If the setup process succeeded: proceed with the program.
+	if (CWindowManager::GetWindow() != nullptr)
 	{
 		//Create camera.
 		poCamera = new CCamera(true, { 0.0f, 0.0f, 3.0f });
 
-		//Enable texture blending.
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		CInputManager::EnableCallbackFunctions();
 
-		//Enable depth testing.
-		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LESS);
-
-		//Enable face culling.
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CCW);
-
-		//Enable wireframe.
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//Enable face culling, depth testing, and texture blending.
+		CProgramSettings::SetFaceCulling(true);
+		CProgramSettings::SetDepthTesting(true);
+		CProgramSettings::SetTextureBlending(true);
 
 		//Create programs.
 		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Texture.frag");
@@ -125,10 +109,10 @@ int main()
 	}
 
 	//Main loop.
-	while (bCloseProgram == false && glfwWindowShouldClose(poWindow) == false)
+	while (glfwWindowShouldClose(CWindowManager::GetWindow()) == false)
 	{
 		Update();
-		Render(poWindow);
+		Render();
 	}
 
 	//Clean up the program. Delete pointers and terminate the render window.
@@ -214,17 +198,21 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 
-	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, 1.0f, 0.0f });
-	//poCamera->GetTransform()->SetPosition({ sin(CTimeManager::GetCurrentTime()) * 2.0f, poCamera->GetTransform()->GetPosition()->y, poCamera->GetTransform()->GetPosition()->z });
+	//oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, 1.0f, 0.0f });
+	
+	CProgramSettings::Update();
+	CWindowManager::Update();
 	poCamera->Update();
+
+	CInputManager::ClearInputs();
 }
 
-void Render(GLFWwindow* _poWindow)
+void Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	poCamera->Render(uiProgramTex, oVecShapePtrs[0]);
 
 	//Swaps the current buffer with the pre-loaded buffer.
-	glfwSwapBuffers(_poWindow);
+	glfwSwapBuffers(CWindowManager::GetWindow());
 }

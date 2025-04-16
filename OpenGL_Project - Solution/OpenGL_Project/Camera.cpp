@@ -13,6 +13,10 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Camera.h"
 #include "TimeManager.h"
 #include "WindowManager.h"
+#include "InputManager.h"
+#include "Math.h"
+
+#include <iostream>
 
 CCamera::CCamera(const bool _kbIsPerspective)
 {
@@ -38,7 +42,31 @@ CCamera::~CCamera() {}
 
 void CCamera::Update()
 {
-	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
+	if (CInputManager::GetKey(GLFW_KEY_1) == true)
+	{
+		SetCameraMode(ECameraMode::Free);
+	}
+
+	else if (CInputManager::GetKey(GLFW_KEY_2) == true)
+	{
+		SetCameraMode(ECameraMode::Orbital);
+	}
+
+	if (m_eCameraMode == ECameraMode::Free)
+	{
+		FreeCamControls();
+	}
+
+	else if (m_eCameraMode == ECameraMode::Orbital)
+	{
+		OrbitalCamControls();
+	}
+
+	//Reset camera position.
+	if (CInputManager::GetKey(GLFW_KEY_R) == true)
+	{
+		m_oTransform.SetPosition({ 0.0f, 0.0f, 3.0f });
+	}
 }
 
 void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
@@ -109,20 +137,120 @@ bool CCamera::GetProjectionSpace()
 	return m_bIsPerspective;
 }
 
-//glm::mat4* CCamera::GetViewMatrix()
-//{
-//	return &matView;
-//}
-//
-//glm::mat4* CCamera::GetProjectionMatrix()
-//{
-//	return &matProjection;
-//}
+void CCamera::SetCameraMode(ECameraMode _eCameraMode)
+{
+	m_eCameraMode = _eCameraMode;
+
+	CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
+}
+
+void CCamera::FreeCamControls()
+{
+	glm::vec2 v2fMousePos = CInputManager::GetMousePosition();
+
+	m_fOffsetX = v2fMousePos.x - m_fPrevMouseX;
+	m_fOffsetY = m_fPrevMouseY - v2fMousePos.y;
+	m_fPrevMouseX = v2fMousePos.x;
+	m_fPrevMouseY = v2fMousePos.y;
+
+	float fMouseSensitivity = 15.0f * CTimeManager::GetDeltaTime();
+	m_fOffsetX *= fMouseSensitivity;
+	m_fOffsetY *= fMouseSensitivity;
+
+	m_fYaw += m_fOffsetX;
+	m_fPitch += m_fOffsetY;
+
+	m_fPitch = glm::clamp(m_fPitch, -89.0f, 89.0f);
+
+	glm::vec3 v3fLookDir =
+	{
+		cos(glm::radians(m_fYaw)) * cos(glm::radians(m_fPitch)),
+		sin(glm::radians(m_fPitch)),
+		sin(glm::radians(m_fYaw)) * cos(glm::radians(m_fPitch))
+	};
+
+	m_v3fCamForwardDir = CMath::Normalize(v3fLookDir);
+	glm::vec3 v3fRightDir = CMath::Normalize(glm::cross(m_v3fCamForwardDir, m_v3fCamUpDir));
+
+	//Create vector for sum movement direction.
+	glm::vec3 v3fMoveDir = { 0.0f, 0.0f, 0.0f };
+
+	//Move +Z.
+	if (CInputManager::GetKey(GLFW_KEY_W) == true)
+	{
+		v3fMoveDir += m_v3fCamForwardDir;
+	}
+
+	//Move -Z.
+	if (CInputManager::GetKey(GLFW_KEY_S) == true)
+	{
+		v3fMoveDir -= m_v3fCamForwardDir;
+	}
+
+	//Move -X.
+	if (CInputManager::GetKey(GLFW_KEY_A) == true)
+	{
+		v3fMoveDir -= v3fRightDir;
+	}
+
+	//Move +X.
+	if (CInputManager::GetKey(GLFW_KEY_D) == true)
+	{
+		v3fMoveDir += v3fRightDir;
+	}
+
+	//Move +Y.
+	if (CInputManager::GetKey(GLFW_KEY_E) == true)
+	{
+		v3fMoveDir += m_v3fCamUpDir;
+	}
+
+	//Move -Y.
+	if (CInputManager::GetKey(GLFW_KEY_Q) == true)
+	{
+		v3fMoveDir -= m_v3fCamUpDir;
+	}
+
+	//Move camera using sum of direction * delta time.
+	m_oTransform.AddPosition(CMath::Normalize(v3fMoveDir) * CTimeManager::GetDeltaTime() * 5.0f);
+
+	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
+
+	std::cout << m_v3fCamForwardDir.x << ", " << m_v3fCamForwardDir.y << ", " << m_v3fCamForwardDir.z << std::endl;
+}
+
+void CCamera::OrbitalCamControls()
+{
+	m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed;
+
+	glm::vec3 v3fNewPosition = { sin(m_fOrbitAngle) * m_fOrbitRadius, m_fOrbitHeight, cos(m_fOrbitAngle) * m_fOrbitRadius };
+	m_oTransform.SetPosition(v3fNewPosition);
+
+	m_matView = glm::lookAt(*m_oTransform.GetPosition(), { 0.0f, 0.0f, 0.0f }, m_v3fCamUpDir); //Look at target.
+}
+
+int CCamera::TriBool()
+{
+	int iValue = 0;
+
+	if (CInputManager::GetKey(GLFW_KEY_A) == true)
+	{
+		iValue -= 1;
+	}
+
+	if (CInputManager::GetKey(GLFW_KEY_D) == true)
+	{
+		iValue += 1;
+	}
+
+	return iValue;
+}
 
 void CCamera::CameraSetup()
 {
+	SetCameraMode(CCamera::ECameraMode::Free);
+
 	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
-	//matView = glm::lookAt(v3fCamPosition, v3fCamTargetPosition, v3fCamUpDir); //Look at target.
 
 	if (m_bIsPerspective == true)
 	{

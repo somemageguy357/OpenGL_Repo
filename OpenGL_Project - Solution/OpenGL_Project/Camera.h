@@ -24,6 +24,12 @@ Mail : Connor.Galvin@mds.ac.nz
 class CCamera
 {
 public:
+	enum class ECameraMode
+	{
+		Free,
+		Orbital,
+	};
+
 	CCamera() = delete;
 
 	/// <summary>
@@ -52,7 +58,7 @@ public:
 	~CCamera();
 
 	/// <summary>
-	/// Updates the camera's View Matrix to reflect any transform changes it has received.
+	/// Checks for movement input and updates the camera's View Matrix to reflect any transform changes it has received.
 	/// </summary>
 	void Update();
 
@@ -69,10 +75,6 @@ public:
 	/// <param name="_v3fTargetPosition:">The target position.</param>
 	void SetTargetPosition(glm::vec3 _v3fTargetPosition);
 
-	//glm::mat4* GetViewMatrix();
-
-	//glm::mat4* GetProjectionMatrix();
-
 	/// <summary>
 	/// Returns the camera's transform.
 	/// </summary>
@@ -87,6 +89,7 @@ public:
 	/// <returns>True for perspective, false for orthographic.</returns>
 	bool GetProjectionSpace();
 
+	void SetCameraMode(ECameraMode _eCameraMode);
 
 private:
 	//The camera's transform.
@@ -94,6 +97,9 @@ private:
 
 	//The camera's projection space. True for perspective, false for orthographic.
 	bool m_bIsPerspective;
+
+	//The mode of the camera (free, orbital, etc).
+	ECameraMode m_eCameraMode;
 
 	//The camera's forward/view direction.
 	glm::vec3 m_v3fCamForwardDir = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -110,6 +116,26 @@ private:
 	//The camera's projection matrix.
 	glm::mat4 m_matProjection;
 
+	//Free camera values.
+	float m_fPrevMouseX = 0.0f;
+	float m_fPrevMouseY = 0.0f;
+	float m_fYaw = 0.0f;
+	float m_fPitch = 0.0f;
+	float m_fOffsetX = 0.0f;
+	float m_fOffsetY = 0.0f;
+
+	//Orbital camera values.
+	float m_fOrbitAngle = 0.0f;
+	float m_fOrbitRadius = 3.0f;
+	float m_fOrbitHeight = 0.5f;
+	float m_fOrbitMoveSpeed = 1.0f;
+
 	//Sets up the camera's view and projection matrices. Called from the constructors.
 	void CameraSetup();
+
+	void FreeCamControls();
+
+	void OrbitalCamControls();
+
+	int TriBool();
 };
