@@ -50,10 +50,21 @@ public:
 	/// <param name="_iHeight:">The height value of the window.</param>
 	static void SetSize(int _iWidth, int _iHeight);
 
+	/// <summary>
+	/// Sets the pointer to the render window to the given value.
+	/// </summary>
+	/// <param name="_poWindow:">The render window.</param>
 	static void SetWindow(GLFWwindow* _poWindow);
 
+	/// <summary>
+	/// Returns a pointer to the render window.
+	/// </summary>
+	/// <returns>A pointer to the render window.</returns>
 	static GLFWwindow* GetWindow();
 
+	/// <summary>
+	/// Checks for inputs.
+	/// </summary>
 	static void Update();
 
 private:

@@ -24,6 +24,7 @@ Mail : Connor.Galvin@mds.ac.nz
 class CCamera
 {
 public:
+	//Control/movement mode for the camera.
 	enum class ECameraMode
 	{
 		Free,
@@ -58,7 +59,7 @@ public:
 	~CCamera();
 
 	/// <summary>
-	/// Checks for movement input and updates the camera's View Matrix to reflect any transform changes it has received.
+	/// Checks for movement input.
 	/// </summary>
 	void Update();
 
@@ -81,6 +82,12 @@ public:
 	/// <returns>The camera's transform.</returns>
 	CTransform* GetTransform();
 
+	/// <summary>
+	/// Sets the projection space of the camera. Adjusts the scale multiplier of all objects in the given vector
+	/// to match the change between perspective and orthographic projection spaces.
+	/// </summary>
+	/// <param name="_bIsPerspective:">Sets the projection space to perspective if true, orthographic if false.</param>
+	/// <param name="_poVecShapePtrs:">Vector containing all shapes that will have their transforms adjusted.</param>
 	void SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _poVecShapePtrs);
 
 	/// <summary>
@@ -89,6 +96,10 @@ public:
 	/// <returns>True for perspective, false for orthographic.</returns>
 	bool GetProjectionSpace();
 
+	/// <summary>
+	/// Sets the camera control mode of the camera.
+	/// </summary>
+	/// <param name="_eCameraMode:">The camera control mode to change to.</param>
 	void SetCameraMode(ECameraMode _eCameraMode);
 
 private:
@@ -130,12 +141,15 @@ private:
 	float m_fOrbitHeight = 0.5f;
 	float m_fOrbitMoveSpeed = 1.0f;
 
-	//Sets up the camera's view and projection matrices. Called from the constructors.
+	//Sets up the camera's projection matrix depending on the current projection space. Called from the constructors.
 	void CameraSetup();
 
+	//Runs the controls for the camera's free cam mode.
 	void FreeCamControls();
 
+	//Runs the controls for the camera's orbital cam mode.
 	void OrbitalCamControls();
 
+	//Used to get the input axis for the orbital cam control mode.
 	int TriBool();
 };

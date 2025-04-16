@@ -153,7 +153,7 @@ void CCamera::FreeCamControls()
 	m_fPrevMouseX = v2fMousePos.x;
 	m_fPrevMouseY = v2fMousePos.y;
 
-	float fMouseSensitivity = 15.0f * CTimeManager::GetDeltaTime();
+	float fMouseSensitivity = 10.0f * CTimeManager::GetDeltaTime();
 	m_fOffsetX *= fMouseSensitivity;
 	m_fOffsetY *= fMouseSensitivity;
 
@@ -175,37 +175,31 @@ void CCamera::FreeCamControls()
 	//Create vector for sum movement direction.
 	glm::vec3 v3fMoveDir = { 0.0f, 0.0f, 0.0f };
 
-	//Move +Z.
 	if (CInputManager::GetKey(GLFW_KEY_W) == true)
 	{
 		v3fMoveDir += m_v3fCamForwardDir;
 	}
 
-	//Move -Z.
 	if (CInputManager::GetKey(GLFW_KEY_S) == true)
 	{
 		v3fMoveDir -= m_v3fCamForwardDir;
 	}
 
-	//Move -X.
 	if (CInputManager::GetKey(GLFW_KEY_A) == true)
 	{
 		v3fMoveDir -= v3fRightDir;
 	}
 
-	//Move +X.
 	if (CInputManager::GetKey(GLFW_KEY_D) == true)
 	{
 		v3fMoveDir += v3fRightDir;
 	}
 
-	//Move +Y.
 	if (CInputManager::GetKey(GLFW_KEY_E) == true)
 	{
 		v3fMoveDir += m_v3fCamUpDir;
 	}
 
-	//Move -Y.
 	if (CInputManager::GetKey(GLFW_KEY_Q) == true)
 	{
 		v3fMoveDir -= m_v3fCamUpDir;
@@ -215,8 +209,6 @@ void CCamera::FreeCamControls()
 	m_oTransform.AddPosition(CMath::Normalize(v3fMoveDir) * CTimeManager::GetDeltaTime() * 5.0f);
 
 	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
-
-	std::cout << m_v3fCamForwardDir.x << ", " << m_v3fCamForwardDir.y << ", " << m_v3fCamForwardDir.z << std::endl;
 }
 
 void CCamera::OrbitalCamControls()
@@ -249,8 +241,6 @@ int CCamera::TriBool()
 void CCamera::CameraSetup()
 {
 	SetCameraMode(CCamera::ECameraMode::Free);
-
-	m_matView = glm::lookAt(*m_oTransform.GetPosition(), *m_oTransform.GetPosition() + m_v3fCamForwardDir, m_v3fCamUpDir); //Look at position.
 
 	if (m_bIsPerspective == true)
 	{

@@ -77,6 +77,7 @@ int main()
 		//Create camera.
 		poCamera = new CCamera(true, { 0.0f, 0.0f, 3.0f });
 
+		//Enables callback functions for keys, mouse buttons, and mouse position.
 		CInputManager::EnableCallbackFunctions();
 
 		//Enable face culling, depth testing, and texture blending.
@@ -104,7 +105,6 @@ int main()
 			}
 		}
 
-		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
 		oVecShapePtrs[0]->AddTexture(oVecTexturePtrs[0]);
 	}
 
@@ -141,7 +141,7 @@ GLFWwindow* InitializeGLSetup()
 	std::string sWindowTitle = "Main Window (" + std::to_string(CWindowManager::GetWidth()) + "x" + std::to_string(CWindowManager::GetHeight()) + ")";
 
 	glfwInit();
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 

@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Math.cpp
+Description : Contains function definitions for Math.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #include "Math.h"
 
 glm::vec3 CMath::Normalize(const glm::vec3 _v3fVector)

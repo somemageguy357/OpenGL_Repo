@@ -116,6 +116,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)/Dependencies/GLEW;$(ProjectDir)/Dependencies/GLFW;$(ProjectDir)/Dependencies/GLM;$(ProjectDir)/Dependencies/STB;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)/Dependencies/GLEW;$(ProjectDir)/Dependencies/GLFW;$(LibraryPath)</LibraryPath>
+    <OutDir>$(ProjectDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
