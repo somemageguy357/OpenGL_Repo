@@ -23,6 +23,27 @@ Mail : Connor.Galvin@mds.ac.nz
 class CShape
 {
 public:
+	struct VertexStandard
+	{
+		glm::vec3 v3fPosition;
+		glm::vec3 v3fColour;
+		glm::vec2 v2fTexCoord;
+
+		VertexStandard()
+		{
+			v3fPosition = { 0.0f, 0.0f, 0.0f };
+			v3fColour = { 0.0f, 0.0f, 0.0f };
+			v2fTexCoord = { 0.0f, 0.0f };
+		}
+
+		VertexStandard(glm::vec3 _v3fPosition, glm::vec3 _v3fColour, glm::vec2 _v2fTexCoord)
+		{
+			v3fPosition = _v3fPosition;
+			v3fColour = _v3fColour;
+			v2fTexCoord = _v2fTexCoord;
+		}
+	};
+
 	~CShape();
 
 	/// <summary>
@@ -56,9 +77,9 @@ public:
 	std::vector<float> GetVertexData();
 
 	/// <summary>
-	/// Returns the vector of uints containing the vertex joints of the tris that make up the quad.
+	/// Returns the vector of uints containing the vertex joints of the tris that make up the shape.
 	/// </summary>
-	/// <returns>The vector of uints containing the vertex joints of the tris that make up the quad.</returns>
+	/// <returns>The vector of uints containing the vertex joints of the tris that make up the shape.</returns>
 	std::vector<unsigned int> GetTriIndices();
 
 	/// <summary>
