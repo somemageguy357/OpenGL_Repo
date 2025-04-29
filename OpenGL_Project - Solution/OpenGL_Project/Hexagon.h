@@ -47,15 +47,15 @@ public:
 	~CHexagon();
 
 private:
-	//Wraps the generative functions of the hexagon. Called from the hexagon's constructors.
-	void ShapeSetup() override;
+	////Wraps the generative functions of the hexagon. Called from the hexagon's constructors.
+	//void ShapeSetup() override;
 
-	//Generates the default vertex data of the hexagon.
-	void GenerateVertexData() override;
+	////Generates the default vertex data of the hexagon.
+	//void GenerateVertexData() override;
 
-	//Generates the default tri indice data of the hexagon.
-	void GenerateTriIndices() override;
+	////Generates the default tri indice data of the hexagon.
+	//void GenerateTriIndices() override;
 
-	//Generates the hexagon's render data (buffers, vertex pointers, etc).
-	void GenerateShape() override;
+	////Generates the hexagon's render data (buffers, vertex pointers, etc).
+	//void GenerateShape() override;
 };

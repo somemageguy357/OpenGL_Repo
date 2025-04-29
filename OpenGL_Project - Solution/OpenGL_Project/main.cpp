@@ -93,7 +93,7 @@ int main()
 		CreateTexture("Resources/Textures/testtex.png");
 
 		//Create cube.
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			CCube* poCube = new CCube();
 			oVecShapePtrs.push_back(poCube);
@@ -103,9 +103,14 @@ int main()
 			{
 				poCube->GetTransform()->SetScaleMultiplier(400.0f);
 			}
+
+			poCube->AddTexture(oVecTexturePtrs[0]);
 		}
 
-		oVecShapePtrs[0]->AddTexture(oVecTexturePtrs[0]);
+		oVecShapePtrs[0]->GetTransform()->SetPosition({ 0.0f, 0.5f, 0.0f });
+		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
+		oVecShapePtrs[1]->GetTransform()->SetPosition({ 2.0f, 0.0f, 0.0f });
+		oVecShapePtrs[2]->GetTransform()->SetPosition({ -2.0f, 0.0f, 0.0f });
 	}
 
 	//Main loop.
@@ -198,7 +203,9 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 
-	//oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, 1.0f, 0.0f });
+	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 180.0f, { 1.0f, 1.0f, 1.0f });
+	oVecShapePtrs[1]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, -1.0f, 0.0f });
+	oVecShapePtrs[2]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 1.0f, 1.0f, 0.0f });
 	
 	CProgramSettings::Update();
 	CWindowManager::Update();
@@ -211,7 +218,10 @@ void Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	poCamera->Render(uiProgramTex, oVecShapePtrs[0]);
+	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
+	{
+		poCamera->Render(uiProgramTex, oVecShapePtrs[i]);
+	}
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(CWindowManager::GetWindow());

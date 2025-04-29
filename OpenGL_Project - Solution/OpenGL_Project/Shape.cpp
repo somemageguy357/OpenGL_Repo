@@ -32,34 +32,14 @@ CShape::CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fSca
 
 CShape::~CShape() {}
 
-GLuint* CShape::GetVBO()
-{
-	return &m_uiVBO;
-}
-
-GLuint* CShape::GetVAO()
-{
-	return &m_uiVAO;
-}
-
-GLuint* CShape::GetEBO()
-{
-	return &m_uiEBO;
-}
-
 CTransform* CShape::GetTransform()
 {
 	return &m_oTransform;
 }
 
-std::vector<float> CShape::GetVertexData()
+CMesh* CShape::GetMesh()
 {
-	return m_fVecVertexData;
-}
-
-std::vector <unsigned int> CShape::GetTriIndices()
-{
-	return m_uiVecTriIndices;
+	return m_poMesh;
 }
 
 void CShape::AddTexture(CTexture* _poTexture)

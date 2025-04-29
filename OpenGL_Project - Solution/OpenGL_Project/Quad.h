@@ -54,15 +54,15 @@ public:
 	void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords) override;
 
 private:
-	//Wraps the generative functions of the quad. Called from the quad's constructors.
-	void ShapeSetup() override;
+	////Wraps the generative functions of the quad. Called from the quad's constructors.
+	//void ShapeSetup() override;
 
-	//Generates the default vertex data of the quad.
-	void GenerateVertexData() override;
+	////Generates the default vertex data of the quad.
+	//void GenerateVertexData() override;
 
-	//Generates the default tri indice data of the quad.
-	void GenerateTriIndices() override;
+	////Generates the default tri indice data of the quad.
+	//void GenerateTriIndices() override;
 
-	//Generates the quad's render data (buffers, vertex pointers, etc).
-	void GenerateShape() override;
+	////Generates the quad's render data (buffers, vertex pointers, etc).
+	//void GenerateShape() override;
 };

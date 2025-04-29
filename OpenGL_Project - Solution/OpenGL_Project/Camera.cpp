@@ -77,7 +77,7 @@ void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
 	GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
 	glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
 
-	glBindVertexArray(*_poShape->GetVAO());
+	glBindVertexArray(*_poShape->GetMesh()->GetVAO());
 
 	//Bind the shape's textures (if any).
 	_poShape->BindTextures(_uiProgram);
@@ -86,7 +86,7 @@ void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(m_matView));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(m_matProjection));
 
-	glDrawElements(GL_TRIANGLES, _poShape->GetTriIndices().size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, _poShape->GetMesh()->GetTriIndices().size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
