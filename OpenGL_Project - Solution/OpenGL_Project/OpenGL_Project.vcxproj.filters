@@ -16,12 +16,6 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{47674e99-c68d-406c-a556-2e3b4325308b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Shapes">
-      <UniqueIdentifier>{af876d39-de6a-41b8-9b1e-f94f0e11a0f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shapes">
-      <UniqueIdentifier>{d167a239-0c0e-4c1d-a6f1-4716b45ecf21}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Loaders">
       <UniqueIdentifier>{0313ced2-70a1-4f97-8569-55225f835763}</UniqueIdentifier>
     </Filter>
@@ -40,23 +34,29 @@
     <Filter Include="Source Files\Misc">
       <UniqueIdentifier>{52bdbf06-1324-43c7-b0d6-981d825e61d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shapes\2D">
-      <UniqueIdentifier>{085b2b9e-4771-48fe-b803-816a1717c6fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Shapes\3D">
-      <UniqueIdentifier>{4d2d5532-f979-4253-889f-223a3df65ac8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shapes\2D">
-      <UniqueIdentifier>{9ddb9bd4-425d-42c0-873f-9d301e158eba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shapes\3D">
-      <UniqueIdentifier>{d7d70234-7f71-4113-8d4b-447479827c64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Meshes">
       <UniqueIdentifier>{2569fc24-c87d-497f-8922-98f26962149a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Meshes">
       <UniqueIdentifier>{2fdd912e-e937-4b7a-be9b-1544cd6ef196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{d167a239-0c0e-4c1d-a6f1-4716b45ecf21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects\2D">
+      <UniqueIdentifier>{085b2b9e-4771-48fe-b803-816a1717c6fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects\3D">
+      <UniqueIdentifier>{4d2d5532-f979-4253-889f-223a3df65ac8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{af876d39-de6a-41b8-9b1e-f94f0e11a0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\2D">
+      <UniqueIdentifier>{9ddb9bd4-425d-42c0-873f-9d301e158eba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\3D">
+      <UniqueIdentifier>{d7d70234-7f71-4113-8d4b-447479827c64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,7 +64,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="ShaderLoader.cpp">
       <Filter>Source Files\Loaders</Filter>
@@ -82,13 +82,13 @@
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp">
-      <Filter>Source Files\Shapes\3D</Filter>
+      <Filter>Source Files\Objects\3D</Filter>
     </ClCompile>
     <ClCompile Include="Hexagon.cpp">
-      <Filter>Source Files\Shapes\2D</Filter>
+      <Filter>Source Files\Objects\2D</Filter>
     </ClCompile>
     <ClCompile Include="Quad.cpp">
-      <Filter>Source Files\Shapes\2D</Filter>
+      <Filter>Source Files\Objects\2D</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -100,7 +100,7 @@
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Shapes</Filter>
+      <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Meshes</Filter>
@@ -108,10 +108,16 @@
     <ClCompile Include="CubeMesh.cpp">
       <Filter>Source Files\Meshes</Filter>
     </ClCompile>
+    <ClCompile Include="ModelMesh.cpp">
+      <Filter>Source Files\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Objects\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shape.h">
-      <Filter>Header Files\Shapes</Filter>
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="ShaderLoader.h">
       <Filter>Header Files\Loaders</Filter>
@@ -129,13 +135,13 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>Header Files\Shapes\3D</Filter>
+      <Filter>Header Files\Objects\3D</Filter>
     </ClInclude>
     <ClInclude Include="Hexagon.h">
-      <Filter>Header Files\Shapes\2D</Filter>
+      <Filter>Header Files\Objects\2D</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
-      <Filter>Header Files\Shapes\2D</Filter>
+      <Filter>Header Files\Objects\2D</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -147,7 +153,7 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Header Files\Shapes</Filter>
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files\Loaders</Filter>
@@ -157,6 +163,12 @@
     </ClInclude>
     <ClInclude Include="CubeMesh.h">
       <Filter>Header Files\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMesh.h">
+      <Filter>Header Files\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Objects\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

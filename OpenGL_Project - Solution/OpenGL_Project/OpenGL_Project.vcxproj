@@ -27,6 +27,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelMesh.cpp" />
     <ClCompile Include="ProgramSettings.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
@@ -44,6 +46,8 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelMesh.h" />
     <ClInclude Include="ProgramSettings.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="ShaderLoader.h" />

@@ -12,6 +12,8 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "Cube.h"
 #include "CubeMesh.h"
+#include "Camera.h"
+#include "TimeManager.h"
 
 CCube::CCube() : CShape()
 {
@@ -34,3 +36,26 @@ CCube::CCube(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale
 }
 
 CCube::~CCube() {}
+
+void CCube::Render(GLuint _uiProgram)
+{
+	glUseProgram(_uiProgram);
+
+	//Supplies the programs current lifetime to the shader program (if it requires it).
+	GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
+	glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
+
+	glBindVertexArray(*GetMesh()->GetVAO());
+
+	//Bind the shape's textures (if any).
+	BindTextures(_uiProgram);
+
+	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*GetTransform()->GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetProjectionMatrix()));
+
+	glDrawElements(GL_TRIANGLES, GetMesh()->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+}

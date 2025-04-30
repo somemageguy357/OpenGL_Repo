@@ -18,6 +18,8 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include <iostream>
 
+CCamera* CCamera::m_poMainCamera = nullptr;
+
 CCamera::CCamera(const bool _kbIsPerspective)
 {
 	m_bIsPerspective = _kbIsPerspective;
@@ -67,29 +69,6 @@ void CCamera::Update()
 	{
 		m_oTransform.SetPosition({ 0.0f, 0.0f, 3.0f });
 	}
-}
-
-void CCamera::Render(GLuint _uiProgram, CShape* _poShape)
-{
-	glUseProgram(_uiProgram);
-
-	//Supplies the programs current lifetime to the shader program (if it requires it).
-	GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
-	glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
-
-	glBindVertexArray(*_poShape->GetMesh()->GetVAO());
-
-	//Bind the shape's textures (if any).
-	_poShape->BindTextures(_uiProgram);
-
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*_poShape->GetTransform()->GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(m_matView));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(m_matProjection));
-
-	glDrawElements(GL_TRIANGLES, _poShape->GetMesh()->GetTriIndices().size(), GL_UNSIGNED_INT, 0);
-
-	glBindVertexArray(0);
-	glUseProgram(0);
 }
 
 void CCamera::SetTargetPosition(glm::vec3 _v3fTargetPosition)
@@ -142,6 +121,21 @@ void CCamera::SetCameraMode(ECameraMode _eCameraMode)
 	m_eCameraMode = _eCameraMode;
 
 	CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
+}
+
+CCamera* CCamera::GetMainCamera()
+{
+	return m_poMainCamera;
+}
+
+glm::mat4* CCamera::GetViewMatrix()
+{
+	return &m_matView;
+}
+
+glm::mat4* CCamera::GetProjectionMatrix()
+{
+	return &m_matProjection;
 }
 
 void CCamera::FreeCamControls()
@@ -240,6 +234,11 @@ int CCamera::TriBool()
 
 void CCamera::CameraSetup()
 {
+	if (m_poMainCamera == nullptr)
+	{
+		m_poMainCamera = this;
+	}
+
 	SetCameraMode(CCamera::ECameraMode::Free);
 
 	if (m_bIsPerspective == true)

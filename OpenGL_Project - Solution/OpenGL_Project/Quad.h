@@ -46,6 +46,8 @@ public:
 
 	~CQuad();
 
+	void Render(GLuint _uiProgram) override;
+
 	/// <summary>
 	/// Sets the texture coordinate portion of the quad's vertex data to the given values. The given vector MUST contain 8
 	/// elements.

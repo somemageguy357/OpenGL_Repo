@@ -71,7 +71,7 @@ public:
 	glm::mat4* GetScaleMatrix();
 
 	/// <summary>
-	/// Returns the transform's model matrix.
+	/// Calculates and returns the transform's model matrix.
 	/// </summary>
 	/// <returns>The transform's model matrix.</returns>
 	glm::mat4* GetModelMatrix();

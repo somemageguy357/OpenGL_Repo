@@ -35,6 +35,10 @@ CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale
 
 CQuad::~CQuad() {}
 
+void CQuad::Render(GLuint _uiProgram)
+{
+}
+
 //void CQuad::ShapeSetup()
 //{
 //	GenerateVertexData();

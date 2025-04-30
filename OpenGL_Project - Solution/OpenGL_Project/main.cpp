@@ -21,6 +21,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Hexagon.h"
 #include "Quad.h"
 #include "Cube.h"
+#include "Model.h"
 
 //------GLOBAL VARIABLES------
 GLuint uiProgramTex = 0;
@@ -104,10 +105,12 @@ int main()
 				poCube->GetTransform()->SetScaleMultiplier(400.0f);
 			}
 
-			poCube->AddTexture(oVecTexturePtrs[0]);
+			//poCube->AddTexture(oVecTexturePtrs[0]);
 		}
 
-		oVecShapePtrs[0]->GetTransform()->SetPosition({ 0.0f, 0.5f, 0.0f });
+		CModel* poModel = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj");
+		oVecShapePtrs.push_back(poModel);
+
 		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
 		oVecShapePtrs[1]->GetTransform()->SetPosition({ 2.0f, 0.0f, 0.0f });
 		oVecShapePtrs[2]->GetTransform()->SetPosition({ -2.0f, 0.0f, 0.0f });
@@ -203,7 +206,7 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 
-	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 180.0f, { 1.0f, 1.0f, 1.0f });
+	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 90.0f, { 1.0f, 1.0f, 1.0f });
 	oVecShapePtrs[1]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, -1.0f, 0.0f });
 	oVecShapePtrs[2]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 1.0f, 1.0f, 0.0f });
 	
@@ -220,8 +223,19 @@ void Render()
 
 	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
 	{
-		poCamera->Render(uiProgramTex, oVecShapePtrs[i]);
+		oVecShapePtrs[i]->Render(uiProgramTex);
+		//poCamera->Render(uiProgramTex, oVecShapePtrs[i]);
 	}
+
+	//UI rendering?
+	//poCamera->SetProjectionSpace(false, &oVecShapePtrs);
+
+	//for (size_t i = 0; i < oVecUIElements.size(); i++)
+	//{
+	//	poCamera->Render(uiProgramTex, oVecUIElements[i]);
+	//}
+
+	//poCamera->SetProjectionSpace(true, &oVecShapePtrs);
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(CWindowManager::GetWindow());

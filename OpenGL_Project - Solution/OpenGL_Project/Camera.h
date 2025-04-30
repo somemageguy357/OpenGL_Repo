@@ -64,13 +64,6 @@ public:
 	void Update();
 
 	/// <summary>
-	/// Renders the given shape to the window using the given shader program.
-	/// </summary>
-	/// <param name="_uiProgram:">The shader program to use.</param>
-	/// <param name="_poShape:">The shape to render.</param>
-	void Render(GLuint _uiProgram, CShape* _poShape);
-
-	/// <summary>
 	/// Sets the target position of the camera.
 	/// </summary>
 	/// <param name="_v3fTargetPosition:">The target position.</param>
@@ -102,7 +95,15 @@ public:
 	/// <param name="_eCameraMode:">The camera control mode to change to.</param>
 	void SetCameraMode(ECameraMode _eCameraMode);
 
+	static CCamera* GetMainCamera();
+
+	glm::mat4* GetViewMatrix();
+
+	glm::mat4* GetProjectionMatrix();
+
 private:
+	static CCamera* m_poMainCamera;
+
 	//The camera's transform.
 	CTransform m_oTransform;
 

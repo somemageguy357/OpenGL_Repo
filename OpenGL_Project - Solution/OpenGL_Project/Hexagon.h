@@ -46,6 +46,8 @@ public:
 
 	~CHexagon();
 
+	void Render(GLuint _uiProgram) override;
+
 private:
 	////Wraps the generative functions of the hexagon. Called from the hexagon's constructors.
 	//void ShapeSetup() override;

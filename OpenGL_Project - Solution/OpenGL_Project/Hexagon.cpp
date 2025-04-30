@@ -35,6 +35,10 @@ CHexagon::CHexagon(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3
 
 CHexagon::~CHexagon() {}
 
+void CHexagon::Render(GLuint _uiProgram)
+{
+}
+
 //void CHexagon::ShapeSetup()
 //{
 //	GenerateVertexData();

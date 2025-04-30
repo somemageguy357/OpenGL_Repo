@@ -44,4 +44,6 @@ public:
 	CCube(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 
 	~CCube();
+
+	void Render(GLuint _uiProgram) override;
 };

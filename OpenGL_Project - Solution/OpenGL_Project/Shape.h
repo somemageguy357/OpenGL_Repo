@@ -80,6 +80,8 @@ public:
 	/// <param name="_fVecNewTexCoords:">The vector containing the new texture coordinate data.</param>
 	virtual void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords);
 
+	virtual void Render(GLuint _uiProgram) = 0;
+
 protected:
 	//The shape's transform.
 	CTransform m_oTransform;

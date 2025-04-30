@@ -31,6 +31,8 @@ public:
 		}
 	};
 
+	~CMesh();
+
 	/// <summary>
 	/// Returns the address of the shape's VAO.
 	/// </summary>
@@ -41,13 +43,13 @@ public:
 	/// Returns the vector of floats containing vertex position and colour data.
 	/// </summary>
 	/// <returns>The vector of floats containing vertex position and colour data.</returns>
-	std::vector<float> GetVertexData();
+	std::vector<float>* GetVertexData();
 
 	/// <summary>
 	/// Returns the vector of uints containing the vertex joints of the tris that make up the shape.
 	/// </summary>
 	/// <returns>The vector of uints containing the vertex joints of the tris that make up the shape.</returns>
-	std::vector<unsigned int> GetTriIndices();
+	std::vector<unsigned int>* GetTriIndices();
 
 protected:
 	GLuint m_uiVAO = 0;
@@ -59,7 +61,6 @@ protected:
 	std::vector<unsigned int> m_oVecTriIndices;
 
 	CMesh();
-	~CMesh();
 
 	//Wraps the generative functions of the mesh. Called from the mesh's constructors.
 	virtual void MeshSetup() = 0;

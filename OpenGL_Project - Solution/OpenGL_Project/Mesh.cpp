@@ -9,12 +9,12 @@ GLuint* CMesh::GetVAO()
 	return &m_uiVAO;
 }
 
-std::vector<float> CMesh::GetVertexData()
+std::vector<float>* CMesh::GetVertexData()
 {
-	return m_oVecVertexData;
+	return &m_oVecVertexData;
 }
 
-std::vector<unsigned int> CMesh::GetTriIndices()
+std::vector<unsigned int>* CMesh::GetTriIndices()
 {
-	return m_oVecTriIndices;
+	return &m_oVecTriIndices;
 }
