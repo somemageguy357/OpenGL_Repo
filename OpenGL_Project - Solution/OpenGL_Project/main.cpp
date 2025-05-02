@@ -92,6 +92,7 @@ int main()
 
 		//Create textures.
 		CreateTexture("Resources/Textures/testtex.png");
+		CreateTexture("Resources/Textures/Dungeons_Texture_03.png");
 
 		//Create cube.
 		for (int i = 0; i < 3; i++)
@@ -105,11 +106,12 @@ int main()
 				poCube->GetTransform()->SetScaleMultiplier(400.0f);
 			}
 
-			//poCube->AddTexture(oVecTexturePtrs[0]);
+			poCube->AddTexture(oVecTexturePtrs[0]);
 		}
 
 		CModel* poModel = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj");
 		oVecShapePtrs.push_back(poModel);
+		poModel->AddTexture(oVecTexturePtrs[1]);
 
 		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
 		oVecShapePtrs[1]->GetTransform()->SetPosition({ 2.0f, 0.0f, 0.0f });

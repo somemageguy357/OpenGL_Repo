@@ -1,9 +1,2 @@
-﻿  Camera.cpp
-  Cube.cpp
-C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Cube.cpp(57,85): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Model.cpp
-C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Model.cpp(33,66): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  main.cpp
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  main.cpp
   OpenGL_Project.vcxproj -> C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\OpenGL_Project.exe

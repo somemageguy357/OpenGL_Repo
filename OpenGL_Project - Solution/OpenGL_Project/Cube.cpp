@@ -42,19 +42,19 @@ void CCube::Render(GLuint _uiProgram)
 	glUseProgram(_uiProgram);
 
 	//Supplies the programs current lifetime to the shader program (if it requires it).
-	GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
-	glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
+	//GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
+	//glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
 
-	glBindVertexArray(*GetMesh()->GetVAO());
+	glBindVertexArray(*m_poMesh->GetVAO());
 
 	//Bind the shape's textures (if any).
 	BindTextures(_uiProgram);
 
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*GetTransform()->GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetProjectionMatrix()));
 
-	glDrawElements(GL_TRIANGLES, GetMesh()->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
