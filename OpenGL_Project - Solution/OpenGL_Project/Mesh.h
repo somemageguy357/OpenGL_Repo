@@ -15,19 +15,22 @@ public:
 		glm::vec3 v3fPosition;
 		glm::vec3 v3fColour;
 		glm::vec2 v2fTexCoord;
+		glm::vec3 v3fNormals;
 
 		VertexStandard()
 		{
 			v3fPosition = { 0.0f, 0.0f, 0.0f };
 			v3fColour = { 0.0f, 0.0f, 0.0f };
 			v2fTexCoord = { 0.0f, 0.0f };
+			v3fNormals = { 0.0f, 0.0f, 0.0f };
 		}
 
-		VertexStandard(glm::vec3 _v3fPosition, glm::vec3 _v3fColour, glm::vec2 _v2fTexCoord)
+		VertexStandard(glm::vec3 _v3fPosition, glm::vec3 _v3fColour, glm::vec2 _v2fTexCoord, glm::vec3 _v3fNormals)
 		{
 			v3fPosition = _v3fPosition;
 			v3fColour = _v3fColour;
 			v2fTexCoord = _v2fTexCoord;
+			v3fNormals = _v3fNormals;
 		}
 	};
 
@@ -63,14 +66,14 @@ protected:
 	CMesh();
 
 	//Wraps the generative functions of the mesh. Called from the mesh's constructors.
-	virtual void MeshSetup() = 0;
+	virtual void MeshSetup() {};
 
 	//Generates the default vertex data of the particular mesh.
-	virtual void GenerateVertexData() = 0;
+	virtual void GenerateVertexData() {};
 
 	//Generates the default tri indice data of the particular mesh.
-	virtual void GenerateTriIndices() = 0;
+	virtual void GenerateTriIndices() {};
 
 	//Generates the mesh's render data (buffers, vertex pointers, etc).
-	virtual void GenerateMesh() = 0;
+	virtual void GenerateMesh() {};
 };

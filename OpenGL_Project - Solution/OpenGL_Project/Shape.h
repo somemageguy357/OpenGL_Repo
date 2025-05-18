@@ -14,6 +14,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Transform.h"
 #include "Texture.h"
 #include "Mesh.h"
+#include "ComponentBehaviour.h"
 
 #include <vector>
 
@@ -80,6 +81,10 @@ public:
 	/// <param name="_fVecNewTexCoords:">The vector containing the new texture coordinate data.</param>
 	virtual void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords);
 
+	void AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour);
+
+	void Update();
+
 	virtual void Render(GLuint _uiProgram) = 0;
 
 protected:
@@ -87,6 +92,8 @@ protected:
 	CTransform m_oTransform;
 
 	CMesh* m_poMesh = nullptr;
+
+	std::vector<CComponentBehaviour*> m_oVecComponentBehaviourPtrs;
 
 	/// <summary>
 	/// Creates a shape with default transform data. Position: (0.0f, 0.0f, 0.0f). Rotation: (0.0f, 0.0f, 0.0f). Scale: (1.0f, 1.0f, 1.0f).

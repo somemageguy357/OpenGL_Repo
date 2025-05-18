@@ -1,14 +1,14 @@
 #version 460 core
 
-in vec3 v3FragColour;
-in vec2 v2FragTexCoords;
+in vec3 v3fFragColour;
+in vec2 v2fFragTexCoords;
 
 uniform sampler2D oTexture0;
 
-out vec4 v4FinalColour;
+out vec4 v4fFinalColour;
 
 void main()
 {
-	v4FinalColour = texture(oTexture0, v2FragTexCoords);
-	//v4FinalColour = texture(oTexture0, v2FragTexCoords) * vec4(v3FragColour, 1.0f);
+	v4fFinalColour = texture(oTexture0, v2fFragTexCoords);
+	//v4fFinalColour = texture(oTexture0, v2fFragTexCoords) * vec4(v3fFragColour, 1.0f);
 }

@@ -128,4 +128,8 @@ void CCubeMesh::GenerateMesh()
 	//Set the Vertex Attribute information (tex coords).
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStandard), (void*)(offsetof(VertexStandard, VertexStandard::v2fTexCoord)));
 	glEnableVertexAttribArray(2);
+
+	//Set the Vertex Attribute information (normals).
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStandard), (void*)(offsetof(VertexStandard, VertexStandard::v3fNormals)));
+	glEnableVertexAttribArray(3);
 }

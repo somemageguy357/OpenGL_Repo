@@ -19,7 +19,9 @@ Mail : Connor.Galvin@mds.ac.nz
 class CMath
 {
 public:
-	static glm::vec3 Normalize(const glm::vec3 _v3fVector);
+	static glm::vec3 Normalize(const glm::vec3 _kv3fVector);
+
+	static float Clamp(const float _kfValue, float _fMin, float _fMax);
 
 private:
 	CMath() {};

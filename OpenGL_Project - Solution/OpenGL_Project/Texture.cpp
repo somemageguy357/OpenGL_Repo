@@ -10,7 +10,7 @@ Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 #include "Texture.h"
@@ -32,15 +32,15 @@ CTexture::CTexture(std::string _sFilePath)
 	glBindTexture(GL_TEXTURE_2D, uiTexture);
 
 	//Check how many components the loaded image has (RGBA or RGB).
-	GLint uiLoadedComponents = GL_RGBA;
+	GLint iLoadedComponents = GL_RGBA;
 
 	if (iImageComponents != 4)
 	{
-		uiLoadedComponents = GL_RGB;
+		iLoadedComponents = GL_RGB;
 	}
 
 	//Populate the texture with image data.
-	glTexImage2D(GL_TEXTURE_2D, 0, uiLoadedComponents, iImageWidth, iImageHeight, 0, uiLoadedComponents, GL_UNSIGNED_BYTE, pucImageData);
+	glTexImage2D(GL_TEXTURE_2D, 0, iLoadedComponents, iImageWidth, iImageHeight, 0, iLoadedComponents, GL_UNSIGNED_BYTE, pucImageData);
 
 	//Smooths the edges of a texture by mixing nearby pixels with each other.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -80,15 +80,15 @@ CTexture::CTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColum
 	glBindTexture(GL_TEXTURE_2D, uiTexture);
 
 	//Check how many components the loaded image has (RGBA or RGB).
-	GLint uiLoadedComponents = GL_RGBA;
+	GLint iLoadedComponents = GL_RGBA;
 
 	if (iImageComponents != 4)
 	{
-		uiLoadedComponents = GL_RGB;
+		iLoadedComponents = GL_RGB;
 	}
 
 	//Populate the texture with image data.
-	glTexImage2D(GL_TEXTURE_2D, 0, uiLoadedComponents, iImageWidth, iImageHeight, 0, uiLoadedComponents, GL_UNSIGNED_BYTE, pucImageData);
+	glTexImage2D(GL_TEXTURE_2D, 0, iLoadedComponents, iImageWidth, iImageHeight, 0, iLoadedComponents, GL_UNSIGNED_BYTE, pucImageData);
 
 	//Smooths the edges of a texture by mixing nearby pixels with each other.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

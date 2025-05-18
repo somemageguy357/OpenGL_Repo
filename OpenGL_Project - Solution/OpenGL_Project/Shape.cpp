@@ -78,3 +78,16 @@ void CShape::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
 	//If the deriving class is not a CQuad (the only class that overrides this function), this will instead run.
 	std::cout << "Attempt to set new texture coordinates for a shape failed: the shape is not a quad." << std::endl;
 }
+
+void CShape::AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour)
+{
+	m_oVecComponentBehaviourPtrs.push_back(_poComponentBehaviour);
+}
+
+void CShape::Update()
+{
+	for (size_t i = 0; i < m_oVecComponentBehaviourPtrs.size(); i++)
+	{
+		m_oVecComponentBehaviourPtrs[i]->Update(this);
+	}
+}

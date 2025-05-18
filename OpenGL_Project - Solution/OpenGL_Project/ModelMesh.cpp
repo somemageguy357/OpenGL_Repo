@@ -1,4 +1,4 @@
-#define TINYOBJLOADER_IMPLEMENTATION
+//#define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 #include "ModelMesh.h"
 
@@ -57,10 +57,15 @@ CModelMesh::CModelMesh(std::string _sFilePath)
 					};
 				}
 
-				//if (iTinyObjVertex.normal_index >= 0)
-				//{
-				//	//normal part
-				//}
+				if (iTinyObjVertex.normal_index >= 0)
+				{
+					oVertex.v3fNormals =
+					{
+						aAttrib.normals[3 * size_t(iTinyObjVertex.normal_index) + 0],
+						aAttrib.normals[3 * size_t(iTinyObjVertex.normal_index) + 1],
+						aAttrib.normals[3 * size_t(iTinyObjVertex.normal_index) + 2],
+					};
+				}
 
 				oVecVertices.push_back(oVertex);
 			}
@@ -91,25 +96,10 @@ CModelMesh::CModelMesh(std::string _sFilePath)
 	//Set the Vertex Attribute information (tex coords).
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStandard), (void*)(offsetof(VertexStandard, VertexStandard::v2fTexCoord)));
 	glEnableVertexAttribArray(2);
+
+	//Set the Vertex Attribute information (normals).
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStandard), (void*)(offsetof(VertexStandard, VertexStandard::v3fNormals)));
+	glEnableVertexAttribArray(3);
 }
 
-CModelMesh::~CModelMesh()
-{
-
-}
-
-void CModelMesh::MeshSetup()
-{
-}
-
-void CModelMesh::GenerateVertexData()
-{
-}
-
-void CModelMesh::GenerateTriIndices()
-{
-}
-
-void CModelMesh::GenerateMesh()
-{
-}
+CModelMesh::~CModelMesh() {}

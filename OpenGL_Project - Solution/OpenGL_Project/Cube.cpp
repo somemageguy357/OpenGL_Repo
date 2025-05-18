@@ -14,6 +14,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "CubeMesh.h"
 #include "Camera.h"
 #include "TimeManager.h"
+#include "LightingSettings.h"
 
 CCube::CCube() : CShape()
 {
@@ -53,6 +54,10 @@ void CCube::Render(GLuint _uiProgram)
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetProjectionMatrix()));
+	glUniform3fv(glGetUniformLocation(_uiProgram, "v3fCameraPosition"), 1, glm::value_ptr(*CCamera::GetMainCamera()->GetTransform()->GetPosition()));
+
+	glUniform1f(glGetUniformLocation(_uiProgram, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
+	glUniform3fv(glGetUniformLocation(_uiProgram, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
 
 	glDrawElements(GL_TRIANGLES, m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
 

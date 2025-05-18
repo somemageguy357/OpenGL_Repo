@@ -44,15 +44,15 @@ CCamera::~CCamera() {}
 
 void CCamera::Update()
 {
-	if (CInputManager::GetKey(GLFW_KEY_1) == true)
-	{
-		SetCameraMode(ECameraMode::Free);
-	}
+	//if (CInputManager::GetKey(GLFW_KEY_1) == true)----------------------- disabled for this assignment
+	//{
+	//	SetCameraMode(ECameraMode::Free);
+	//}
 
-	else if (CInputManager::GetKey(GLFW_KEY_2) == true)
-	{
-		SetCameraMode(ECameraMode::Orbital);
-	}
+	//else if (CInputManager::GetKey(GLFW_KEY_2) == true)
+	//{
+	//	SetCameraMode(ECameraMode::Orbital);
+	//}
 
 	if (m_eCameraMode == ECameraMode::Free)
 	{
@@ -62,12 +62,6 @@ void CCamera::Update()
 	else if (m_eCameraMode == ECameraMode::Orbital)
 	{
 		OrbitalCamControls();
-	}
-
-	//Reset camera position.
-	if (CInputManager::GetKey(GLFW_KEY_R) == true)
-	{
-		m_oTransform.SetPosition({ 0.0f, 0.0f, 3.0f });
 	}
 }
 
@@ -136,6 +130,11 @@ glm::mat4* CCamera::GetViewMatrix()
 glm::mat4* CCamera::GetProjectionMatrix()
 {
 	return &m_matProjection;
+}
+
+glm::vec3* CCamera::GetForwardDirection()
+{
+	return &m_v3fCamForwardDir;
 }
 
 void CCamera::FreeCamControls()
@@ -207,12 +206,17 @@ void CCamera::FreeCamControls()
 
 void CCamera::OrbitalCamControls()
 {
-	m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed;
+	//m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; -- regular controls
+	m_fOrbitAngle += CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //-- assignment controls
 
 	glm::vec3 v3fNewPosition = { sin(m_fOrbitAngle) * m_fOrbitRadius, m_fOrbitHeight, cos(m_fOrbitAngle) * m_fOrbitRadius };
 	m_oTransform.SetPosition(v3fNewPosition);
 
-	m_matView = glm::lookAt(*m_oTransform.GetPosition(), { 0.0f, 0.0f, 0.0f }, m_v3fCamUpDir); //Look at target.
+	m_matView = glm::lookAt(*m_oTransform.GetPosition(), m_v3fTargetPosition, m_v3fCamUpDir); //Look at target.
+
+	m_v3fCamForwardDir = CMath::Normalize(m_v3fTargetPosition - *m_oTransform.GetPosition());
+	//std::cout << "Position: (" << m_oTransform.GetPosition()->x << ", " << m_oTransform.GetPosition()->y << ", " << m_oTransform.GetPosition()->z << ") | ";
+	//std::cout << "Forward Dir: (" << m_v3fCamForwardDir.x << ", " << m_v3fCamForwardDir.y << ", " << m_v3fCamForwardDir.z << ")\n";
 }
 
 int CCamera::TriBool()
@@ -238,8 +242,6 @@ void CCamera::CameraSetup()
 	{
 		m_poMainCamera = this;
 	}
-
-	SetCameraMode(CCamera::ECameraMode::Free);
 
 	if (m_bIsPerspective == true)
 	{

@@ -17,17 +17,22 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "ProgramSettings.h"
 
 #include "Camera.h"
+#include "Skybox.h"
 #include "Texture.h"
 #include "Hexagon.h"
 #include "Quad.h"
 #include "Cube.h"
 #include "Model.h"
 
+#include "CameraBasedMovement.h"
+
 //------GLOBAL VARIABLES------
 GLuint uiProgramTex = 0;
-GLuint uiProgramTexMix = 0;
+GLuint uiProgramSkybox = 0;
 
 CCamera* poCamera = nullptr;
+CSkybox* poSkybox = nullptr;
+
 std::vector<CTexture*> oVecTexturePtrs;
 std::vector<CShape*> oVecShapePtrs;
 //----------------------------
@@ -77,6 +82,7 @@ int main()
 	{
 		//Create camera.
 		poCamera = new CCamera(true, { 0.0f, 0.0f, 3.0f });
+		poCamera->SetCameraMode(CCamera::ECameraMode::Orbital);
 
 		//Enables callback functions for keys, mouse buttons, and mouse position.
 		CInputManager::EnableCallbackFunctions();
@@ -87,35 +93,53 @@ int main()
 		CProgramSettings::SetTextureBlending(true);
 
 		//Create programs.
-		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Texture.frag");
-		//uiProgramTexMix = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/TextureMix.frag");
+		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
+		uiProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag");
+
+		poSkybox = new CSkybox
+		(uiProgramSkybox,
+			{
+				"Resources/Textures/Skybox/Right.png",
+				"Resources/Textures/Skybox/Left.png",
+				"Resources/Textures/Skybox/Top.png",
+				"Resources/Textures/Skybox/Bottom.png",
+				"Resources/Textures/Skybox/Back.png",
+				"Resources/Textures/Skybox/Front.png"
+			}
+		);
 
 		//Create textures.
-		CreateTexture("Resources/Textures/testtex.png");
+		CreateTexture("Resources/Textures/Dungeons_Texture_01.png");
 		CreateTexture("Resources/Textures/Dungeons_Texture_03.png");
 
 		//Create cube.
-		for (int i = 0; i < 3; i++)
-		{
-			CCube* poCube = new CCube();
-			oVecShapePtrs.push_back(poCube);
+		//for (int i = 0; i < 3; i++)
+		//{
+		//	CCube* poCube = new CCube();
+		//	oVecShapePtrs.push_back(poCube);
 
-			//Increase the scale of the quad if the camera is using orthographic projection.
-			if (poCamera->GetProjectionSpace() == false)
-			{
-				poCube->GetTransform()->SetScaleMultiplier(400.0f);
-			}
+		//	//Increase the scale of the quad if the camera is using orthographic projection.
+		//	if (poCamera->GetProjectionSpace() == false)
+		//	{
+		//		poCube->GetTransform()->SetScaleMultiplier(400.0f);
+		//	}
 
-			poCube->AddTexture(oVecTexturePtrs[0]);
-		}
+		//	poCube->AddTexture(oVecTexturePtrs[0]);
+		//}
 
-		CModel* poModel = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj");
-		oVecShapePtrs.push_back(poModel);
-		poModel->AddTexture(oVecTexturePtrs[1]);
+		CModel* poTower = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj", poSkybox);
+		oVecShapePtrs.push_back(poTower);
+		poTower->AddTexture(oVecTexturePtrs[1]);
 
-		oVecShapePtrs[0]->GetTransform()->SetScale(2.0f);
-		oVecShapePtrs[1]->GetTransform()->SetPosition({ 2.0f, 0.0f, 0.0f });
-		oVecShapePtrs[2]->GetTransform()->SetPosition({ -2.0f, 0.0f, 0.0f });
+		CModel* poBanner = new CModel("Resources/Models/SM_Wep_Banner_05.obj", poSkybox);
+		oVecShapePtrs.push_back(poBanner);
+		poBanner->AddTexture(oVecTexturePtrs[0]);
+
+		poBanner->AddComponentBehaviour(new CCameraBasedMovement());
+
+		oVecShapePtrs[0]->GetTransform()->SetPosition({ 0.0f, -5.0f, 0.0f });
+		oVecShapePtrs[1]->GetTransform()->SetScale(1.5f);
+		oVecShapePtrs[1]->GetTransform()->SetPosition({ 0.0f, -0.0f, 0.0f });
 	}
 
 	//Main loop.
@@ -208,13 +232,14 @@ void Update()
 	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
 	CTimeManager::SetCurrentTime((float)glfwGetTime());
 
-	oVecShapePtrs[0]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 90.0f, { 1.0f, 1.0f, 1.0f });
-	oVecShapePtrs[1]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 0.0f, -1.0f, 0.0f });
-	oVecShapePtrs[2]->GetTransform()->AddRotation(CTimeManager::GetDeltaTime() * 45.0f, { 1.0f, 1.0f, 0.0f });
-	
 	CProgramSettings::Update();
 	CWindowManager::Update();
 	poCamera->Update();
+
+	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
+	{
+		oVecShapePtrs[i]->Update();
+	}
 
 	CInputManager::ClearInputs();
 }
@@ -226,8 +251,9 @@ void Render()
 	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
 	{
 		oVecShapePtrs[i]->Render(uiProgramTex);
-		//poCamera->Render(uiProgramTex, oVecShapePtrs[i]);
 	}
+
+	poSkybox->Render();
 
 	//UI rendering?
 	//poCamera->SetProjectionSpace(false, &oVecShapePtrs);

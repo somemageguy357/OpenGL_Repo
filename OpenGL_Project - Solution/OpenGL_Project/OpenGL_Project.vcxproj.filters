@@ -58,6 +58,18 @@
     <Filter Include="Header Files\Objects\3D">
       <UniqueIdentifier>{d7d70234-7f71-4113-8d4b-447479827c64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders\Vertex">
+      <UniqueIdentifier>{c6a34b4e-1ea1-4050-bb8b-39eb6346630d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Fragment">
+      <UniqueIdentifier>{8f9e5bd4-14ad-4d3b-9108-96f3acb89287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ComponentBehaviours">
+      <UniqueIdentifier>{407c44e5-5254-427e-9d6b-16bb30b2089d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ComponentBehaviours">
+      <UniqueIdentifier>{09874d64-8691-424b-b967-bfa972caa35e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +125,21 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Objects\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingSettings.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyboxMesh.cpp">
+      <Filter>Source Files\Meshes</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraBasedMovement.cpp">
+      <Filter>Source Files\ComponentBehaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentBehaviour.cpp">
+      <Filter>Source Files\ComponentBehaviours</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -170,16 +197,46 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\Objects\3D</Filter>
     </ClInclude>
+    <ClInclude Include="LightingSettings.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Header Files\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxMesh.h">
+      <Filter>Header Files\Meshes</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentBehaviour.h">
+      <Filter>Header Files\ComponentBehaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraBasedMovement.h">
+      <Filter>Header Files\ComponentBehaviours</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Texture.frag">
-      <Filter>Resource Files\Shaders</Filter>
+    <None Include="Resources\Shaders\ClipSpace.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+    <None Include="Resources\Shaders\InstancedArray_Standard.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+    <None Include="Resources\Shaders\Lighting_BlinnPhong.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="Resources\Shaders\Reflection.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="Resources\Shaders\Skybox.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
+    </None>
+    <None Include="Resources\Shaders\Texture.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
     </None>
     <None Include="Resources\Shaders\TextureMix.frag">
-      <Filter>Resource Files\Shaders</Filter>
+      <Filter>Resource Files\Shaders\Fragment</Filter>
     </None>
-    <None Include="Resources\Shaders\ClipSpace.vert">
-      <Filter>Resource Files\Shaders</Filter>
+    <None Include="Resources\Shaders\Skybox.vert">
+      <Filter>Resource Files\Shaders\Vertex</Filter>
     </None>
   </ItemGroup>
 </Project>

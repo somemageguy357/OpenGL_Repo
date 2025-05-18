@@ -20,10 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraBasedMovement.cpp" />
+    <ClCompile Include="ComponentBehaviour.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="LightingSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -33,6 +36,8 @@
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SkyboxMesh.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -40,10 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraBasedMovement.h" />
+    <ClInclude Include="ComponentBehaviour.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="Hexagon.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LightingSettings.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
@@ -52,6 +60,8 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="ShaderLoader.h" />
     <ClInclude Include="Shape.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SkyboxMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="tiny_obj_loader.h" />
@@ -60,8 +70,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ClipSpace.vert" />
+    <None Include="Resources\Shaders\InstancedArray_Standard.vert" />
+    <None Include="Resources\Shaders\Lighting_BlinnPhong.frag" />
+    <None Include="Resources\Shaders\Reflection.frag" />
+    <None Include="Resources\Shaders\Skybox.frag" />
+    <None Include="Resources\Shaders\Skybox.vert" />
+    <None Include="Resources\Shaders\Texture.frag" />
     <None Include="Resources\Shaders\TextureMix.frag" />
-    <None Include="Texture.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

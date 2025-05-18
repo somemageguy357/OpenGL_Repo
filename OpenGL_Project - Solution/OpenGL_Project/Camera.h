@@ -101,6 +101,8 @@ public:
 
 	glm::mat4* GetProjectionMatrix();
 
+	glm::vec3* GetForwardDirection();
+
 private:
 	static CCamera* m_poMainCamera;
 
@@ -138,9 +140,9 @@ private:
 
 	//Orbital camera values.
 	float m_fOrbitAngle = 0.0f;
-	float m_fOrbitRadius = 3.0f;
-	float m_fOrbitHeight = 0.5f;
-	float m_fOrbitMoveSpeed = 1.0f;
+	float m_fOrbitRadius = 10.0f;
+	float m_fOrbitHeight = 3.0f;
+	float m_fOrbitMoveSpeed = 0.5f;
 
 	//Sets up the camera's projection matrix depending on the current projection space. Called from the constructors.
 	void CameraSetup();
