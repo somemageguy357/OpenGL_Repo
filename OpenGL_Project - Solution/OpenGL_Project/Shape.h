@@ -122,7 +122,7 @@ protected:
 	/// <param name="_v3fScale:">The starting scale of the shape.</param>
 	CShape(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 
-private:
+protected:
 	//The vector containing the shape's CTextures.
 	std::vector<CTexture*> m_oVecTexturePtrs;
 };

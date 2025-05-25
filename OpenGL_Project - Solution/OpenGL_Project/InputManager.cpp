@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : InputManager.cpp
+Description : Contains function definitions for InputManager.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #include "InputManager.h"
 #include <iostream>
 
@@ -6,6 +18,7 @@ std::vector<int> CInputManager::m_oVecKeysReleasedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsClickedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsReleasedThisFrame;
 glm::vec2 CInputManager::m_v2fMousePosition = { 0, 0 };
+CInputManager::ECursorMode CInputManager::m_eCursorMode;
 
 bool CInputManager::GetKey(int _iKeyCode)
 {
@@ -86,6 +99,8 @@ glm::vec2 CInputManager::GetMousePosition()
 
 void CInputManager::SetMouseCursorMode(ECursorMode _eCursorMode)
 {
+	m_eCursorMode = _eCursorMode;
+
 	if (_eCursorMode == ECursorMode::Visible)
 	{
 		glfwSetInputMode(CWindowManager::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -105,6 +120,11 @@ void CInputManager::SetMouseCursorMode(ECursorMode _eCursorMode)
 			glfwSetInputMode(CWindowManager::GetWindow(), GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		}
 	}
+}
+
+CInputManager::ECursorMode CInputManager::GetCursorMode()
+{
+	return m_eCursorMode;
 }
 
 void CInputManager::ClearInputs()

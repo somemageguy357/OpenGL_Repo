@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Mesh.h
+Description : Base class for all mesh types. Contains a mesh's vertex data.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #pragma once
 #include <glew.h>
 #include <glfw3.h>

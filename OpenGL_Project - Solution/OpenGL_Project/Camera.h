@@ -95,6 +95,8 @@ public:
 	/// <param name="_eCameraMode:">The camera control mode to change to.</param>
 	void SetCameraMode(ECameraMode _eCameraMode);
 
+	void ToggleOrbitMovement();
+
 	static CCamera* GetMainCamera();
 
 	glm::mat4* GetViewMatrix();
@@ -102,6 +104,8 @@ public:
 	glm::mat4* GetProjectionMatrix();
 
 	glm::vec3* GetForwardDirection();
+
+	glm::vec3* GetRightDirection();
 
 private:
 	static CCamera* m_poMainCamera;
@@ -118,11 +122,14 @@ private:
 	//The camera's forward/view direction.
 	glm::vec3 m_v3fCamForwardDir = glm::vec3(0.0f, 0.0f, -1.0f);
 
-	//The camera's target position.
-	glm::vec3 m_v3fTargetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+	//The camera's right direction.
+	glm::vec3 m_v3fCamRightDir = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	//The camera's upwards position.
 	glm::vec3 m_v3fCamUpDir = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	//The camera's target position.
+	glm::vec3 m_v3fTargetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	//The camera's view matrix.
 	glm::mat4 m_matView;
@@ -139,6 +146,7 @@ private:
 	float m_fOffsetY = 0.0f;
 
 	//Orbital camera values.
+	bool m_bEnableOrbitMovement = true;
 	float m_fOrbitAngle = 0.0f;
 	float m_fOrbitRadius = 10.0f;
 	float m_fOrbitHeight = 3.0f;

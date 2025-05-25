@@ -5,11 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Lighting_BlinnPhong.frag
-Description :
-
-
-
-
+Description : A fragment shader that allows a object's texture to interact with lighting values.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

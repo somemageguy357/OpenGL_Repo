@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : CameraBasedMovement.cpp
+Description : Contains function definitions for CameraBasedMovement.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #include "CameraBasedMovement.h"
 #include "Shape.h"
 #include "InputManager.h"
@@ -7,29 +19,44 @@
 
 #include <iostream>
 
-void CCameraBasedMovement::Update(CShape* _poShape)
+CCameraBasedMovement::CCameraBasedMovement(glm::vec3 _v3fStartingPosition)
 {
+	m_v3fStartingPosition = _v3fStartingPosition;
+}
+
+void CCameraBasedMovement::Update(CTransform* _poTransform)
+{
+	if (CInputManager::GetKeyDown(GLFW_KEY_R) == true)
+	{
+		_poTransform->SetPosition(m_v3fStartingPosition);
+		return;
+	}
+
 	m_v3fMoveDir = { 0.0f, 0.0f, 0.0f };
 
 	if (CInputManager::GetKey(GLFW_KEY_W) == true)
 	{
-		m_v3fMoveDir += *CCamera::GetMainCamera()->GetForwardDirection();
+		glm::vec3 v3fCamForward = *CCamera::GetMainCamera()->GetForwardDirection();
+		m_v3fMoveDir += glm::vec3{ v3fCamForward.x, 0.0f, v3fCamForward.z};
 	}
 
 	else if (CInputManager::GetKey(GLFW_KEY_S) == true)
 	{
-		m_v3fMoveDir -= *CCamera::GetMainCamera()->GetForwardDirection();
+		glm::vec3 v3fCamForward = *CCamera::GetMainCamera()->GetForwardDirection();
+		m_v3fMoveDir -= glm::vec3{ v3fCamForward.x, 0.0f, v3fCamForward.z };
 	}
 
-	//if (CInputManager::GetKey(GLFW_KEY_A) == true)
-	//{
-	//	m_v3fMoveDir += *CCamera::GetMainCamera()->GetForwardDirection();
-	//}
+	if (CInputManager::GetKey(GLFW_KEY_A) == true)
+	{
+		glm::vec3 v3fCamRight = *CCamera::GetMainCamera()->GetRightDirection();
+		m_v3fMoveDir -= glm::vec3{ v3fCamRight.x, 0.0f, v3fCamRight.z };
+	}
 
-	//else if (CInputManager::GetKey(GLFW_KEY_D) == true)
-	//{
-	//	m_v3fMoveDir -= *CCamera::GetMainCamera()->GetForwardDirection();
-	//}
+	else if (CInputManager::GetKey(GLFW_KEY_D) == true)
+	{
+		glm::vec3 v3fCamRight = *CCamera::GetMainCamera()->GetRightDirection();
+		m_v3fMoveDir += glm::vec3{ v3fCamRight.x, 0.0f, v3fCamRight.z };
+	}
 
 	if (CInputManager::GetKey(GLFW_KEY_Q) == true)
 	{
@@ -42,7 +69,7 @@ void CCameraBasedMovement::Update(CShape* _poShape)
 	}
 
 	glm::vec3 v3fMoveDiff = CMath::Normalize(m_v3fMoveDir) * m_fMoveSpeed * CTimeManager::GetDeltaTime();
-	_poShape->GetTransform()->AddPosition(v3fMoveDiff);
+	_poTransform->AddPosition(v3fMoveDiff);
 
-	std::cout << "Position: (" << _poShape->GetTransform()->GetPosition()->x << ", " << _poShape->GetTransform()->GetPosition()->y << ", " << _poShape->GetTransform()->GetPosition()->z << ")\n";
+	//std::cout << "Position: (" << _poShape->GetTransform()->GetPosition()->x << ", " << _poShape->GetTransform()->GetPosition()->y << ", " << _poShape->GetTransform()->GetPosition()->z << ")\n";
 }

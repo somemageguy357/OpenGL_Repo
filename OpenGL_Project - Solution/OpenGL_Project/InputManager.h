@@ -89,6 +89,12 @@ public:
 	static void SetMouseCursorMode(ECursorMode _eCursorMode);
 
 	/// <summary>
+	/// Gets the mode of the cursor.
+	/// </summary>
+	/// <returns>The mode of the cursor.</returns>
+	static ECursorMode GetCursorMode();
+
+	/// <summary>
 	/// Clears the vectors containing all keys and mouse buttons that were pressed and/or released this frame.
 	/// This is to be called at the end of the main update loop.
 	/// </summary>
@@ -115,6 +121,9 @@ private:
 
 	//Stores mouse position.
 	static glm::vec2 m_v2fMousePosition;
+
+	//The current mode of the cursor.
+	static ECursorMode m_eCursorMode;
 
 	CInputManager() {};
 	~CInputManager() {};

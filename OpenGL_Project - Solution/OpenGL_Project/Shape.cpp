@@ -88,6 +88,6 @@ void CShape::Update()
 {
 	for (size_t i = 0; i < m_oVecComponentBehaviourPtrs.size(); i++)
 	{
-		m_oVecComponentBehaviourPtrs[i]->Update(this);
+		m_oVecComponentBehaviourPtrs[i]->Update(&m_oTransform);
 	}
 }

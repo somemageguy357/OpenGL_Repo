@@ -55,16 +55,38 @@ public:
 	/// <param name="_fVecNewTexCoords:">The vector containing the new texture coordinate data.</param>
 	void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords) override;
 
+	/// <summary>
+	/// Returns the vector of floats containing vertex position and colour data.
+	/// </summary>
+	/// <returns>The vector of floats containing vertex position and colour data.</returns>
+	std::vector<float>* GetVertexData();
+
+	/// <summary>
+	/// Returns the vector of uints containing the vertex joints of the tris that make up the shape.
+	/// </summary>
+	/// <returns>The vector of uints containing the vertex joints of the tris that make up the shape.</returns>
+	std::vector<unsigned int>* GetTriIndices();
+
 private:
-	////Wraps the generative functions of the quad. Called from the quad's constructors.
-	//void ShapeSetup() override;
 
-	////Generates the default vertex data of the quad.
-	//void GenerateVertexData() override;
+protected:
+	GLuint m_uiVAO = 0;
 
-	////Generates the default tri indice data of the quad.
-	//void GenerateTriIndices() override;
+	//Positions, colours, and texture coordinates of the mesh's vertices.
+	std::vector<float> m_oVecVertexData;
 
-	////Generates the quad's render data (buffers, vertex pointers, etc).
-	//void GenerateShape() override;
+	//Indices of the vertices for the triangles that make up the mesh.
+	std::vector<unsigned int> m_oVecTriIndices;
+
+	//Wraps the generative functions of the quad. Called from the quad's constructors.
+	void ShapeSetup();
+
+	//Generates the default vertex data of the quad.
+	void GenerateVertexData();
+
+	//Generates the default tri indice data of the quad.
+	void GenerateTriIndices();
+
+	//Generates the quad's render data (buffers, vertex pointers, etc).
+	void GenerateShape();
 };

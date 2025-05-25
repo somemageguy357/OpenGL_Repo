@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Skybox.h
+Description : An object representing a skybox.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #pragma once
 #include "Camera.h"
 #include "SkyboxMesh.h"

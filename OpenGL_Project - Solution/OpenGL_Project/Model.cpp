@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Model.cpp
+Description : Contains function definitions for Model.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #include "Model.h"
 #include "ModelMesh.h"
 #include "Camera.h"
@@ -30,7 +42,9 @@ void CModel::Render(GLuint _uiProgram)
 	//Bind the shape's textures (if any).
 	BindTextures(_uiProgram);
 
-	glUniform1i(glGetUniformLocation(_uiProgram, "oSkyboxTexture"), *m_poSkybox->GetTextureID());
+	glActiveTexture(GL_TEXTURE0 + m_oVecTexturePtrs.size());
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *m_poSkybox->GetTextureID());
+	glUniform1i(glGetUniformLocation(_uiProgram, "oSkyboxTexture"), m_oVecTexturePtrs.size());
 
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));

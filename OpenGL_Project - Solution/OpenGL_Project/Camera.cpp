@@ -117,6 +117,11 @@ void CCamera::SetCameraMode(ECameraMode _eCameraMode)
 	CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
 }
 
+void CCamera::ToggleOrbitMovement()
+{
+	m_bEnableOrbitMovement = !m_bEnableOrbitMovement;
+}
+
 CCamera* CCamera::GetMainCamera()
 {
 	return m_poMainCamera;
@@ -135,6 +140,11 @@ glm::mat4* CCamera::GetProjectionMatrix()
 glm::vec3* CCamera::GetForwardDirection()
 {
 	return &m_v3fCamForwardDir;
+}
+
+glm::vec3* CCamera::GetRightDirection()
+{
+	return &m_v3fCamRightDir;
 }
 
 void CCamera::FreeCamControls()
@@ -163,7 +173,7 @@ void CCamera::FreeCamControls()
 	};
 
 	m_v3fCamForwardDir = CMath::Normalize(v3fLookDir);
-	glm::vec3 v3fRightDir = CMath::Normalize(glm::cross(m_v3fCamForwardDir, m_v3fCamUpDir));
+	m_v3fCamRightDir = CMath::Normalize(glm::cross(m_v3fCamForwardDir, m_v3fCamUpDir));
 
 	//Create vector for sum movement direction.
 	glm::vec3 v3fMoveDir = { 0.0f, 0.0f, 0.0f };
@@ -180,12 +190,12 @@ void CCamera::FreeCamControls()
 
 	if (CInputManager::GetKey(GLFW_KEY_A) == true)
 	{
-		v3fMoveDir -= v3fRightDir;
+		v3fMoveDir -= m_v3fCamRightDir;
 	}
 
 	if (CInputManager::GetKey(GLFW_KEY_D) == true)
 	{
-		v3fMoveDir += v3fRightDir;
+		v3fMoveDir += m_v3fCamRightDir;
 	}
 
 	if (CInputManager::GetKey(GLFW_KEY_E) == true)
@@ -206,17 +216,28 @@ void CCamera::FreeCamControls()
 
 void CCamera::OrbitalCamControls()
 {
-	//m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; -- regular controls
-	m_fOrbitAngle += CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //-- assignment controls
+	if (CInputManager::GetKeyDown(GLFW_KEY_TAB) == true)
+	{
+		ToggleOrbitMovement();
+	}
 
-	glm::vec3 v3fNewPosition = { sin(m_fOrbitAngle) * m_fOrbitRadius, m_fOrbitHeight, cos(m_fOrbitAngle) * m_fOrbitRadius };
-	m_oTransform.SetPosition(v3fNewPosition);
+	if (m_bEnableOrbitMovement == true)
+	{
+		//m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; -- regular controls
+		m_fOrbitAngle += CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //-- assignment controls
 
-	m_matView = glm::lookAt(*m_oTransform.GetPosition(), m_v3fTargetPosition, m_v3fCamUpDir); //Look at target.
+		glm::vec3 v3fNewPosition = { sin(m_fOrbitAngle) * m_fOrbitRadius, m_fOrbitHeight, cos(m_fOrbitAngle) * m_fOrbitRadius };
+		m_oTransform.SetPosition(v3fNewPosition);
 
-	m_v3fCamForwardDir = CMath::Normalize(m_v3fTargetPosition - *m_oTransform.GetPosition());
-	//std::cout << "Position: (" << m_oTransform.GetPosition()->x << ", " << m_oTransform.GetPosition()->y << ", " << m_oTransform.GetPosition()->z << ") | ";
-	//std::cout << "Forward Dir: (" << m_v3fCamForwardDir.x << ", " << m_v3fCamForwardDir.y << ", " << m_v3fCamForwardDir.z << ")\n";
+		m_matView = glm::lookAt(*m_oTransform.GetPosition(), m_v3fTargetPosition, m_v3fCamUpDir); //Look at target.
+
+		m_v3fCamForwardDir = CMath::Normalize(m_v3fTargetPosition - *m_oTransform.GetPosition());
+		m_v3fCamRightDir = CMath::Normalize(glm::cross(m_v3fCamForwardDir, m_v3fCamUpDir));
+
+		//std::cout << "Position: (" << m_oTransform.GetPosition()->x << ", " << m_oTransform.GetPosition()->y << ", " << m_oTransform.GetPosition()->z << ") | ";
+		//std::cout << "Forward Dir: (" << m_v3fCamForwardDir.x << ", " << m_v3fCamForwardDir.y << ", " << m_v3fCamForwardDir.z << ")\t|\t";
+		//std::cout << "Right Dir: (" << m_v3fCamRightDir.x << ", " << m_v3fCamRightDir.y << ", " << m_v3fCamRightDir.z << ")\n";
+	}
 }
 
 int CCamera::TriBool()

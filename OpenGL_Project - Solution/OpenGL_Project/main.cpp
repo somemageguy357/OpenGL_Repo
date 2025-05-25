@@ -19,7 +19,6 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Camera.h"
 #include "Skybox.h"
 #include "Texture.h"
-#include "Hexagon.h"
 #include "Quad.h"
 #include "Cube.h"
 #include "Model.h"
@@ -28,13 +27,16 @@ Mail : Connor.Galvin@mds.ac.nz
 
 //------GLOBAL VARIABLES------
 GLuint uiProgramTex = 0;
+GLuint uiProgramReflective = 0;
 GLuint uiProgramSkybox = 0;
+GLuint uiProgramUI = 0;
 
 CCamera* poCamera = nullptr;
 CSkybox* poSkybox = nullptr;
 
 std::vector<CTexture*> oVecTexturePtrs;
 std::vector<CShape*> oVecShapePtrs;
+//std::vector<CQuad*> oVecUIElementPtrs;
 //----------------------------
 
 /// <summary>
@@ -72,7 +74,7 @@ void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColum
 int main()
 {
 	//Set window size values.
-	CWindowManager::SetSize(800, 800);
+	CWindowManager::SetSize(1280, 720);
 
 	//Attempt to initialize OpenGL setup.
 	CWindowManager::SetWindow(InitializeGLSetup());
@@ -93,11 +95,14 @@ int main()
 		CProgramSettings::SetTextureBlending(true);
 
 		//Create programs.
-		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
+		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Lighting_BlinnPhong.frag");
+		uiProgramReflective = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
 		uiProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag");
+		//uiProgramUI = ShaderLoader::CreateProgram("Resources/Shaders/UI.vert", "Resources/Shaders/Texture.frag");
 
 		poSkybox = new CSkybox
-		(uiProgramSkybox,
+		(
+			uiProgramSkybox,
 			{
 				"Resources/Textures/Skybox/Right.png",
 				"Resources/Textures/Skybox/Left.png",
@@ -111,21 +116,7 @@ int main()
 		//Create textures.
 		CreateTexture("Resources/Textures/Dungeons_Texture_01.png");
 		CreateTexture("Resources/Textures/Dungeons_Texture_03.png");
-
-		//Create cube.
-		//for (int i = 0; i < 3; i++)
-		//{
-		//	CCube* poCube = new CCube();
-		//	oVecShapePtrs.push_back(poCube);
-
-		//	//Increase the scale of the quad if the camera is using orthographic projection.
-		//	if (poCamera->GetProjectionSpace() == false)
-		//	{
-		//		poCube->GetTransform()->SetScaleMultiplier(400.0f);
-		//	}
-
-		//	poCube->AddTexture(oVecTexturePtrs[0]);
-		//}
+		CreateTexture("Resources/Textures/ReflectionMap_Banner.png");
 
 		CModel* poTower = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj", poSkybox);
 		oVecShapePtrs.push_back(poTower);
@@ -134,12 +125,17 @@ int main()
 		CModel* poBanner = new CModel("Resources/Models/SM_Wep_Banner_05.obj", poSkybox);
 		oVecShapePtrs.push_back(poBanner);
 		poBanner->AddTexture(oVecTexturePtrs[0]);
-
-		poBanner->AddComponentBehaviour(new CCameraBasedMovement());
+		poBanner->AddTexture(oVecTexturePtrs[2]);
 
 		oVecShapePtrs[0]->GetTransform()->SetPosition({ 0.0f, -5.0f, 0.0f });
 		oVecShapePtrs[1]->GetTransform()->SetScale(1.5f);
-		oVecShapePtrs[1]->GetTransform()->SetPosition({ 0.0f, -0.0f, 0.0f });
+		oVecShapePtrs[1]->GetTransform()->SetPosition({ 0.0f, -0.25f, 0.0f });
+
+		poBanner->AddComponentBehaviour(new CCameraBasedMovement(*poBanner->GetTransform()->GetPosition()));
+
+		//CQuad* poButton = new CQuad();
+		//oVecUIElementPtrs.push_back(poButton);
+		//poButton->AddTexture(oVecTexturePtrs[3]);
 	}
 
 	//Main loop.
@@ -248,22 +244,25 @@ void Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
-	{
-		oVecShapePtrs[i]->Render(uiProgramTex);
-	}
+	//poCamera->SetProjectionSpace(true, &oVecShapePtrs);
+
+	oVecShapePtrs[0]->Render(uiProgramTex);
+	oVecShapePtrs[1]->Render(uiProgramReflective);
+
+	//for (size_t i = 0; i < oVecShapePtrs.size(); i++)
+	//{
+	//	oVecShapePtrs[i]->Render(uiProgramTex);
+	//}
 
 	poSkybox->Render();
 
-	//UI rendering?
+	//UI rendering.
 	//poCamera->SetProjectionSpace(false, &oVecShapePtrs);
 
-	//for (size_t i = 0; i < oVecUIElements.size(); i++)
+	//for (size_t i = 0; i < oVecUIElementPtrs.size(); i++)
 	//{
-	//	poCamera->Render(uiProgramTex, oVecUIElements[i]);
+	//	oVecUIElementPtrs[i]->Render(uiProgramUI);
 	//}
-
-	//poCamera->SetProjectionSpace(true, &oVecShapePtrs);
 
 	//Swaps the current buffer with the pre-loaded buffer.
 	glfwSwapBuffers(CWindowManager::GetWindow());

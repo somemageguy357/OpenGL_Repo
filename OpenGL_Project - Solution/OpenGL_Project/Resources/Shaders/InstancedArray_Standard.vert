@@ -5,11 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : InstancedArray_Standard.vert
-Description : 
-
-
-
-
+Description : CURRENTLY UNUSED AND UNFINISHED
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

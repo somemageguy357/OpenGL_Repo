@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : Skybox.cpp
+Description : Contains function definitions for Skybox.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 

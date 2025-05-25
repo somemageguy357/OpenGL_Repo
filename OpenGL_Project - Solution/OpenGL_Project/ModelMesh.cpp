@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : ModelMesh.cpp
+Description : Contains function definitions for ModelMesh.h.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 //#define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 #include "ModelMesh.h"

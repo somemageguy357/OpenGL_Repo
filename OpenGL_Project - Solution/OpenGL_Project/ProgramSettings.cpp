@@ -13,6 +13,8 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "ProgramSettings.h"
 #include "InputManager.h"
 
+#include <iostream>
+
 bool CProgramSettings::m_bWireframeOn = false;
 bool CProgramSettings::m_bFaceCullingOn = false;
 bool CProgramSettings::m_bDepthTestingOn = false;
@@ -20,9 +22,28 @@ bool CProgramSettings::m_bTextureBlendingOn = false;
 
 void CProgramSettings::Update()
 {
-	if (CInputManager::GetKeyDown(GLFW_KEY_F) == true)
+	if (CInputManager::GetKeyDown(GLFW_KEY_1) == true)
+	{
+		if (CInputManager::GetCursorMode() == CInputManager::ECursorMode::Disabled || CInputManager::GetCursorMode() == CInputManager::ECursorMode::Hidden)
+		{
+			CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Visible);
+		}
+
+		else if (CInputManager::GetCursorMode() == CInputManager::ECursorMode::Visible)
+		{
+			CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
+		}
+	}
+
+	else if (CInputManager::GetKeyDown(GLFW_KEY_2) == true)
 	{
 		ToggleWireframe();
+	}
+
+	else if (CInputManager::GetKeyDown(GLFW_KEY_3) == true)
+	{
+		glm::vec2 v2fMousePosition = CInputManager::GetMousePosition();
+		std::cout << "Mouse Position: (" << v2fMousePosition.x << ", " << v2fMousePosition.y << ")\n";
 	}
 
 	else if (CInputManager::GetKeyDown(GLFW_KEY_C) == true)

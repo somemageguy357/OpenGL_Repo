@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : CubeMesh.h
+Description : Mesh class for a cube object. Sets up the vertex data specific for a cube.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #include "Mesh.h"
 
 class CCubeMesh : public CMesh

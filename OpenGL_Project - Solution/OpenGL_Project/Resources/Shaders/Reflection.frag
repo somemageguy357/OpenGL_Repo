@@ -5,11 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Reflection.frag
-Description :
-
-
-
-
+Description : A fragment shader that allows an object's textures to interact with lighting and reflection values.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
@@ -22,6 +18,7 @@ in vec2 v2fFragTexCoords;
 in vec3 v3fFragNormals;
 
 uniform sampler2D oTexture0;
+uniform sampler2D oTexture1;
 uniform samplerCube oSkyboxTexture;
 
 uniform vec3 v3fCameraPosition;
@@ -57,7 +54,10 @@ void main()
 	vec4 v4fLight = vec4(v3fAmbient + v3fDiffuse + v3fSpecular, 1.0f);
 
 	vec4 oObjectTexture = texture(oTexture0, v2fFragTexCoords);
+
+	vec4 oObjectReflectionMap = texture(oTexture1, v2fFragTexCoords);
+
 	vec4 oReflectionTexture = texture(oSkyboxTexture, v3fReflectDir);
 
-	v4fFinalColour = v4fLight * mix(oObjectTexture, oReflectionTexture, 0.5f);
+	v4fFinalColour = v4fLight * mix(oObjectTexture, oReflectionTexture, oObjectReflectionMap.r);
 }
