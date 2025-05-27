@@ -1,5 +1,10 @@
 #pragma once
-#include "Texture.h"
+#include <glew.h>
+#include <glfw3.h>
+#include <glm.hpp>
+
+#include <string>
+#include <vector>
 
 class CTextureManager
 {
@@ -9,7 +14,7 @@ public:
 	/// </summary>
 	/// <param name="_sFilePath:">The file path of the texture.</param>
 	/// <returns>The texture's ID.</returns>
-	static GLuint CreateTexture(std::string _sFilePath);
+	static GLuint GetTexture(std::string _sFilePath);
 
 	static void DestroyTextures();
 
@@ -30,4 +35,6 @@ private:
 
 	CTextureManager() = delete;
 	~CTextureManager() = delete;
+
+	static GLuint CreateNewTexture(std::string _sFilePath);
 };

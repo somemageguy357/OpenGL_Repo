@@ -49,13 +49,6 @@ public:
 	void Render(CSkybox* _poSkybox, CCamera* _poCamera) override;
 
 	/// <summary>
-	/// Sets the texture coordinate portion of the quad's vertex data to the given values. The given vector MUST contain 8
-	/// elements.
-	/// </summary>
-	/// <param name="_fVecNewTexCoords:">The vector containing the new texture coordinate data.</param>
-	void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords) override;
-
-	/// <summary>
 	/// Returns the vector of floats containing vertex position and colour data.
 	/// </summary>
 	/// <returns>The vector of floats containing vertex position and colour data.</returns>

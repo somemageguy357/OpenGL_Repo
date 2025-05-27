@@ -82,26 +82,6 @@ void CQuad::GenerateVertexData()
 	m_oVecVertexData.insert(m_oVecVertexData.end(), fVecVertexData.begin(), fVecVertexData.end());
 }
 
-void CQuad::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
-{
-	//Requires 8 elements as there are 8 texture coordinate values.
-	if (_fVecNewTexCoords.size() != 8)
-	{
-		std::cout << "Attempt to set new texture coordinates for a quad failed: incorrect number of elements supplied in vector (expecting 8)." << std::endl;
-		return;
-	}
-
-	//Index positions of the tex coords: 6,7	14,15	22,23	30,31
-	for (size_t iRows = 0; iRows < 4; iRows++)
-	{
-		m_oVecVertexData[6 + (iRows * 8)] = _fVecNewTexCoords[iRows * 2];
-		m_oVecVertexData[7 + (iRows * 8)] = _fVecNewTexCoords[(iRows * 2) + 1];
-	}
-
-	//Regenerate the Object with the updated vertex data.
-	GenerateShape();
-}
-
 std::vector<float>* CQuad::GetVertexData()
 {
 	return &m_oVecVertexData;

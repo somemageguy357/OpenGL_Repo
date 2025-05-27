@@ -108,6 +108,24 @@ int main()
 			{ 1.5f, 1.5f, 1.5f }
 		);
 
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Prop_Goblin_Tower_01.obj",
+			{ "Resources/Textures/Dungeons_Texture_03.png" },
+			uiProgramTex,
+			{ -10.0f, -5.0f, 0.0f }
+		);
+
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Wep_Banner_05.obj",
+			{ "Resources/Textures/Dungeons_Texture_01.png", "Resources/Textures/ReflectionMap_Banner.png" },
+			uiProgramReflective,
+			{ -10.0f, -0.25f, 0.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 1.5f, 1.5f, 1.5f }
+		);
+
 		//poBanner->AddComponentBehaviour(new CCameraBasedMovement(*poBanner->GetTransform()->GetPosition()));
 
 		//CQuad* poButton = new CQuad();

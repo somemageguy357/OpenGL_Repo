@@ -44,12 +44,7 @@ CMesh* CObject::GetMesh()
 
 void CObject::AddTexture(std::string _sTextureFilePath)
 {
-	m_oVecTextureIDs.push_back(CTextureManager::CreateTexture(_sTextureFilePath));
-
-	//if (_poTexture->GetAnimated() == true)
-	//{
-	//	SetNewQuadTexCoords(*_poTexture->GetCurrentFrameTexCoords());
-	//}
+	m_oVecTextureIDs.push_back(CTextureManager::GetTexture(_sTextureFilePath));
 }
 
 std::vector<GLuint> CObject::GetTextureIDs()
@@ -64,19 +59,7 @@ void CObject::BindTextures(GLuint _uiProgram)
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, m_oVecTextureIDs[i]);
 		glUniform1i(glGetUniformLocation(_uiProgram, std::string("oTexture" + std::to_string(i)).c_str()), i);
-
-		////If the texture is animated: change the quads's texture coordinates to match the right frame to display.
-		//if (m_oVecTextureIDs[i]->GetAnimated() == true && m_oVecTextureIDs[i]->GetNextFrameReady() == true)
-		//{
-		//	SetNewQuadTexCoords(*m_oVecTextureIDs[i]->GetCurrentFrameTexCoords());
-		//}
 	}
-}
-
-void CObject::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
-{
-	//If the deriving class is not a CQuad (the only class that overrides this function), this will instead run.
-	std::cout << "Attempt to set new texture coordinates for a Object failed: the Object is not a quad." << std::endl;
 }
 
 void CObject::AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour)

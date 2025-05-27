@@ -38,7 +38,6 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SkyboxMesh.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -63,7 +62,6 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SkyboxMesh.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="tiny_obj_loader.h" />

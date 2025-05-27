@@ -1,7 +1,4 @@
-﻿  Camera.cpp
-C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Camera.cpp(110,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Camera.cpp(111,46): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-  CameraBasedMovement.cpp
+﻿  CameraBasedMovement.cpp
   Cube.cpp
 C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Cube.cpp(61,84): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   main.cpp
@@ -9,7 +6,10 @@ C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_P
 C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Model.cpp(58,55): warning C4267: 'argument': conversion from 'size_t' to 'GLenum', possible loss of data
 C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Model.cpp(60,90): warning C4267: 'argument': conversion from 'size_t' to 'GLint', possible loss of data
 C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Model.cpp(73,65): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Texture.cpp
-  TimeManager.cpp
+  Quad.cpp
+C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\Quad.cpp(57,74): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  SceneManager.cpp
+  Object.cpp
   Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   OpenGL_Project.vcxproj -> C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\OpenGL_Project\OpenGL_Project.exe

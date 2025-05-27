@@ -12,7 +12,6 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #pragma once
 #include "Transform.h"
-#include "Texture.h"
 #include "Mesh.h"
 #include "ComponentBehaviour.h"
 #include "TextureManager.h"
@@ -69,13 +68,6 @@ public:
 	/// </summary>
 	/// <param name="_uiProgram:">The program that the textures are to use.</param>
 	void BindTextures(GLuint _uiProgram);
-
-	/// <summary>
-	/// Sets the texture coordinate portion of the Object's vertex data to the given values. The given vector MUST contain 8
-	/// elements. This function may be called for any Object type but only works with shapes of type: CQuad.
-	/// </summary>
-	/// <param name="_fVecNewTexCoords:">The vector containing the new texture coordinate data.</param>
-	virtual void SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords);
 
 	void AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour);
 
