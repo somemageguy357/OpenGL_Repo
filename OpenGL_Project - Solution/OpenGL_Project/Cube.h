@@ -5,15 +5,15 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Cube.h
-Description : Deriving class of CShape. Contains the cube's vertex data, rendering object data, and textures.
+Description : Deriving class of CObject. Contains the cube's vertex data, rendering object data, and textures.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
-#include "Shape.h"
+#include "Object.h"
 
-// Deriving class of CShape. Contains the cube's vertex data, rendering object data, and textures.
-class CCube : public CShape
+// Deriving class of CObject. Contains the cube's vertex data, rendering object data, and textures.
+class CCube : public CObject
 {
 public:
 	/// <summary>
@@ -45,5 +45,5 @@ public:
 
 	~CCube();
 
-	void Render(GLuint _uiProgram) override;
+	void Render(CSkybox* _poSkybox, CCamera* _poCamera) override;
 };

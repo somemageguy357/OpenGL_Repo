@@ -11,7 +11,7 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "CameraBasedMovement.h"
-#include "Shape.h"
+#include "Object.h"
 #include "InputManager.h"
 #include "TimeManager.h"
 #include "Camera.h"

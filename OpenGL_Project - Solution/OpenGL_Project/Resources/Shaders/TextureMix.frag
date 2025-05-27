@@ -5,7 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : TextureMix.frag
-Description : Fragment shader for the mixing of two textures on one shape.
+Description : Fragment shader for the mixing of two textures on one object.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

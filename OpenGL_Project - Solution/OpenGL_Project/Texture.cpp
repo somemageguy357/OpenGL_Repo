@@ -28,8 +28,8 @@ CTexture::CTexture(std::string _sFilePath)
 	unsigned char* pucImageData = stbi_load(_sFilePath.c_str(), &iImageWidth, &iImageHeight, &iImageComponents, 0);
 
 	//Create and bind a new texture variable.
-	glGenTextures(1, &uiTexture);
-	glBindTexture(GL_TEXTURE_2D, uiTexture);
+	glGenTextures(1, &uiTextureID);
+	glBindTexture(GL_TEXTURE_2D, uiTextureID);
 
 	//Check how many components the loaded image has (RGBA or RGB).
 	GLint iLoadedComponents = GL_RGBA;
@@ -76,8 +76,8 @@ CTexture::CTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColum
 	m_fFrameTexCoordHeight = 1.0f / (float)m_iSpritesheetRows;
 
 	//Create and bind a new texture variable.
-	glGenTextures(1, &uiTexture);
-	glBindTexture(GL_TEXTURE_2D, uiTexture);
+	glGenTextures(1, &uiTextureID);
+	glBindTexture(GL_TEXTURE_2D, uiTextureID);
 
 	//Check how many components the loaded image has (RGBA or RGB).
 	GLint iLoadedComponents = GL_RGBA;
@@ -104,9 +104,9 @@ CTexture::CTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColum
 
 CTexture::~CTexture() {}
 
-GLuint CTexture::GetTexture()
+GLuint CTexture::GetTextureID()
 {
-	return uiTexture;
+	return uiTextureID;
 }
 
 bool CTexture::GetAnimated()

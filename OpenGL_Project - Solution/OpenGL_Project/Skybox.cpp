@@ -17,7 +17,6 @@ Mail : Connor.Galvin@mds.ac.nz
 
 CSkybox::CSkybox(GLuint _uiProgram, std::vector<std::string> _oVecImageFilePaths)
 {
-	m_poCamera = CCamera::GetMainCamera();
 	m_poMesh = new CSkyboxMesh("");
 	m_uiProgram = _uiProgram;
 
@@ -26,7 +25,7 @@ CSkybox::CSkybox(GLuint _uiProgram, std::vector<std::string> _oVecImageFilePaths
 
 CSkybox::~CSkybox() {}
 
-void CSkybox::Render()
+void CSkybox::Render(CCamera* _poCamera)
 {
 	glUseProgram(m_uiProgram);
 
@@ -35,8 +34,8 @@ void CSkybox::Render()
 
 	glUniform1i(glGetUniformLocation(m_uiProgram, "oTextureSkybox"), 0);
 
-	glm::mat4 matCamViewMatrix = glm::mat4(glm::mat3(*m_poCamera->GetViewMatrix()));
-	glm::mat4 matCamProjMatrix = *m_poCamera->GetProjectionMatrix();
+	glm::mat4 matCamViewMatrix = glm::mat4(glm::mat3(*_poCamera->GetViewMatrix()));
+	glm::mat4 matCamProjMatrix = *_poCamera->GetProjectionMatrix();
 
 	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matVP"), 1, GL_FALSE, glm::value_ptr(matCamProjMatrix * matCamViewMatrix));
 

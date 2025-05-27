@@ -5,7 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Texture.h
-Description : Holds the data of a texture used for rendering to a shape.
+Description : Holds the data of a texture used for rendering to a Object.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
@@ -18,7 +18,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <string>
 #include <vector>
 
-//Holds the data of a texture used for rendering to a shape.
+//Holds the data of a texture used for rendering to a Object.
 class CTexture
 {
 public:
@@ -48,7 +48,7 @@ public:
 	/// Returns the GLuint representing the texture.
 	/// </summary>
 	/// <returns>The GLuint representing the texture./returns>
-	GLuint GetTexture();
+	GLuint GetTextureID();
 
 	/// <summary>
 	/// Returns if the texture is an animated texture.
@@ -70,7 +70,7 @@ public:
 
 private:
 	//The GLuint representing the texture.
-	GLuint uiTexture = 0;
+	GLuint uiTextureID = 0;
 
 	//---ANIMATED ONLY VALUES---
 	//The texture is animated?

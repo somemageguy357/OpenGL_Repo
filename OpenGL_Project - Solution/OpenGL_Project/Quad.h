@@ -5,16 +5,16 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Quad.h
-Description : Deriving class of CShape. Contains the quad's vertex data, rendering object data, and textures.
+Description : Deriving class of CObject. Contains the quad's vertex data, rendering object data, and textures.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #pragma once
-#include "Shape.h"
+#include "Object.h"
 
-// Deriving class of CShape. Contains the quad's vertex data, rendering object data, and textures.
-class CQuad : public CShape
+// Deriving class of CObject. Contains the quad's vertex data, rendering object data, and textures.
+class CQuad : public CObject
 {
 public:
 	/// <summary>
@@ -46,7 +46,7 @@ public:
 
 	~CQuad();
 
-	void Render(GLuint _uiProgram) override;
+	void Render(CSkybox* _poSkybox, CCamera* _poCamera) override;
 
 	/// <summary>
 	/// Sets the texture coordinate portion of the quad's vertex data to the given values. The given vector MUST contain 8
@@ -62,9 +62,9 @@ public:
 	std::vector<float>* GetVertexData();
 
 	/// <summary>
-	/// Returns the vector of uints containing the vertex joints of the tris that make up the shape.
+	/// Returns the vector of uints containing the vertex joints of the tris that make up the Object.
 	/// </summary>
-	/// <returns>The vector of uints containing the vertex joints of the tris that make up the shape.</returns>
+	/// <returns>The vector of uints containing the vertex joints of the tris that make up the Object.</returns>
 	std::vector<unsigned int>* GetTriIndices();
 
 private:

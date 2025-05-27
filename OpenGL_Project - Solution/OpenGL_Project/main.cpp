@@ -15,13 +15,10 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "InputManager.h"
 #include "ShaderLoader.h"
 #include "ProgramSettings.h"
+#include "SceneManager.h"
+#include "TextureManager.h"
 
 #include "Camera.h"
-#include "Skybox.h"
-#include "Texture.h"
-#include "Quad.h"
-#include "Cube.h"
-#include "Model.h"
 
 #include "CameraBasedMovement.h"
 
@@ -32,10 +29,7 @@ GLuint uiProgramSkybox = 0;
 GLuint uiProgramUI = 0;
 
 CCamera* poCamera = nullptr;
-CSkybox* poSkybox = nullptr;
 
-std::vector<CTexture*> oVecTexturePtrs;
-std::vector<CShape*> oVecShapePtrs;
 //std::vector<CQuad*> oVecUIElementPtrs;
 //----------------------------
 
@@ -55,22 +49,6 @@ void Update();
 /// </summary>
 void Render();
 
-/// <summary>
-/// Creates a CTexture which gets its texture data from the given file path.
-/// </summary>
-/// <param name="_sFilePath:">The file path of the image file.</param>
-void CreateTexture(std::string _sFilePath);
-
-/// <summary>
-/// Creates an animated CTexture which gets its texture data from the given file path.
-/// </summary>
-/// <param name="_sFilePath:">The file path of the image file.</param>
-/// <param name="_iFrames:">The total number of frames in the spritesheet.</param>
-/// <param name="_iRows:">The number of rows in the spritesheet.</param>
-/// <param name="_iColumns:">The number of columns in the spritesheet.</param>
-/// <param name="_iFrameRate:">The frame rate of the texture's animation.</param>
-void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColumns, int _iFrameRate);
-
 int main()
 {
 	//Set window size values.
@@ -82,10 +60,6 @@ int main()
 	//If the setup process succeeded: proceed with the program.
 	if (CWindowManager::GetWindow() != nullptr)
 	{
-		//Create camera.
-		poCamera = new CCamera(true, { 0.0f, 0.0f, 3.0f });
-		poCamera->SetCameraMode(CCamera::ECameraMode::Orbital);
-
 		//Enables callback functions for keys, mouse buttons, and mouse position.
 		CInputManager::EnableCallbackFunctions();
 
@@ -99,10 +73,12 @@ int main()
 		uiProgramReflective = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
 		uiProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag");
 		//uiProgramUI = ShaderLoader::CreateProgram("Resources/Shaders/UI.vert", "Resources/Shaders/Texture.frag");
+		
+		//Create camera.
+		poCamera = new CCamera(true, CCamera::ECameraMode::Free, { 0.0f, 0.0f, 10.0f }, { 0.0f, 0.0f, -1.0f });
 
-		poSkybox = new CSkybox
+		CSceneManager::CreateSkybox
 		(
-			uiProgramSkybox,
 			{
 				"Resources/Textures/Skybox/Right.png",
 				"Resources/Textures/Skybox/Left.png",
@@ -110,28 +86,29 @@ int main()
 				"Resources/Textures/Skybox/Bottom.png",
 				"Resources/Textures/Skybox/Back.png",
 				"Resources/Textures/Skybox/Front.png"
-			}
+			},
+			uiProgramSkybox
 		);
 
-		//Create textures.
-		CreateTexture("Resources/Textures/Dungeons_Texture_01.png");
-		CreateTexture("Resources/Textures/Dungeons_Texture_03.png");
-		CreateTexture("Resources/Textures/ReflectionMap_Banner.png");
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Prop_Goblin_Tower_01.obj",
+			{ "Resources/Textures/Dungeons_Texture_03.png" },
+			uiProgramTex,
+			{ 0.0f, -5.0f, 0.0f }
+		);
 
-		CModel* poTower = new CModel("Resources/Models/SM_Prop_Goblin_Tower_01.obj", poSkybox);
-		oVecShapePtrs.push_back(poTower);
-		poTower->AddTexture(oVecTexturePtrs[1]);
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Wep_Banner_05.obj",
+			{ "Resources/Textures/Dungeons_Texture_01.png", "Resources/Textures/ReflectionMap_Banner.png" },
+			uiProgramReflective,
+			{ 0.0f, -0.25f, 0.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 1.5f, 1.5f, 1.5f }
+		);
 
-		CModel* poBanner = new CModel("Resources/Models/SM_Wep_Banner_05.obj", poSkybox);
-		oVecShapePtrs.push_back(poBanner);
-		poBanner->AddTexture(oVecTexturePtrs[0]);
-		poBanner->AddTexture(oVecTexturePtrs[2]);
-
-		oVecShapePtrs[0]->GetTransform()->SetPosition({ 0.0f, -5.0f, 0.0f });
-		oVecShapePtrs[1]->GetTransform()->SetScale(1.5f);
-		oVecShapePtrs[1]->GetTransform()->SetPosition({ 0.0f, -0.25f, 0.0f });
-
-		poBanner->AddComponentBehaviour(new CCameraBasedMovement(*poBanner->GetTransform()->GetPosition()));
+		//poBanner->AddComponentBehaviour(new CCameraBasedMovement(*poBanner->GetTransform()->GetPosition()));
 
 		//CQuad* poButton = new CQuad();
 		//oVecUIElementPtrs.push_back(poButton);
@@ -145,22 +122,10 @@ int main()
 		Render();
 	}
 
-	//Clean up the program. Delete pointers and terminate the render window.
-	for (int i = 0; i < oVecShapePtrs.size(); i++)
-	{
-		delete oVecShapePtrs[i];
-	}
-
-	oVecShapePtrs.clear();
-
-	for (int i = 0; i < oVecTexturePtrs.size(); i++)
-	{
-		delete oVecTexturePtrs[i];
-	}
-
-	oVecTexturePtrs.clear();
-
 	delete poCamera;
+
+	CSceneManager::DestroyScene();
+	CTextureManager::DestroyTextures();
 
 	glfwTerminate();
 }
@@ -209,33 +174,15 @@ GLFWwindow* InitializeGLSetup()
 	return poWindow;
 }
 
-void CreateTexture(std::string _sFilePath)
-{
-	CTexture* poTexture = new CTexture(_sFilePath);
-	oVecTexturePtrs.push_back(poTexture);
-}
-
-void CreateTexture(std::string _sFilePath, int _iFrames, int _iRows, int _iColumns, int _iFrameRate)
-{
-	CTexture* poTexture = new CTexture(_sFilePath, _iFrames, _iRows, _iColumns, _iFrameRate);
-	oVecTexturePtrs.push_back(poTexture);
-}
-
 void Update()
 {
 	glfwPollEvents();
 
-	CTimeManager::SetDeltaTime((float)glfwGetTime() - CTimeManager::GetCurrentTime());
-	CTimeManager::SetCurrentTime((float)glfwGetTime());
-
+	CTimeManager::Update();
 	CProgramSettings::Update();
 	CWindowManager::Update();
 	poCamera->Update();
-
-	for (size_t i = 0; i < oVecShapePtrs.size(); i++)
-	{
-		oVecShapePtrs[i]->Update();
-	}
+	CSceneManager::Update();
 
 	CInputManager::ClearInputs();
 }
@@ -244,20 +191,12 @@ void Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//poCamera->SetProjectionSpace(true, &oVecShapePtrs);
+	//poCamera->SetProjectionSpace(true, &oVecObjectPtrs);
 
-	oVecShapePtrs[0]->Render(uiProgramTex);
-	oVecShapePtrs[1]->Render(uiProgramReflective);
-
-	//for (size_t i = 0; i < oVecShapePtrs.size(); i++)
-	//{
-	//	oVecShapePtrs[i]->Render(uiProgramTex);
-	//}
-
-	poSkybox->Render();
+	CSceneManager::Render();
 
 	//UI rendering.
-	//poCamera->SetProjectionSpace(false, &oVecShapePtrs);
+	//poCamera->SetProjectionSpace(false, &oVecObjectPtrs);
 
 	//for (size_t i = 0; i < oVecUIElementPtrs.size(); i++)
 	//{

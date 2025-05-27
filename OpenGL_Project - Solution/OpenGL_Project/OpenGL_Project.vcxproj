@@ -24,7 +24,6 @@
     <ClCompile Include="ComponentBehaviour.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeMesh.cpp" />
-    <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="LightingSettings.cpp" />
     <ClCompile Include="main.cpp" />
@@ -34,11 +33,13 @@
     <ClCompile Include="ModelMesh.cpp" />
     <ClCompile Include="ProgramSettings.cpp" />
     <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
-    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="SkyboxMesh.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="WindowManager.cpp" />
@@ -49,7 +50,6 @@
     <ClInclude Include="ComponentBehaviour.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeMesh.h" />
-    <ClInclude Include="Hexagon.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LightingSettings.h" />
     <ClInclude Include="Math.h" />
@@ -58,11 +58,13 @@
     <ClInclude Include="ModelMesh.h" />
     <ClInclude Include="ProgramSettings.h" />
     <ClInclude Include="Quad.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderLoader.h" />
-    <ClInclude Include="Shape.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="SkyboxMesh.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="Transform.h" />

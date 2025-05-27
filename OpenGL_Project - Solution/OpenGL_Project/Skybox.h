@@ -21,12 +21,11 @@ public:
 	CSkybox(GLuint _uiProgram, std::vector<std::string> _oVecImageFilePaths);
 	~CSkybox();
 
-	void Render();
+	void Render(CCamera* _poCamera);
 
 	GLuint* GetTextureID();
 
 private:
-	CCamera* m_poCamera = nullptr;
 	CMesh* m_poMesh = nullptr;
 
 	GLuint m_uiProgram = 0;

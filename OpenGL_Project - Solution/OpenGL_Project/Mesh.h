@@ -49,9 +49,9 @@ public:
 	~CMesh();
 
 	/// <summary>
-	/// Returns the address of the shape's VAO.
+	/// Returns the address of the Object's VAO.
 	/// </summary>
-	/// <returns>The shape's VAO.</returns>
+	/// <returns>The Object's VAO.</returns>
 	GLuint* GetVAO();
 
 	/// <summary>
@@ -61,9 +61,9 @@ public:
 	std::vector<float>* GetVertexData();
 
 	/// <summary>
-	/// Returns the vector of uints containing the vertex joints of the tris that make up the shape.
+	/// Returns the vector of uints containing the vertex joints of the tris that make up the Object.
 	/// </summary>
-	/// <returns>The vector of uints containing the vertex joints of the tris that make up the shape.</returns>
+	/// <returns>The vector of uints containing the vertex joints of the tris that make up the Object.</returns>
 	std::vector<unsigned int>* GetTriIndices();
 
 protected:

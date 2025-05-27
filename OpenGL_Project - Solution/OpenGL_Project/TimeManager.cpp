@@ -19,16 +19,6 @@ CTimeManager::CTimeManager() {}
 
 CTimeManager::~CTimeManager() {}
 
-void CTimeManager::SetDeltaTime(float _fDeltaTime)
-{
-	m_fDeltaTime = _fDeltaTime;
-}
-
-void CTimeManager::SetCurrentTime(float _fCurrentTime)
-{
-	m_fCurrentTime = _fCurrentTime;
-}
-
 float CTimeManager::GetDeltaTime()
 {
 	return m_fDeltaTime;
@@ -37,4 +27,10 @@ float CTimeManager::GetDeltaTime()
 float CTimeManager::GetCurrentTime()
 {
 	return m_fCurrentTime;
+}
+
+void CTimeManager::Update()
+{
+	m_fDeltaTime = (float)glfwGetTime() - m_fCurrentTime;
+	m_fCurrentTime = (float)glfwGetTime();
 }

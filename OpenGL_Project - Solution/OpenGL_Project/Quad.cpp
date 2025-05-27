@@ -15,31 +15,31 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include <iostream>
 
-CQuad::CQuad() : CShape() 
+CQuad::CQuad() : CObject() 
 {
 	ShapeSetup();
 }
 
-CQuad::CQuad(glm::vec3 _v3fPosition) : CShape(_v3fPosition)
+CQuad::CQuad(glm::vec3 _v3fPosition) : CObject(_v3fPosition)
 {
 	ShapeSetup();
 }
 
-CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation) : CShape(_v3fPosition, _v3fRotation)
+CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation) : CObject(_v3fPosition, _v3fRotation)
 {
 	ShapeSetup();
 }
 
-CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale) : CShape(_v3fPosition, _v3fRotation, _v3fScale)
+CQuad::CQuad(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale) : CObject(_v3fPosition, _v3fRotation, _v3fScale)
 {
 	ShapeSetup();
 }
 
 CQuad::~CQuad() {}
 
-void CQuad::Render(GLuint _uiProgram)
+void CQuad::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 {
-	glUseProgram(_uiProgram);
+	glUseProgram(m_uiProgram);
 
 	//Supplies the programs current lifetime to the shader program (if it requires it).
 	//GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
@@ -47,12 +47,12 @@ void CQuad::Render(GLuint _uiProgram)
 
 	glBindVertexArray(m_uiVAO);
 
-	//Bind the shape's textures (if any).
-	BindTextures(_uiProgram);
+	//Bind the Object's textures (if any).
+	BindTextures(m_uiProgram);
 
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetProjectionMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
 
 	glDrawElements(GL_TRIANGLES, m_oVecTriIndices.size(), GL_UNSIGNED_INT, 0);
 
@@ -98,7 +98,7 @@ void CQuad::SetNewQuadTexCoords(std::vector<float> _fVecNewTexCoords)
 		m_oVecVertexData[7 + (iRows * 8)] = _fVecNewTexCoords[(iRows * 2) + 1];
 	}
 
-	//Regenerate the shape with the updated vertex data.
+	//Regenerate the Object with the updated vertex data.
 	GenerateShape();
 }
 

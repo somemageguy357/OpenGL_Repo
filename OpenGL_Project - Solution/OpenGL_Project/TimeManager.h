@@ -10,22 +10,14 @@ Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
+#pragma once
+#include <glew.h>
+#include <glfw3.h>
+
 //Static class that holds the program's current/run time and delta time values.
 class CTimeManager
 {
 public:
-	/// <summary>
-	/// Sets the value of the program's DeltaTime.
-	/// </summary>
-	/// <param name="_fDeltaTime:">The new value of DeltaTime.</param>
-	static void SetDeltaTime(float _fDeltaTime);
-
-	/// <summary>
-	/// Sets the value of the program's CurrentTime (run time).
-	/// </summary>
-	/// <param name="_fCurrentTime:">The new value of CurrentTime.</param>
-	static void SetCurrentTime(float _fCurrentTime);
-
 	/// <summary>
 	/// Returns the program's DeltaTime.
 	/// </summary>
@@ -36,6 +28,11 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	static float GetCurrentTime();
+
+	/// <summary>
+	/// Updates the values of DeltaTime and CurrentTime.
+	/// </summary>
+	static void Update();
 
 private:
 	static float m_fDeltaTime;

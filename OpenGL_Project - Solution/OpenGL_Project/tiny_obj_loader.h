@@ -51,7 +51,7 @@ THE SOFTWARE.
 // version 1.0.3 : Support parsing texture options(#85)
 // version 1.0.2 : Improve parsing speed by about a factor of 2 for large
 // files(#105)
-// version 1.0.1 : Fixes a shape is lost if obj ends with a 'usemtl'(#104)
+// version 1.0.1 : Fixes a Object is lost if obj ends with a 'usemtl'(#104)
 // version 1.0.0 : Change data structure. Change license from BSD to MIT.
 //
 
@@ -594,8 +594,8 @@ class ObjReader {
 /// ==>>========= Legacy v1 API =============================================
 
 /// Loads .obj from a file.
-/// 'attrib', 'shapes' and 'materials' will be filled with parsed shape data
-/// 'shapes' will be filled with parsed shape data
+/// 'attrib', 'shapes' and 'materials' will be filled with parsed Object data
+/// 'shapes' will be filled with parsed Object data
 /// Returns true when loading .obj become success.
 /// Returns warning message into `warn`, and error message into `err`
 /// 'mtl_basedir' is optional, and used for base directory for .mtl file.
@@ -1479,7 +1479,7 @@ inline TinyObjPoint WorldToLocal(const TinyObjPoint &a, const TinyObjPoint &u,
 }
 
 // TODO(syoyo): refactor function.
-static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
+static bool exportGroupsToShape(shape_t *Object, const PrimGroup &prim_group,
                                 const std::vector<tag_t> &tags,
                                 const int material_id, const std::string &name,
                                 bool triangulate, const std::vector<real_t> &v,
@@ -1488,7 +1488,7 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
     return false;
   }
 
-  shape->name = name;
+  Object->name = name;
 
   // polygon
   if (!prim_group.faceGroup.empty()) {
@@ -1586,33 +1586,33 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
 
           if (sqr02 < sqr13) {
             // [0, 1, 2], [0, 2, 3]
-            shape->mesh.indices.push_back(idx0);
-            shape->mesh.indices.push_back(idx1);
-            shape->mesh.indices.push_back(idx2);
+            Object->mesh.indices.push_back(idx0);
+            Object->mesh.indices.push_back(idx1);
+            Object->mesh.indices.push_back(idx2);
 
-            shape->mesh.indices.push_back(idx0);
-            shape->mesh.indices.push_back(idx2);
-            shape->mesh.indices.push_back(idx3);
+            Object->mesh.indices.push_back(idx0);
+            Object->mesh.indices.push_back(idx2);
+            Object->mesh.indices.push_back(idx3);
           } else {
             // [0, 1, 3], [1, 2, 3]
-            shape->mesh.indices.push_back(idx0);
-            shape->mesh.indices.push_back(idx1);
-            shape->mesh.indices.push_back(idx3);
+            Object->mesh.indices.push_back(idx0);
+            Object->mesh.indices.push_back(idx1);
+            Object->mesh.indices.push_back(idx3);
 
-            shape->mesh.indices.push_back(idx1);
-            shape->mesh.indices.push_back(idx2);
-            shape->mesh.indices.push_back(idx3);
+            Object->mesh.indices.push_back(idx1);
+            Object->mesh.indices.push_back(idx2);
+            Object->mesh.indices.push_back(idx3);
           }
 
           // Two triangle faces
-          shape->mesh.num_face_vertices.push_back(3);
-          shape->mesh.num_face_vertices.push_back(3);
+          Object->mesh.num_face_vertices.push_back(3);
+          Object->mesh.num_face_vertices.push_back(3);
 
-          shape->mesh.material_ids.push_back(material_id);
-          shape->mesh.material_ids.push_back(material_id);
+          Object->mesh.material_ids.push_back(material_id);
+          Object->mesh.material_ids.push_back(material_id);
 
-          shape->mesh.smoothing_group_ids.push_back(face.smoothing_group_id);
-          shape->mesh.smoothing_group_ids.push_back(face.smoothing_group_id);
+          Object->mesh.smoothing_group_ids.push_back(face.smoothing_group_id);
+          Object->mesh.smoothing_group_ids.push_back(face.smoothing_group_id);
 
         } else {
 #ifdef TINYOBJLOADER_USE_MAPBOX_EARCUT
@@ -1726,13 +1726,13 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
               idx2.texcoord_index =
                   face.vertex_indices[indices[3 * k + 2]].vt_idx;
 
-              shape->mesh.indices.push_back(idx0);
-              shape->mesh.indices.push_back(idx1);
-              shape->mesh.indices.push_back(idx2);
+              Object->mesh.indices.push_back(idx0);
+              Object->mesh.indices.push_back(idx1);
+              Object->mesh.indices.push_back(idx2);
 
-              shape->mesh.num_face_vertices.push_back(3);
-              shape->mesh.material_ids.push_back(material_id);
-              shape->mesh.smoothing_group_ids.push_back(
+              Object->mesh.num_face_vertices.push_back(3);
+              Object->mesh.material_ids.push_back(material_id);
+              Object->mesh.smoothing_group_ids.push_back(
                   face.smoothing_group_id);
             }
           }
@@ -1912,13 +1912,13 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
               idx2.normal_index = ind[2].vn_idx;
               idx2.texcoord_index = ind[2].vt_idx;
 
-              shape->mesh.indices.push_back(idx0);
-              shape->mesh.indices.push_back(idx1);
-              shape->mesh.indices.push_back(idx2);
+              Object->mesh.indices.push_back(idx0);
+              Object->mesh.indices.push_back(idx1);
+              Object->mesh.indices.push_back(idx2);
 
-              shape->mesh.num_face_vertices.push_back(3);
-              shape->mesh.material_ids.push_back(material_id);
-              shape->mesh.smoothing_group_ids.push_back(
+              Object->mesh.num_face_vertices.push_back(3);
+              Object->mesh.material_ids.push_back(material_id);
+              Object->mesh.smoothing_group_ids.push_back(
                   face.smoothing_group_id);
             }
 
@@ -1950,13 +1950,13 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
               idx2.normal_index = i2.vn_idx;
               idx2.texcoord_index = i2.vt_idx;
 
-              shape->mesh.indices.push_back(idx0);
-              shape->mesh.indices.push_back(idx1);
-              shape->mesh.indices.push_back(idx2);
+              Object->mesh.indices.push_back(idx0);
+              Object->mesh.indices.push_back(idx1);
+              Object->mesh.indices.push_back(idx2);
 
-              shape->mesh.num_face_vertices.push_back(3);
-              shape->mesh.material_ids.push_back(material_id);
-              shape->mesh.smoothing_group_ids.push_back(
+              Object->mesh.num_face_vertices.push_back(3);
+              Object->mesh.material_ids.push_back(material_id);
+              Object->mesh.smoothing_group_ids.push_back(
                   face.smoothing_group_id);
             }
           }
@@ -1968,18 +1968,18 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
           idx.vertex_index = face.vertex_indices[k].v_idx;
           idx.normal_index = face.vertex_indices[k].vn_idx;
           idx.texcoord_index = face.vertex_indices[k].vt_idx;
-          shape->mesh.indices.push_back(idx);
+          Object->mesh.indices.push_back(idx);
         }
 
-        shape->mesh.num_face_vertices.push_back(
+        Object->mesh.num_face_vertices.push_back(
             static_cast<unsigned int>(npolys));
-        shape->mesh.material_ids.push_back(material_id);  // per face
-        shape->mesh.smoothing_group_ids.push_back(
+        Object->mesh.material_ids.push_back(material_id);  // per face
+        Object->mesh.smoothing_group_ids.push_back(
             face.smoothing_group_id);  // per face
       }
     }
 
-    shape->mesh.tags = tags;
+    Object->mesh.tags = tags;
   }
 
   // line
@@ -1995,10 +1995,10 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
         idx.normal_index = vi.vn_idx;
         idx.texcoord_index = vi.vt_idx;
 
-        shape->lines.indices.push_back(idx);
+        Object->lines.indices.push_back(idx);
       }
 
-      shape->lines.num_line_vertices.push_back(
+      Object->lines.num_line_vertices.push_back(
           int(prim_group.lineGroup[i].vertex_indices.size()));
     }
   }
@@ -2016,7 +2016,7 @@ static bool exportGroupsToShape(shape_t *shape, const PrimGroup &prim_group,
         idx.normal_index = vi.vn_idx;
         idx.texcoord_index = vi.vt_idx;
 
-        shape->points.indices.push_back(idx);
+        Object->points.indices.push_back(idx);
       }
     }
   }
@@ -2612,7 +2612,7 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
   int greatest_vn_idx = -1;
   int greatest_vt_idx = -1;
 
-  shape_t shape;
+  shape_t Object;
 
   bool found_all_colors = true;  // check if all 'v' line has color info
 
@@ -2865,10 +2865,10 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
       }
 
       if (newMaterialId != material) {
-        // Create per-face material. Thus we don't add `shape` to `shapes` at
+        // Create per-face material. Thus we don't add `Object` to `shapes` at
         // this time.
         // just clear `faceGroup` after `exportGroupsToShape()` call.
-        exportGroupsToShape(&shape, prim_group, tags, material, name,
+        exportGroupsToShape(&Object, prim_group, tags, material, name,
                             triangulate, v, warn);
         prim_group.faceGroup.clear();
         material = newMaterialId;
@@ -2937,15 +2937,15 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
     // group name
     if (token[0] == 'g' && IS_SPACE((token[1]))) {
       // flush previous face group.
-      bool ret = exportGroupsToShape(&shape, prim_group, tags, material, name,
+      bool ret = exportGroupsToShape(&Object, prim_group, tags, material, name,
                                      triangulate, v, warn);
       (void)ret;  // return value not used.
 
-      if (shape.mesh.indices.size() > 0) {
-        shapes->push_back(shape);
+      if (Object.mesh.indices.size() > 0) {
+        shapes->push_back(Object);
       }
 
-      shape = shape_t();
+      Object = shape_t();
 
       // material = -1;
       prim_group.clear();
@@ -2989,18 +2989,18 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
     // object name
     if (token[0] == 'o' && IS_SPACE((token[1]))) {
       // flush previous face group.
-      bool ret = exportGroupsToShape(&shape, prim_group, tags, material, name,
+      bool ret = exportGroupsToShape(&Object, prim_group, tags, material, name,
                                      triangulate, v, warn);
       (void)ret;  // return value not used.
 
-      if (shape.mesh.indices.size() > 0 || shape.lines.indices.size() > 0 ||
-          shape.points.indices.size() > 0) {
-        shapes->push_back(shape);
+      if (Object.mesh.indices.size() > 0 || Object.lines.indices.size() > 0 ||
+          Object.points.indices.size() > 0) {
+        shapes->push_back(Object);
       }
 
       // material = -1;
       prim_group.clear();
-      shape = shape_t();
+      Object = shape_t();
 
       // @todo { multiple object name? }
       token += 2;
@@ -3128,15 +3128,15 @@ bool LoadObj(attrib_t *attrib, std::vector<shape_t> *shapes,
     }
   }
 
-  bool ret = exportGroupsToShape(&shape, prim_group, tags, material, name,
+  bool ret = exportGroupsToShape(&Object, prim_group, tags, material, name,
                                  triangulate, v, warn);
   // exportGroupsToShape return false when `usemtl` is called in the last
   // line.
-  // we also add `shape` to `shapes` when `shape.mesh` has already some
+  // we also add `Object` to `shapes` when `Object.mesh` has already some
   // faces(indices)
-  if (ret || shape.mesh.indices
+  if (ret || Object.mesh.indices
                  .size()) {  // FIXME(syoyo): Support other prims(e.g. lines)
-    shapes->push_back(shape);
+    shapes->push_back(Object);
   }
   prim_group.clear();  // for safety
 

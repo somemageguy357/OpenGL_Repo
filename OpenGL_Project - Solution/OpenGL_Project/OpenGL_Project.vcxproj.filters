@@ -75,7 +75,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="ShaderLoader.cpp">
@@ -95,9 +95,6 @@
     </ClCompile>
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\Objects\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Hexagon.cpp">
-      <Filter>Source Files\Objects\2D</Filter>
     </ClCompile>
     <ClCompile Include="Quad.cpp">
       <Filter>Source Files\Objects\2D</Filter>
@@ -141,9 +138,15 @@
     <ClCompile Include="ComponentBehaviour.cpp">
       <Filter>Source Files\ComponentBehaviours</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Shape.h">
+    <ClInclude Include="Object.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="ShaderLoader.h">
@@ -163,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Header Files\Objects\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Hexagon.h">
-      <Filter>Header Files\Objects\2D</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
       <Filter>Header Files\Objects\2D</Filter>
@@ -211,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="CameraBasedMovement.h">
       <Filter>Header Files\ComponentBehaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

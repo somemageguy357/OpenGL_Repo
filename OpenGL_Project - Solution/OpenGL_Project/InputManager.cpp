@@ -17,7 +17,7 @@ std::vector<int> CInputManager::m_oVecKeysPressedThisFrame;
 std::vector<int> CInputManager::m_oVecKeysReleasedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsClickedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsReleasedThisFrame;
-glm::vec2 CInputManager::m_v2fMousePosition = { 0, 0 };
+glm::vec2 CInputManager::m_v2fMousePosition = { 0.0f, 0.0f };
 CInputManager::ECursorMode CInputManager::m_eCursorMode;
 
 bool CInputManager::GetKey(int _iKeyCode)
@@ -119,6 +119,9 @@ void CInputManager::SetMouseCursorMode(ECursorMode _eCursorMode)
 		{
 			glfwSetInputMode(CWindowManager::GetWindow(), GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		}
+
+		m_v2fMousePosition.x = CWindowManager::GetWidth() / 2;
+		m_v2fMousePosition.y = CWindowManager::GetHeight() / 2;
 	}
 }
 

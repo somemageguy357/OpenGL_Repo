@@ -11,17 +11,22 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #pragma once
-#include "Shape.h"
+#include "Object.h"
 #include "Skybox.h"
 
-class CModel : public CShape
+class CModel : public CObject
 {
 public:
-	CModel(std::string _sFilePath, CSkybox* _poSkybox);
+	CModel() = delete;
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition);
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 	~CModel();
 
-	void Render(GLuint _uiProgram) override;
+	void Render(CSkybox* _poSkybox, CCamera* _poCamera) override;
 
 private:
-	CSkybox* m_poSkybox = nullptr;
+	void ModelSetup(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
+
 };

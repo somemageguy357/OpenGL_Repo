@@ -18,10 +18,27 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include <iostream>
 
-CModel::CModel(std::string _sFilePath, CSkybox* _poSkybox) : CShape()
+CModel::CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram)
 {
-	m_poMesh = new CModelMesh(_sFilePath);
-	m_poSkybox = _poSkybox;
+	ModelSetup(_sModelFilePath, _oVecTextureFilePaths, _uiProgram);
+}
+
+CModel::CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition)
+	: CObject(_v3fPosition)
+{
+	ModelSetup(_sModelFilePath, _oVecTextureFilePaths, _uiProgram);
+}
+
+CModel::CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
+	: CObject(_v3fPosition, _v3fRotation)
+{
+	ModelSetup(_sModelFilePath, _oVecTextureFilePaths, _uiProgram);
+}
+
+CModel::CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale)
+	: CObject(_v3fPosition, _v3fRotation, _v3fScale)
+{
+	ModelSetup(_sModelFilePath, _oVecTextureFilePaths, _uiProgram);
 }
 
 CModel::~CModel()
@@ -29,36 +46,44 @@ CModel::~CModel()
 	delete m_poMesh;
 }
 
-void CModel::Render(GLuint _uiProgram)
+void CModel::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 {
-	glUseProgram(_uiProgram);
-
-	//Supplies the programs current lifetime to the shader program (if it requires it).
-	//GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
-	//glUniform1f(iCurrentTimeLocation, CTimeManager::GetCurrentTime());
+	glUseProgram(m_uiProgram);
 
 	glBindVertexArray(*m_poMesh->GetVAO());
 
-	//Bind the shape's textures (if any).
-	BindTextures(_uiProgram);
+	//Bind the object's textures (if any).
+	BindTextures(m_uiProgram);
 
-	glActiveTexture(GL_TEXTURE0 + m_oVecTexturePtrs.size());
-	glBindTexture(GL_TEXTURE_CUBE_MAP, *m_poSkybox->GetTextureID());
-	glUniform1i(glGetUniformLocation(_uiProgram, "oSkyboxTexture"), m_oVecTexturePtrs.size());
+	glActiveTexture(GL_TEXTURE0 + m_oVecTextureIDs.size());
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *_poSkybox->GetTextureID());
+	glUniform1i(glGetUniformLocation(m_uiProgram, "oSkyboxTexture"), m_oVecTextureIDs.size());
 
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*CCamera::GetMainCamera()->GetProjectionMatrix()));
-	glUniform3fv(glGetUniformLocation(_uiProgram, "v3fCameraPosition"), 1, glm::value_ptr(*CCamera::GetMainCamera()->GetTransform()->GetPosition()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
+	glUniform3fv(glGetUniformLocation(m_uiProgram, "v3fCameraPosition"), 1, glm::value_ptr(*_poCamera->GetTransform()->GetPosition()));
 
-	glUniform1f(glGetUniformLocation(_uiProgram, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
-	glUniform3fv(glGetUniformLocation(_uiProgram, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
+	glUniform1f(glGetUniformLocation(m_uiProgram, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
+	glUniform3fv(glGetUniformLocation(m_uiProgram, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
 
-	glUniform1f(glGetUniformLocation(_uiProgram, "fSpecularStrength"), 0.0f);
-	glUniform1f(glGetUniformLocation(_uiProgram, "fObjectShineValue"), 32.0f);
+	glUniform1f(glGetUniformLocation(m_uiProgram, "fSpecularStrength"), 0.0f);
+	glUniform1f(glGetUniformLocation(m_uiProgram, "fObjectShineValue"), 32.0f);
 
 	glDrawArrays(GL_TRIANGLES, 0, m_poMesh->GetTriIndices()->size());
 
 	glBindVertexArray(0);
 	glUseProgram(0);
+}
+
+void CModel::ModelSetup(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram)
+{
+	m_poMesh = new CModelMesh(_sModelFilePath);
+
+	for (size_t i = 0; i < _oVecTextureFilePaths.size(); i++)
+	{
+		AddTexture(_oVecTextureFilePaths[i]);
+	}
+
+	m_uiProgram = _uiProgram;
 }

@@ -11,8 +11,9 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #pragma once
-#include "Shape.h"
-#include "Texture.h"
+//#include "Object.h"
+//#include "Texture.h"
+#include "Transform.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -34,27 +35,14 @@ public:
 	CCamera() = delete;
 
 	/// <summary>
-	/// Creates a camera whose view frustrum is set using the window's width and height values. The position (0.0f, 0.0f, 0.0f)
-	/// and rotation (0.0f, 0.0f, 0.0f) of the camera are set to their default values.
+	/// Creates a camera whose view frustrum is set using the window's width and height values as well as the given position and forward direction.
+	/// The forward direction is normalized in this constructor. 
 	/// </summary>
 	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
-	CCamera(const bool _kbIsPerspective);
-
-	/// <summary>
-	/// Creates a camera whose view frustrum is set using the window's width and height values as well as the given position. 
-	/// The rotation (0.0f, 0.0f, 0.0f) of the camera is set to its default value.
-	/// </summary>
-	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
+	/// <param name="_eCameraMode:">The camera mode. Free or orbital?</param>
 	/// <param name="_v3fPosition:">The starting position of the camera.</param>
-	CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition);
-
-	/// <summary>
-	/// Creates a camera whose view frustrum is set using the window's width and height values as well as the given position and rotation. 
-	/// </summary>
-	/// <param name="_kbIsPerspective:">Is the camera perspective or orthographic?</param>
-	/// <param name="_v3fPosition:">The starting position of the camera.</param>
-	/// <param name="_v3fRotation:">The starting rotation of the camera.</param>
-	CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	/// <param name="_v3fForwardDir:">The starting forward direction of the camera. Normalizes in constructor.</param>
+	CCamera(const bool _kbIsPerspective, ECameraMode _eCameraMode, glm::vec3 _v3fPosition, glm::vec3 _v3fForwardDir);
 
 	~CCamera();
 
@@ -80,8 +68,8 @@ public:
 	/// to match the change between perspective and orthographic projection spaces.
 	/// </summary>
 	/// <param name="_bIsPerspective:">Sets the projection space to perspective if true, orthographic if false.</param>
-	/// <param name="_poVecShapePtrs:">Vector containing all shapes that will have their transforms adjusted.</param>
-	void SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _poVecShapePtrs);
+	/// <param name="_poVeCObjectPtrs:">Vector containing all shapes that will have their transforms adjusted.</param>
+	//void SetProjectionSpace(bool _bIsPerspective, std::vector<CObject*>* _poVeCObjectPtrs);
 
 	/// <summary>
 	/// Returns the camera's projection space.

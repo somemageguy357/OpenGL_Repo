@@ -20,23 +20,14 @@ Mail : Connor.Galvin@mds.ac.nz
 
 CCamera* CCamera::m_poMainCamera = nullptr;
 
-CCamera::CCamera(const bool _kbIsPerspective)
-{
-	m_bIsPerspective = _kbIsPerspective;
-	CameraSetup();
-}
-
-CCamera::CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition)
+CCamera::CCamera(const bool _kbIsPerspective, ECameraMode _eCameraMode, glm::vec3 _v3fPosition, glm::vec3 _v3fForwardDir)
 {
 	m_bIsPerspective = _kbIsPerspective;
 	m_oTransform = CTransform(_v3fPosition);
-	CameraSetup();
-}
+	m_v3fCamForwardDir = CMath::Normalize(_v3fForwardDir);
+	m_fYaw = glm::degrees(atan2(m_v3fCamForwardDir.z, m_v3fCamForwardDir.x));
 
-CCamera::CCamera(const bool _kbIsPerspective, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
-{
-	m_bIsPerspective = _kbIsPerspective;
-	m_oTransform = CTransform(_v3fPosition, _v3fRotation);
+	SetCameraMode(_eCameraMode);
 	CameraSetup();
 }
 
@@ -44,15 +35,15 @@ CCamera::~CCamera() {}
 
 void CCamera::Update()
 {
-	//if (CInputManager::GetKey(GLFW_KEY_1) == true)----------------------- disabled for this assignment
-	//{
-	//	SetCameraMode(ECameraMode::Free);
-	//}
+	if (CInputManager::GetKey(GLFW_KEY_9) == true)
+	{
+		SetCameraMode(ECameraMode::Free);
+	}
 
-	//else if (CInputManager::GetKey(GLFW_KEY_2) == true)
-	//{
-	//	SetCameraMode(ECameraMode::Orbital);
-	//}
+	else if (CInputManager::GetKey(GLFW_KEY_0) == true)
+	{
+		SetCameraMode(ECameraMode::Orbital);
+	}
 
 	if (m_eCameraMode == ECameraMode::Free)
 	{
@@ -75,35 +66,35 @@ CTransform* CCamera::GetTransform()
 	return &m_oTransform;
 }
 
-void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CShape*>* _poVecShapePtrs)
-{
-	if (m_bIsPerspective != _bIsPerspective)
-	{
-		m_bIsPerspective = _bIsPerspective;
-
-		//Perspective
-		if (m_bIsPerspective == true)
-		{
-			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)
-			{
-				(*_poVecShapePtrs)[i]->GetTransform()->SetScaleMultiplier(1.0f);
-			}
-
-			CameraSetup();
-		}
-
-		//Orthographic
-		else
-		{
-			for (size_t i = 0; i < _poVecShapePtrs->size(); i++)
-			{
-				(*_poVecShapePtrs)[i]->GetTransform()->SetScaleMultiplier(400.0f);
-			}
-
-			CameraSetup();
-		}
-	}
-}
+//void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CObject*>* _poVeCObjectPtrs)
+//{
+//	if (m_bIsPerspective != _bIsPerspective)
+//	{
+//		m_bIsPerspective = _bIsPerspective;
+//
+//		//Perspective
+//		if (m_bIsPerspective == true)
+//		{
+//			for (size_t i = 0; i < _poVeCObjectPtrs->size(); i++)
+//			{
+//				(*_poVeCObjectPtrs)[i]->GetTransform()->SetScaleMultiplier(1.0f);
+//			}
+//
+//			CameraSetup();
+//		}
+//
+//		//Orthographic
+//		else
+//		{
+//			for (size_t i = 0; i < _poVeCObjectPtrs->size(); i++)
+//			{
+//				(*_poVeCObjectPtrs)[i]->GetTransform()->SetScaleMultiplier(400.0f);
+//			}
+//
+//			CameraSetup();
+//		}
+//	}
+//}
 
 bool CCamera::GetProjectionSpace()
 {
@@ -115,6 +106,9 @@ void CCamera::SetCameraMode(ECameraMode _eCameraMode)
 	m_eCameraMode = _eCameraMode;
 
 	CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
+
+	m_fPrevMouseX = CWindowManager::GetWidth() / 2;
+	m_fPrevMouseY = CWindowManager::GetHeight() / 2;
 }
 
 void CCamera::ToggleOrbitMovement()
@@ -175,6 +169,8 @@ void CCamera::FreeCamControls()
 	m_v3fCamForwardDir = CMath::Normalize(v3fLookDir);
 	m_v3fCamRightDir = CMath::Normalize(glm::cross(m_v3fCamForwardDir, m_v3fCamUpDir));
 
+	//std::cout << "Mouse: " << v2fMousePos.x << "," << v2fMousePos.y << " | Prev: " << m_fPrevMouseX << "," << m_fPrevMouseY << " | Offset: " << m_fOffsetX << "," << m_fOffsetY << std::endl;
+
 	//Create vector for sum movement direction.
 	glm::vec3 v3fMoveDir = { 0.0f, 0.0f, 0.0f };
 
@@ -223,8 +219,8 @@ void CCamera::OrbitalCamControls()
 
 	if (m_bEnableOrbitMovement == true)
 	{
-		//m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; -- regular controls
-		m_fOrbitAngle += CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //-- assignment controls
+		m_fOrbitAngle += TriBool() * CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //--Manual rotation.
+		//m_fOrbitAngle += CTimeManager::GetDeltaTime() * m_fOrbitMoveSpeed; //--Auto rotation.
 
 		glm::vec3 v3fNewPosition = { sin(m_fOrbitAngle) * m_fOrbitRadius, m_fOrbitHeight, cos(m_fOrbitAngle) * m_fOrbitRadius };
 		m_oTransform.SetPosition(v3fNewPosition);
