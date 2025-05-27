@@ -13,6 +13,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #pragma once
 #include <glm.hpp>
 
+//Static class that holds and controls lighting settings.
 class CLightingSettings
 {
 public:

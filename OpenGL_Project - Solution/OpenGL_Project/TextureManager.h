@@ -1,3 +1,15 @@
+/***********************************************************************
+Bachelor of Software Engineering
+Media Design School
+Auckland
+New Zealand
+(c) 2025 Media Design School
+File Name : TextureManager.h
+Description : Static class that handles the creation of textures and acts as a container for them.
+Author : Connor Galvin
+Mail : Connor.Galvin@mds.ac.nz
+**************************************************************************/
+
 #pragma once
 #include <glew.h>
 #include <glfw3.h>
@@ -6,6 +18,7 @@
 #include <string>
 #include <vector>
 
+//Static class that handles the creation of textures and acts as a container for them.
 class CTextureManager
 {
 public:
@@ -16,6 +29,9 @@ public:
 	/// <returns>The texture's ID.</returns>
 	static GLuint GetTexture(std::string _sFilePath);
 
+	/// <summary>
+	/// Deletes all textures.
+	/// </summary>
 	static void DestroyTextures();
 
 private:
@@ -36,5 +52,11 @@ private:
 	CTextureManager() = delete;
 	~CTextureManager() = delete;
 
+	/// <summary>
+	/// Performs the texture creation process and returns the ID that is generated. Creates and binds the texture ID and 
+	/// assigns the texture data to it.
+	/// </summary>
+	/// <param name="_sFilePath:">The file path of the texture.</param>
+	/// <returns>The texture ID.</returns>
 	static GLuint CreateNewTexture(std::string _sFilePath);
 };

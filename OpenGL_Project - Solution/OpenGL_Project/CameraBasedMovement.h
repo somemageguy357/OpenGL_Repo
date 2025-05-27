@@ -13,6 +13,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #pragma once
 #include "ComponentBehaviour.h"
 
+//Allows an object to be moved based on the camera's direction vectors.
 class CCameraBasedMovement : public CComponentBehaviour
 {
 public:

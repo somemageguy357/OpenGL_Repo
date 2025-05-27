@@ -11,6 +11,7 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #include "Object.h"
+
 #include <iostream>
 
 CObject::CObject() {}
@@ -30,7 +31,19 @@ CObject::CObject(glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fS
 	m_oTransform = CTransform(_v3fPosition, _v3fRotation, _v3fScale);
 }
 
-CObject::~CObject() {}
+CObject::~CObject() 
+{
+	std::cout << "Deleting object...\n";
+
+	std::cout << "Deleting " << m_oVecComponentBehaviourPtrs.size() << " component behaviours...\n";
+
+	for (size_t i = 0; i < m_oVecComponentBehaviourPtrs.size(); i++)
+	{
+		delete m_oVecComponentBehaviourPtrs[i];
+	}
+
+	std::cout << "Object has been deleted.\n\n";
+}
 
 CTransform* CObject::GetTransform()
 {
