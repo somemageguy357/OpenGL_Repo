@@ -8,8 +8,41 @@
 class ShaderLoader
 {
 	
-public:	
-	static GLuint CreateProgram(const char* VertexShaderFilename, const char* FragmentShaderFilename);
+public:
+	enum class EShaderType
+	{
+		Unlit,
+		Lit,
+		Reflective,
+		Skybox,
+	};
+
+	struct ShaderProgram
+	{
+		GLuint uiID;
+		bool bRenderReflections = false;
+		bool bRenderLighting = false;
+
+		ShaderProgram() = delete;
+
+		ShaderProgram(GLuint _uiID, ShaderLoader::EShaderType _eShaderType)
+		{
+			uiID = _uiID;
+			
+			if (_eShaderType == EShaderType::Lit)
+			{
+				bRenderLighting = true;
+			}
+
+			else if (_eShaderType == EShaderType::Reflective)
+			{
+				bRenderLighting = true;
+				bRenderReflections = true;
+			}
+		}
+	};
+
+	static ShaderProgram* CreateProgram(const char* VertexShaderFilename, const char* FragmentShaderFilename, EShaderType _eShaderType);
 
 private:
 	ShaderLoader(void);

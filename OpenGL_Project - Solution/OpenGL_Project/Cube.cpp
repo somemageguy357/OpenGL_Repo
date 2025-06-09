@@ -39,7 +39,7 @@ CCube::~CCube() {}
 
 void CCube::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 {
-	glUseProgram(m_uiProgram);
+	glUseProgram(m_poProgram->uiID);
 
 	//Supplies the programs current lifetime to the shader program (if it requires it).
 	//GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
@@ -48,15 +48,15 @@ void CCube::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 	glBindVertexArray(*m_poMesh->GetVAO());
 
 	//Bind the Object's textures (if any).
-	BindTextures(m_uiProgram);
+	BindTextures(m_poProgram->uiID);
 
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
-	glUniform3fv(glGetUniformLocation(m_uiProgram, "v3fCameraPosition"), 1, glm::value_ptr(*_poCamera->GetTransform()->GetPosition()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
+	glUniform3fv(glGetUniformLocation(m_poProgram->uiID, "v3fCameraPosition"), 1, glm::value_ptr(*_poCamera->GetTransform()->GetPosition()));
 
-	glUniform1f(glGetUniformLocation(m_uiProgram, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
-	glUniform3fv(glGetUniformLocation(m_uiProgram, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
+	glUniform1f(glGetUniformLocation(m_poProgram->uiID, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
+	glUniform3fv(glGetUniformLocation(m_poProgram->uiID, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
 
 	glDrawElements(GL_TRIANGLES, m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
 

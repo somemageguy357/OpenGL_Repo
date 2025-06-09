@@ -1,35 +1,40 @@
 #include "SceneManager.h"
+#include "LightingSettings.h"
 
 CSkybox* CSceneManager::m_poSkybox = nullptr;
 std::vector<CModel*> CSceneManager::m_oVecModelPtrs;
 
-void CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram)
+CModel* CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour)
 {
-	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _uiProgram);
+	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _poProgram, _v3fColour);
 	m_oVecModelPtrs.push_back(poModel);
+	return poModel;
 }
 
-void CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition)
+CModel* CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition)
 {
-	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _uiProgram, _v3fPosition);
+	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _poProgram, _v3fColour, _v3fPosition);
 	m_oVecModelPtrs.push_back(poModel);
+	return poModel;
 }
 
-void CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
+CModel* CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation)
 {
-	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _uiProgram, _v3fPosition, _v3fRotation);
+	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _poProgram, _v3fColour, _v3fPosition, _v3fRotation);
 	m_oVecModelPtrs.push_back(poModel);
+	return poModel;
 }
 
-void CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale)
+CModel* CSceneManager::CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale)
 {
-	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _uiProgram, _v3fPosition, _v3fRotation, _v3fScale);
+	CModel* poModel = new CModel(_sModelFilePath, _oVecTextureFilePaths, _poProgram, _v3fColour, _v3fPosition, _v3fRotation, _v3fScale);
 	m_oVecModelPtrs.push_back(poModel);
+	return poModel;
 }
 
-void CSceneManager::CreateSkybox(std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram)
+void CSceneManager::CreateSkybox(std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram)
 {
-	m_poSkybox = new CSkybox(_uiProgram, _oVecTextureFilePaths);
+	m_poSkybox = new CSkybox(_poProgram, _oVecTextureFilePaths);
 }
 
 std::vector<CModel*>* CSceneManager::GetModels()
@@ -70,4 +75,6 @@ void CSceneManager::DestroyScene()
 	{
 		delete m_oVecModelPtrs[i];
 	}
+
+	CLightingSettings::DestroyLights();
 }

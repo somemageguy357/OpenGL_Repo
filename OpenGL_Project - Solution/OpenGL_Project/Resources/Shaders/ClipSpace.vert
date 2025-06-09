@@ -31,5 +31,6 @@ void main()
 	gl_Position = matProjection * matView * matModel * vec4(v3fPosition, 1.0f);
 	v3fFragColour = v3fColour;
 	v2fFragTexCoords = v2fTexCoords;
-	v3fFragNormals = v3fNormals;
+	v3fFragNormals = mat3(transpose(inverse(matModel))) * v3fNormals;
+	v3fFragPosition = vec3(matModel * vec4(v3fPosition, 1.0f));
 }

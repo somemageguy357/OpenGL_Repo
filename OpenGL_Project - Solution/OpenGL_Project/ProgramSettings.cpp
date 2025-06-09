@@ -12,6 +12,7 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "ProgramSettings.h"
 #include "InputManager.h"
+#include "LightingSettings.h"
 
 #include <iostream>
 
@@ -24,26 +25,22 @@ void CProgramSettings::Update()
 {
 	if (CInputManager::GetKeyDown(GLFW_KEY_1) == true)
 	{
-		if (CInputManager::GetCursorMode() == CInputManager::ECursorMode::Disabled || CInputManager::GetCursorMode() == CInputManager::ECursorMode::Hidden)
-		{
-			CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Visible);
-		}
-
-		else if (CInputManager::GetCursorMode() == CInputManager::ECursorMode::Visible)
-		{
-			CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
-		}
+		CLightingSettings::TogglePointLights();
 	}
 
 	else if (CInputManager::GetKeyDown(GLFW_KEY_2) == true)
 	{
-		ToggleWireframe();
+		CLightingSettings::ToggleDirectionalLights();
 	}
 
 	else if (CInputManager::GetKeyDown(GLFW_KEY_3) == true)
 	{
-		glm::vec2 v2fMousePosition = CInputManager::GetMousePosition();
-		std::cout << "Mouse Position: (" << v2fMousePosition.x << ", " << v2fMousePosition.y << ")\n";
+		CLightingSettings::ToggleSpotLights();
+	}
+
+	else if (CInputManager::GetKeyDown(GLFW_KEY_F) == true)
+	{
+		ToggleWireframe();
 	}
 
 	else if (CInputManager::GetKeyDown(GLFW_KEY_C) == true)

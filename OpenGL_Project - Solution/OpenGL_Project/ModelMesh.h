@@ -17,7 +17,7 @@ Mail : Connor.Galvin@mds.ac.nz
 class CModelMesh : public CMesh
 {
 public:
-	CModelMesh(std::string _sFilePath);
+	CModelMesh(std::string _sFilePath, glm::vec3 _v3fColour);
 	~CModelMesh();
 
 protected:

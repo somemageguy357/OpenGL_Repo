@@ -71,7 +71,8 @@
   <ItemGroup>
     <None Include="Resources\Shaders\ClipSpace.vert" />
     <None Include="Resources\Shaders\InstancedArray_Standard.vert" />
-    <None Include="Resources\Shaders\Lighting_BlinnPhong.frag" />
+    <None Include="Resources\Shaders\Unlit.frag" />
+    <None Include="Resources\Shaders\Lit.frag" />
     <None Include="Resources\Shaders\Reflection.frag" />
     <None Include="Resources\Shaders\Skybox.frag" />
     <None Include="Resources\Shaders\Skybox.vert" />

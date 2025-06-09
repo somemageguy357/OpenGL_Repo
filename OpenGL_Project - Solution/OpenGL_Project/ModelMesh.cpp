@@ -16,7 +16,7 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include <iostream>
 
-CModelMesh::CModelMesh(std::string _sFilePath)
+CModelMesh::CModelMesh(std::string _sFilePath, glm::vec3 _v3fColour)
 {
 	std::vector<VertexStandard> oVecVertices;
 	tinyobj::ObjReaderConfig oReaderConfig;
@@ -59,6 +59,8 @@ CModelMesh::CModelMesh(std::string _sFilePath)
 					aAttrib.vertices[3 * size_t(iTinyObjVertex.vertex_index) + 1],
 					aAttrib.vertices[3 * size_t(iTinyObjVertex.vertex_index) + 2],
 				};
+
+				oVertex.v3fColour = _v3fColour;
 
 				if (iTinyObjVertex.texcoord_index >= 0)
 				{

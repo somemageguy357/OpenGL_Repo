@@ -35,6 +35,7 @@ public:
 	static void DestroyTextures();
 
 private:
+	//Contains a texture's ID and the file path string used to load the texture from file.
 	struct TTextureIDMap
 	{
 		std::string sFilePath = "";

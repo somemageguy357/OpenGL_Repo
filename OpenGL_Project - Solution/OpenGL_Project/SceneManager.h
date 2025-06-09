@@ -35,7 +35,7 @@ public:
 	/// <param name="_sModelFilePath:">The file path of the model.</param>
 	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
 	/// <param name="_uiProgram:">The rendering program this object is to use.</param>
-	static void CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
+	static CModel* CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour);
 
 	/// <summary>
 	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its position. The rotation and 
@@ -45,7 +45,7 @@ public:
 	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
 	/// <param name="_uiProgram:">The rendering program this object is to use.</param>
 	/// <param name="_v3fPosition:">The position of the model object.</param>
-	static void CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition);
+	static CModel* CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition);
 	
 	/// <summary>
 	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its position and rotation. 
@@ -56,7 +56,7 @@ public:
 	/// <param name="_uiProgram:">The rendering program this object is to use.</param>
 	/// <param name="_v3fPosition:">The position of the model object.</param>
 	/// <param name="_v3fRotation:">The rotation of the model object.</param>
-	static void CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation); 
+	static CModel* CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
 	
 	/// <summary>
 	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its transform values. 
@@ -67,14 +67,14 @@ public:
 	/// <param name="_v3fPosition:">The position of the model object.</param>
 	/// <param name="_v3fRotation:">The rotation of the model object.</param>
 	/// <param name="_v3fScale:">The scale of the model object.</param>
-	static void CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
+	static CModel* CreateModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
 
 	/// <summary>
 	/// Creates a skybox using the given texture file paths.
 	/// </summary>
 	/// <param name="_oVecTextureFilePaths:">The file paths of the textures.</param>
 	/// <param name="_uiProgram:">The rendering program the skybox is to use.</param>
-	static void CreateSkybox(std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
+	static void CreateSkybox(std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram);
 
 	/// <summary>
 	/// Gets a pointer to the vector containing all model objects.
@@ -89,7 +89,7 @@ public:
 	static CSkybox* GetSkybox();
 
 	/// <summary>
-	/// Deletes the skybox and all model objects in the scene.
+	/// Deletes the skybox and all model objects in the scene. Also calls the LightSettings DestroyLights() function.
 	/// </summary>
 	static void DestroyScene();
 

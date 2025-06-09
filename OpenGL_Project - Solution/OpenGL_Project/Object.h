@@ -15,6 +15,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "Mesh.h"
 #include "ComponentBehaviour.h"
 #include "TextureManager.h"
+#include "ShaderLoader.h"
 
 #include "Skybox.h"
 #include "Camera.h"
@@ -22,7 +23,7 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <vector>
 
 /// <summary>
-/// Base class for all 2D and 3D Object types. Contains a Object's vertex data, rendering object data, and textures
+/// Base class for all 2D and 3D objects. Contains an object's vertex data, rendering object data, and textures
 /// as well as its transform. Objects of this type specifically cannot be created.
 /// </summary>
 class CObject
@@ -51,6 +52,10 @@ public:
 
 	~CObject();
 
+	void Update();
+
+	virtual void Render(CSkybox* _poSkybox, CCamera* _poCamera) = 0;
+
 	/// <summary>
 	/// Returns the Object's transform.
 	/// </summary>
@@ -71,17 +76,13 @@ public:
 
 	void AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour);
 
-	void Update();
-
-	virtual void Render(CSkybox* _poSkybox, CCamera* _poCamera) = 0;
-
 protected:
 	//The Object's transform.
 	CTransform m_oTransform;
 
 	CMesh* m_poMesh = nullptr;
 
-	GLuint m_uiProgram = 0;
+	ShaderLoader::ShaderProgram* m_poProgram = nullptr;
 
 	//The vector containing the Object's TextureIDs.
 	std::vector<GLuint> m_oVecTextureIDs;

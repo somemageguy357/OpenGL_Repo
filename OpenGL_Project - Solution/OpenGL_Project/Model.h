@@ -18,15 +18,64 @@ class CModel : public CObject
 {
 public:
 	CModel() = delete;
-	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
-	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition);
-	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
-	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
+
+	/// <summary>
+	/// Creates a model object using the given file paths for both its vertex data and texture(s). The model object's transform values are set to 
+	/// their defaults (Position and Rotation: 0.0f, 0.0f, 0.0f | Scale: 1.0f, 1.0f, 1.0f).
+	/// </summary>
+	/// <param name="_sModelFilePath:">The file path of the model.</param>
+	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
+	/// <param name="_uiProgram:">The rendering program this model is to use.</param>
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour);
+
+	/// <summary>
+	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its position. The rotation and 
+	/// scale are set to their default values (Rotation: 0.0f, 0.0f, 0.0f | Scale: 1.0f, 1.0f, 1.0f).
+	/// </summary>
+	/// <param name="_sModelFilePath:">The file path of the model.</param>
+	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
+	/// <param name="_uiProgram:">The rendering program this model is to use.</param>
+	/// <param name="_v3fPosition:">The position of the model object.</param>
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition);
+	
+	/// <summary>
+	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its position and rotation. 
+	/// The scale is set to its default values (1.0f, 1.0f, 1.0f).
+	/// </summary>
+	/// <param name="_sModelFilePath:">The file path of the model.</param>
+	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
+	/// <param name="_uiProgram:">The rendering program this model is to use.</param>
+	/// <param name="_v3fPosition:">The position of the model object.</param>
+	/// <param name="_v3fRotation:">The rotation of the model object.</param>
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation);
+	
+	/// <summary>
+	/// Creates a model object using the given file paths for both its vertex data and texture(s). Also sets its transform values. 
+	/// </summary>
+	/// <param name="_sModelFilePath:">The file path of the model.</param>
+	/// <param name="_oVecTextureFilePaths:">The file path(s) of the texture(s).</param>
+	/// <param name="_uiProgram:">The rendering program this object is to use.</param>
+	/// <param name="_v3fPosition:">The position of the model object.</param>
+	/// <param name="_v3fRotation:">The rotation of the model object.</param>
+	/// <param name="_v3fScale:">The scale of the model object.</param>
+	CModel(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour, glm::vec3 _v3fPosition, glm::vec3 _v3fRotation, glm::vec3 _v3fScale);
+	
 	~CModel();
 
+	/// <summary>
+	/// Renders the model.
+	/// </summary>
+	/// <param name="_poSkybox:">The skybox, for reflective textures.</param>
+	/// <param name="_poCamera:">The main camera.</param>
 	void Render(CSkybox* _poSkybox, CCamera* _poCamera) override;
 
 private:
-	void ModelSetup(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, GLuint _uiProgram);
+	void ModelSetup(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour);
+
+	void RenderModel(CCamera* _poCamera);
+
+	void RenderLighting();
+
+	void RenderReflections(CSkybox* _poSkybox);
 
 };

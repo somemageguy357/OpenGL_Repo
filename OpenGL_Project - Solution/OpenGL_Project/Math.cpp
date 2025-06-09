@@ -12,6 +12,9 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "Math.h"
 
+const float CMath::m_kfDegToRad = 0.0174533f;
+const float CMath::m_kfRadToDeg = 57.2958f;
+
 glm::vec3 CMath::Normalize(const glm::vec3 _kv3fVector)
 {
 	float fMag = sqrt(pow(_kv3fVector.x, 2) + pow(_kv3fVector.y, 2) + pow(_kv3fVector.z, 2));
@@ -39,4 +42,14 @@ float CMath::Clamp(const float _kfValue, float _fMin, float _fMax)
 	}
 
 	return _kfValue;
+}
+
+float CMath::RadToDeg()
+{
+	return m_kfRadToDeg;
+}
+
+float CMath::DegToRad()
+{
+	return m_kfDegToRad;
 }

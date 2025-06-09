@@ -11,8 +11,6 @@ Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
 #pragma once
-//#include "Object.h"
-//#include "Texture.h"
 #include "Transform.h"
 
 #include <glew.h>
@@ -32,6 +30,11 @@ public:
 		Orbital,
 	};
 
+	/// <summary>
+	/// Checks for movement input.
+	/// </summary>
+	void Update();
+
 	CCamera() = delete;
 
 	/// <summary>
@@ -45,11 +48,6 @@ public:
 	CCamera(const bool _kbIsPerspective, ECameraMode _eCameraMode, glm::vec3 _v3fPosition, glm::vec3 _v3fForwardDir);
 
 	~CCamera();
-
-	/// <summary>
-	/// Checks for movement input.
-	/// </summary>
-	void Update();
 
 	/// <summary>
 	/// Sets the target position of the camera.
@@ -83,22 +81,44 @@ public:
 	/// <param name="_eCameraMode:">The camera control mode to change to.</param>
 	void SetCameraMode(ECameraMode _eCameraMode);
 
+	/// <summary>
+	/// Enables and disables the movement of the orbital camera.
+	/// </summary>
 	void ToggleOrbitMovement();
 
+	/// <summary>
+	/// Returns a pointer to the first camera created.
+	/// </summary>
+	/// <returns>A pointer to the first camera created.</returns>
 	static CCamera* GetMainCamera();
 
+	/// <summary>
+	/// Returns a pointer to this camera's view matrix.
+	/// </summary>
+	/// <returns>A pointer to this camera's view matrix.</returns>
 	glm::mat4* GetViewMatrix();
 
+	/// <summary>
+	/// Returns a pointer to this camera's projection matrix.
+	/// </summary>
+	/// <returns>A pointer to this camera's projection matrix.</returns>
 	glm::mat4* GetProjectionMatrix();
 
+	/// <summary>
+	/// Returns a pointer to this camera's forward direction.
+	/// </summary>
+	/// <returns>A pointer to this camera's forward direction.</returns>
 	glm::vec3* GetForwardDirection();
 
+	/// <summary>
+	/// Returns a pointer to this camera's right direction.
+	/// </summary>
+	/// <returns>A pointer to this camera's right direction.</returns>
 	glm::vec3* GetRightDirection();
 
 private:
 	static CCamera* m_poMainCamera;
 
-	//The camera's transform.
 	CTransform m_oTransform;
 
 	//The camera's projection space. True for perspective, false for orthographic.
@@ -107,22 +127,15 @@ private:
 	//The mode of the camera (free, orbital, etc).
 	ECameraMode m_eCameraMode;
 
-	//The camera's forward/view direction.
+	//The camera's direction vectors
 	glm::vec3 m_v3fCamForwardDir = glm::vec3(0.0f, 0.0f, -1.0f);
-
-	//The camera's right direction.
 	glm::vec3 m_v3fCamRightDir = glm::vec3(0.0f, 0.0f, 0.0f);
-
-	//The camera's upwards position.
 	glm::vec3 m_v3fCamUpDir = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	//The camera's target position.
+	//The camera's target/lookat position.
 	glm::vec3 m_v3fTargetPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	//The camera's view matrix.
 	glm::mat4 m_matView;
-
-	//The camera's projection matrix.
 	glm::mat4 m_matProjection;
 
 	//Free camera values.

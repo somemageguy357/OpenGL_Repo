@@ -6,7 +6,7 @@
 ShaderLoader::ShaderLoader(void){}
 ShaderLoader::~ShaderLoader(void){}
 
-GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char* fragmentShaderFilename)
+ShaderLoader::ShaderProgram* ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char* fragmentShaderFilename, EShaderType _eShaderType)
 {
 	// Create the shaders from the filepath
 	GLuint uiVertexID = CreateShader(GL_VERTEX_SHADER, vertexShaderFilename);
@@ -25,9 +25,10 @@ GLuint ShaderLoader::CreateProgram(const char* vertexShaderFilename, const char*
 	{
 		std::string programName = vertexShaderFilename + *fragmentShaderFilename;
 		PrintErrorDetails(false, program, programName.c_str());
-		return 0;
+		return nullptr;
 	}
-	return program;
+
+	return new ShaderProgram(program, _eShaderType);
 }
 
 GLuint ShaderLoader::CreateShader(GLenum shaderType, const char* shaderName)

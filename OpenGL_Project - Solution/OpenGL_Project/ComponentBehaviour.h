@@ -25,6 +25,6 @@ public:
 	~CComponentBehaviour();
 
 protected:
-	CComponentBehaviour() = delete;
+	CComponentBehaviour();
 };
 #endif

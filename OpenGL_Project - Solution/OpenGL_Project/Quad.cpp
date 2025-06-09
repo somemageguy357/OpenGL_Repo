@@ -39,7 +39,7 @@ CQuad::~CQuad() {}
 
 void CQuad::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 {
-	glUseProgram(m_uiProgram);
+	glUseProgram(m_poProgram->uiID);
 
 	//Supplies the programs current lifetime to the shader program (if it requires it).
 	//GLint iCurrentTimeLocation = glGetUniformLocation(_uiProgram, "fCurrentTime");
@@ -48,11 +48,11 @@ void CQuad::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 	glBindVertexArray(m_uiVAO);
 
 	//Bind the Object's textures (if any).
-	BindTextures(m_uiProgram);
+	BindTextures(m_poProgram->uiID);
 
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matModel"), 1, GL_FALSE, glm::value_ptr(*m_oTransform.GetModelMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
 
 	glDrawElements(GL_TRIANGLES, m_oVecTriIndices.size(), GL_UNSIGNED_INT, 0);
 

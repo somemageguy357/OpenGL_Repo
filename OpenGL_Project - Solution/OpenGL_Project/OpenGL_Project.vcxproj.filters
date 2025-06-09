@@ -220,7 +220,7 @@
     <None Include="Resources\Shaders\InstancedArray_Standard.vert">
       <Filter>Resource Files\Shaders\Vertex</Filter>
     </None>
-    <None Include="Resources\Shaders\Lighting_BlinnPhong.frag">
+    <None Include="Resources\Shaders\Unlit.frag">
       <Filter>Resource Files\Shaders\Fragment</Filter>
     </None>
     <None Include="Resources\Shaders\Reflection.frag">
@@ -240,6 +240,9 @@
     </None>
     <None Include="Resources\Shaders\UI.vert">
       <Filter>Resource Files\Shaders\Vertex</Filter>
+    </None>
+    <None Include="Resources\Shaders\Lit.frag">
+      <Filter>Resource Files\Shaders\Fragment</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@ Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/
 
+#pragma once
 #include "TimeManager.h"
 #include "WindowManager.h"
 #include "InputManager.h"
@@ -17,18 +18,20 @@ Mail : Connor.Galvin@mds.ac.nz
 #include "ProgramSettings.h"
 #include "SceneManager.h"
 #include "TextureManager.h"
+#include "LightingSettings.h"
 
 #include "Camera.h"
 
 #include "CameraBasedMovement.h"
 
 //------GLOBAL VARIABLES------
-GLuint uiProgramTex = 0;
-GLuint uiProgramReflective = 0;
-GLuint uiProgramSkybox = 0;
-GLuint uiProgramUI = 0;
+ShaderLoader::ShaderProgram* poProgramLit = nullptr;
+ShaderLoader::ShaderProgram* poProgramUnlit = nullptr;
+ShaderLoader::ShaderProgram* poProgramSkybox = nullptr;
+ShaderLoader::ShaderProgram* poProgramUI = nullptr;
 
 CCamera* poCamera = nullptr;
+CLightingSettings::SpotLight* poSpotLight = nullptr;
 
 //std::vector<CQuad*> oVecUIElementPtrs;
 //----------------------------
@@ -69,13 +72,14 @@ int main()
 		CProgramSettings::SetTextureBlending(true);
 
 		//Create programs.
-		uiProgramTex = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Lighting_BlinnPhong.frag");
-		uiProgramReflective = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
-		uiProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag");
+		poProgramLit = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Lit.frag", ShaderLoader::EShaderType::Lit);
+		poProgramUnlit = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Unlit.frag", ShaderLoader::EShaderType::Unlit);
+		poProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag", ShaderLoader::EShaderType::Skybox);
+		//uiProgramReflective = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
 		//uiProgramUI = ShaderLoader::CreateProgram("Resources/Shaders/UI.vert", "Resources/Shaders/Texture.frag");
 		
 		//Create camera.
-		poCamera = new CCamera(true, CCamera::ECameraMode::Free, { 0.0f, 0.0f, 10.0f }, { 0.0f, 0.0f, -1.0f });
+		poCamera = new CCamera(true, CCamera::ECameraMode::Free, { 0.0f, 0.0f, 5.0f }, { 0.0f, 0.0f, -1.0f });
 
 		CSceneManager::CreateSkybox
 		(
@@ -87,22 +91,24 @@ int main()
 				"Resources/Textures/Skybox/Back.png",
 				"Resources/Textures/Skybox/Front.png"
 			},
-			uiProgramSkybox
+			poProgramSkybox
 		);
 
 		CSceneManager::CreateModel
 		(
 			"Resources/Models/SM_Prop_Goblin_Tower_01.obj",
 			{ "Resources/Textures/Dungeons_Texture_03.png" },
-			uiProgramTex,
+			poProgramLit,
+			{ 1.0f, 1.0f, 1.0f },
 			{ 0.0f, -5.0f, 0.0f }
 		);
 
 		CSceneManager::CreateModel
 		(
 			"Resources/Models/SM_Wep_Banner_05.obj",
-			{ "Resources/Textures/Dungeons_Texture_01.png", "Resources/Textures/ReflectionMap_Banner.png" },
-			uiProgramReflective,
+			{ "Resources/Textures/Dungeons_Texture_01.png" },
+			poProgramLit,
+			{ 1.0f, 1.0f, 1.0f },
 			{ 0.0f, -0.25f, 0.0f },
 			{ 0.0f, 0.0f, 0.0f },
 			{ 1.5f, 1.5f, 1.5f }
@@ -112,19 +118,50 @@ int main()
 		(
 			"Resources/Models/SM_Prop_Goblin_Tower_01.obj",
 			{ "Resources/Textures/Dungeons_Texture_03.png" },
-			uiProgramTex,
-			{ -10.0f, -5.0f, 0.0f }
+			poProgramLit,
+			{ 1.0f, 1.0f, 1.0f },
+			{ 0.0f, -5.0f, 10.0f }
 		);
 
 		CSceneManager::CreateModel
 		(
 			"Resources/Models/SM_Wep_Banner_05.obj",
-			{ "Resources/Textures/Dungeons_Texture_01.png", "Resources/Textures/ReflectionMap_Banner.png" },
-			uiProgramReflective,
-			{ -10.0f, -0.25f, 0.0f },
+			{ "Resources/Textures/Dungeons_Texture_01.png" },
+			poProgramLit,
+			{ 1.0f, 1.0f, 1.0f },
+			{ 0.0f, -0.25f, 10.0f },
 			{ 0.0f, 0.0f, 0.0f },
 			{ 1.5f, 1.5f, 1.5f }
 		);
+
+		//light 1
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Wep_Banner_05.obj",
+			{ "Resources/Textures/White.png"},
+			poProgramUnlit,
+			{ 0.0f, 0.0f, 1.0f },
+			{ 1.0f, 0.5f, 1.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.2f, 0.2f, 0.2f }
+		);
+
+		//light 2
+		CSceneManager::CreateModel
+		(
+			"Resources/Models/SM_Wep_Banner_05.obj",
+			{ "Resources/Textures/White.png" },
+			poProgramUnlit,
+			{ 1.0f, 0.0f, 0.0f },
+			{ -1.0f, -0.5f, 1.0f },
+			{ 0.0f, 0.0f, 0.0f },
+			{ 0.2f, 0.2f, 0.2f }
+		);
+
+		CLightingSettings::CreatePointLight({ 1.0f, 0.5f, 1.0f }, { 0.0f, 0.0f, 1.0f }, 0.0f, 1.0f, 0.045f, 0.0075f);
+		CLightingSettings::CreatePointLight({ -1.0f, -0.5f, 1.0f }, { 1.0f, 0.0f, 0.0f }, 0.0f, 1.0f, 0.045f, 0.0075f);
+		CLightingSettings::CreateDirectionalLight({ 1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, 1.0f }, 0.0f);
+		poSpotLight = CLightingSettings::CreateSpotLight(*poCamera->GetTransform()->GetPosition(), *poCamera->GetForwardDirection(), { 1.0f, 1.0f, 1.0f }, 0.0f, 10.0f, 15.0f);
 
 		//poBanner->AddComponentBehaviour(new CCameraBasedMovement(*poBanner->GetTransform()->GetPosition()));
 
@@ -200,6 +237,8 @@ void Update()
 	CProgramSettings::Update();
 	CWindowManager::Update();
 	poCamera->Update();
+	poSpotLight->v3fPosition = *poCamera->GetTransform()->GetPosition();
+	poSpotLight->v3fDirection = *poCamera->GetForwardDirection();
 	CSceneManager::Update();
 
 	CInputManager::ClearInputs();

@@ -15,10 +15,10 @@ Mail : Connor.Galvin@mds.ac.nz
 
 #include "Skybox.h"
 
-CSkybox::CSkybox(GLuint _uiProgram, std::vector<std::string> _oVecImageFilePaths)
+CSkybox::CSkybox(ShaderLoader::ShaderProgram* _poProgram, std::vector<std::string> _oVecImageFilePaths)
 {
 	m_poMesh = new CSkyboxMesh("");
-	m_uiProgram = _uiProgram;
+	m_poProgram = _poProgram;
 
 	CreateTextures(_oVecImageFilePaths);
 }
@@ -27,17 +27,17 @@ CSkybox::~CSkybox() {}
 
 void CSkybox::Render(CCamera* _poCamera)
 {
-	glUseProgram(m_uiProgram);
+	glUseProgram(m_poProgram->uiID);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_uiTextureID);
 
-	glUniform1i(glGetUniformLocation(m_uiProgram, "oTextureSkybox"), 0);
+	glUniform1i(glGetUniformLocation(m_poProgram->uiID, "oTextureSkybox"), 0);
 
 	glm::mat4 matCamViewMatrix = glm::mat4(glm::mat3(*_poCamera->GetViewMatrix()));
 	glm::mat4 matCamProjMatrix = *_poCamera->GetProjectionMatrix();
 
-	glUniformMatrix4fv(glGetUniformLocation(m_uiProgram, "matVP"), 1, GL_FALSE, glm::value_ptr(matCamProjMatrix * matCamViewMatrix));
+	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matVP"), 1, GL_FALSE, glm::value_ptr(matCamProjMatrix * matCamViewMatrix));
 
 	glBindVertexArray(*m_poMesh->GetVAO());
 	glDepthFunc(GL_LEQUAL);

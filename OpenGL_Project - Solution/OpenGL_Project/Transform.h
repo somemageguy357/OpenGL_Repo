@@ -147,25 +147,17 @@ public:
 	void SetScaleMultiplier(float _fScaleMultiplier);
 
 private:
-	//Position of the transform.
+	//Transform vectors.
 	glm::vec3 m_v3fPosition = { 0.0f, 0.0f, 0.0f };
-
-	//Rotation of the transform.
 	glm::vec3 m_v3fRotation = { 0.0f, 0.0f, 0.0f };
-
-	//Scale of the transform.
 	glm::vec3 m_v3fScale = { 1.0f, 1.0f, 1.0f };
 
 	//How much the scale is multiplied by. Used for camera projection spaces.
 	float m_fScaleMultiplier = 1.0f;
 
-	//The transform's translation matrix.
+	//Transform matrices.
 	glm::mat4 m_matTranslation = glm::mat4(1.0f);
-
-	//The transform's rotation matrix.
 	glm::mat4 m_matRotation = glm::mat4(1.0f);
-
-	//The transform's scale matrix.
 	glm::mat4 m_matScale = glm::mat4(1.0f);
 
 	//The transform's model matrix.
