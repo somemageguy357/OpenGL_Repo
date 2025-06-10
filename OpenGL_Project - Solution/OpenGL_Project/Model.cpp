@@ -67,7 +67,7 @@ void CModel::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 		RenderReflections(_poSkybox);
 	}
 
-	glDrawArrays(GL_TRIANGLES, 0, m_poMesh->GetTriIndices()->size());
+	glDrawArraysInstanced(GL_TRIANGLES, 0, m_poMesh->GetTriIndices()->size(), m_poMesh->GetInstanceCount(*m_poMesh->GetVAO()));
 
 	glBindVertexArray(0);
 	glUseProgram(0);

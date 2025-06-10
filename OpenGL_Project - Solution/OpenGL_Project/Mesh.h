@@ -18,6 +18,11 @@ Mail : Connor.Galvin@mds.ac.nz
 #include <gtc/type_ptr.hpp>
 
 #include <vector>
+#include <string>
+
+#include "Skybox.h"
+#include "Camera.h"
+#include "ShaderLoader.h"
 
 class CMesh
 {
@@ -46,6 +51,22 @@ public:
 		}
 	};
 
+	struct InstancedObject
+	{
+		std::string sFilePath;
+		CMesh* poMesh = nullptr;
+		GLuint uiVAO;
+		int iInstanceCount = 1;
+
+		InstancedObject() = delete;
+
+		InstancedObject(std::string _sFilePath, GLuint _uiVAO)
+		{
+			sFilePath = _sFilePath;
+			uiVAO = _uiVAO;
+		}
+	};
+
 	~CMesh();
 
 	/// <summary>
@@ -66,6 +87,10 @@ public:
 	/// <returns>The vector of uints containing the vertex joints of the tris that make up the Object.</returns>
 	std::vector<unsigned int>* GetTriIndices();
 
+	static int GetInstanceCount(GLuint _uiVAO);
+
+	void Render(ShaderLoader::ShaderProgram* _poProgram, CCamera* _poCamera, CSkybox* _poSkybox, int _iTextureCount);
+
 protected:
 	GLuint m_uiVAO = 0;
 
@@ -76,6 +101,10 @@ protected:
 	std::vector<unsigned int> m_oVecTriIndices;
 
 	CMesh();
+
+	static bool GetExistingVAOInstance(std::string _sFilePath, GLuint* _puiVAO, int* _piInstanceCount);
+
+	static void AddVAOInstance(std::string _sFilePath, GLuint _uiVAO);
 
 	//Wraps the generative functions of the mesh. Called from the mesh's constructors.
 	virtual void MeshSetup() {};
@@ -88,4 +117,15 @@ protected:
 
 	//Generates the mesh's render data (buffers, vertex pointers, etc).
 	virtual void GenerateMesh() {};
+
+private:
+	static std::vector<InstancedVAO> m_oVecInstancedVAOs;
+
+	ShaderLoader::ShaderProgram
+
+	void RenderModel(ShaderLoader::ShaderProgram* _poProgram, CCamera* _poCamera);
+
+	void RenderLighting(ShaderLoader::ShaderProgram* _poProgram);
+
+	void RenderReflections(ShaderLoader::ShaderProgram* _poProgram, CSkybox* _poSkybox, int _iTextureCount);
 };

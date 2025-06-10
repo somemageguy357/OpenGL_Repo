@@ -72,8 +72,8 @@ int main()
 		CProgramSettings::SetTextureBlending(true);
 
 		//Create programs.
-		poProgramLit = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Lit.frag", ShaderLoader::EShaderType::Lit);
-		poProgramUnlit = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Unlit.frag", ShaderLoader::EShaderType::Unlit);
+		poProgramLit = ShaderLoader::CreateProgram("Resources/Shaders/InstancedArray_Standard.vert", "Resources/Shaders/Lit.frag", ShaderLoader::EShaderType::Lit);
+		poProgramUnlit = ShaderLoader::CreateProgram("Resources/Shaders/InstancedArray_Standard.vert", "Resources/Shaders/Unlit.frag", ShaderLoader::EShaderType::Unlit);
 		poProgramSkybox = ShaderLoader::CreateProgram("Resources/Shaders/Skybox.vert", "Resources/Shaders/Skybox.frag", ShaderLoader::EShaderType::Skybox);
 		//uiProgramReflective = ShaderLoader::CreateProgram("Resources/Shaders/ClipSpace.vert", "Resources/Shaders/Reflection.frag");
 		//uiProgramUI = ShaderLoader::CreateProgram("Resources/Shaders/UI.vert", "Resources/Shaders/Texture.frag");
