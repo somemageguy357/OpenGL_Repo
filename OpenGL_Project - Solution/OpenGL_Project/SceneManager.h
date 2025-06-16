@@ -95,9 +95,11 @@ public:
 
 private:
 	static CSkybox* m_poSkybox;
-
 	static std::vector<CModel*> m_oVecModelPtrs;
+	static std::vector<CMesh*> m_oVecMeshPtrs;
 
 	CSceneManager() = delete;
 	~CSceneManager() = delete;
+
+	static void AddMeshToVector(CMesh* _poMesh);
 };
