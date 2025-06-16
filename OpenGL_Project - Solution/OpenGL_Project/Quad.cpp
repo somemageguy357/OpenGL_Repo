@@ -54,7 +54,7 @@ void CQuad::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matView"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetViewMatrix()));
 	glUniformMatrix4fv(glGetUniformLocation(m_poProgram->uiID, "matProjection"), 1, GL_FALSE, glm::value_ptr(*_poCamera->GetProjectionMatrix()));
 
-	glDrawElements(GL_TRIANGLES, m_oVecTriIndices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_oVecTriIndices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);

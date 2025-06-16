@@ -72,10 +72,21 @@ public:
 private:
 	void ModelSetup(std::string _sModelFilePath, std::vector<std::string> _oVecTextureFilePaths, ShaderLoader::ShaderProgram* _poProgram, glm::vec3 _v3fColour);
 
+	/// <summary>
+	/// Renders the model, using its MVP matrix and the current camera position.
+	/// </summary>
+	/// <param name="_poCamera:">The main camera.</param>
 	void RenderModel(CCamera* _poCamera);
 
+	/// <summary>
+	/// Renders all lighting values on the model.
+	/// </summary>
 	void RenderLighting();
 
+	/// <summary>
+	/// Renders the reflection of the model. Uses the skybox for its reflections.
+	/// </summary>
+	/// <param name="_poSkybox:">The skybox that is reflected.</param>
 	void RenderReflections(CSkybox* _poSkybox);
 
 };

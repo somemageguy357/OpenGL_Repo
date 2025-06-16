@@ -41,7 +41,7 @@ void CSkybox::Render(CCamera* _poCamera)
 
 	glBindVertexArray(*m_poMesh->GetVAO());
 	glDepthFunc(GL_LEQUAL);
-	glDrawElements(GL_TRIANGLES, m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
 	glDepthFunc(GL_LESS);
 
 	glBindVertexArray(0);

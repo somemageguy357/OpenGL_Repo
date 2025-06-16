@@ -62,14 +62,6 @@ public:
 	CTransform* GetTransform();
 
 	/// <summary>
-	/// Sets the projection space of the camera. Adjusts the scale multiplier of all objects in the given vector
-	/// to match the change between perspective and orthographic projection spaces.
-	/// </summary>
-	/// <param name="_bIsPerspective:">Sets the projection space to perspective if true, orthographic if false.</param>
-	/// <param name="_poVeCObjectPtrs:">Vector containing all shapes that will have their transforms adjusted.</param>
-	//void SetProjectionSpace(bool _bIsPerspective, std::vector<CObject*>* _poVeCObjectPtrs);
-
-	/// <summary>
 	/// Returns the camera's projection space.
 	/// </summary>
 	/// <returns>True for perspective, false for orthographic.</returns>
@@ -153,6 +145,11 @@ private:
 	float m_fOrbitHeight = 3.0f;
 	float m_fOrbitMoveSpeed = 0.5f;
 
+	//Camera FOV.
+	float m_fMinFOV = 15.0f;
+	float m_fMaxFOV = 145.0f;
+	float m_fFOV = 45.0f;
+
 	//Sets up the camera's projection matrix depending on the current projection space. Called from the constructors.
 	void CameraSetup();
 
@@ -164,4 +161,7 @@ private:
 
 	//Used to get the input axis for the orbital cam control mode.
 	int TriBool();
+
+	//Updates the FOV of the camera. Calculated by adding/subtracting a set value from the current FOV value, depending on the mouse scroll value.
+	void UpdateFOV(double _dScrollDirection);
 };

@@ -5,10 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Lit.frag
-Description : 
-
-
-
+Description : Contains uniforms used to rendering a model that is to be affected by lighting values.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

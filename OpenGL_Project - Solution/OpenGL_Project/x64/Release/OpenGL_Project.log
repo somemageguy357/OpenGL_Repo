@@ -1,7 +1,29 @@
 ﻿  Camera.cpp
+  CameraBasedMovement.cpp
+  ComponentBehaviour.cpp
+  Cube.cpp
+  CubeMesh.cpp
+  InputManager.cpp
+  LightingSettings.cpp
+  main.cpp
+  Math.cpp
+  Mesh.cpp
+  Model.cpp
+  ModelMesh.cpp
+  ProgramSettings.cpp
+  Quad.cpp
+  SceneManager.cpp
+  ShaderLoader.cpp
+  Object.cpp
+  Skybox.cpp
+  SkyboxMesh.cpp
+  TextureManager.cpp
+  Compiling...
+  TimeManager.cpp
+  Transform.cpp
+  WindowManager.cpp
   Generating code
-  0 of 2199 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+  All 2281 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   OpenGL_Project.vcxproj -> C:\Users\Administrator\Desktop\course\Semester3\3D Graphics\OpenGL_Repo\OpenGL_Project - Solution\x64\Release\OpenGL_Project.exe

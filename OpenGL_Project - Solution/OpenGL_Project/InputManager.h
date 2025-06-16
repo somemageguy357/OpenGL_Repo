@@ -75,6 +75,13 @@ public:
 	static bool GetButtonUp(int _iButtonCode);
 
 	/// <summary>
+	/// Checks if the mouse scroll wheel has gone up or down this frame.
+	/// </summary>
+	/// <param name="_dScrollValue:">The value to compare to the mouse scroll wheel.</param>
+	/// <returns>True if the given double is equal to the mouse scroll wheel value this frame, false if not.</returns>
+	static bool GetMouseScroll(double _dScrollValue);
+
+	/// <summary>
 	/// Gets the mouse position in pixel coordinates of the current window, with the top-left corner being (0,0).
 	/// </summary>
 	/// <returns>The mouse position.</returns>
@@ -95,8 +102,8 @@ public:
 	static ECursorMode GetCursorMode();
 
 	/// <summary>
-	/// Clears the vectors containing all keys and mouse buttons that were pressed and/or released this frame.
-	/// This is to be called at the end of the main update loop.
+	/// Clears the vectors containing all keys and mouse buttons that were pressed and/or released this frame, as well as any changes
+	/// to the value of the mouse's scroll wheel. This is to be called at the end of the main update loop.
 	/// </summary>
 	static void ClearInputs();
 
@@ -119,6 +126,9 @@ private:
 	static std::vector<int> m_oVecButtonsClickedThisFrame;
 	static std::vector<int> m_oVecButtonsReleasedThisFrame;
 
+	//Mouse scroll direction.
+	static double m_dScrollDirection;
+
 	//Stores mouse position.
 	static glm::vec2 m_v2fMousePosition;
 
@@ -136,6 +146,9 @@ private:
 
 	//Callback function for mouse button inputs.
 	static void MouseInput(GLFWwindow* _poWindow, int _iButtonCode, int _iAction, int _iMods);
+
+	//Callback function for mouse scroll direction.
+	static void MouseScroll(GLFWwindow* _poWindow, double _dX, double _dY);
 
 	//Callback function for reading the mouse position.
 	static void MousePosition(GLFWwindow* _poWindow, double _dX, double _dY);

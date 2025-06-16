@@ -35,6 +35,16 @@ CCamera::~CCamera() {}
 
 void CCamera::Update()
 {
+	if (CInputManager::GetMouseScroll(1) == true)
+	{
+		UpdateFOV(1);
+	}
+
+	else if (CInputManager::GetMouseScroll(-1) == true)
+	{
+		UpdateFOV(-1);
+	}
+
 	if (CInputManager::GetKey(GLFW_KEY_9) == true)
 	{
 		SetCameraMode(ECameraMode::Free);
@@ -66,36 +76,6 @@ CTransform* CCamera::GetTransform()
 	return &m_oTransform;
 }
 
-//void CCamera::SetProjectionSpace(bool _bIsPerspective, std::vector<CObject*>* _poVeCObjectPtrs)
-//{
-//	if (m_bIsPerspective != _bIsPerspective)
-//	{
-//		m_bIsPerspective = _bIsPerspective;
-//
-//		//Perspective
-//		if (m_bIsPerspective == true)
-//		{
-//			for (size_t i = 0; i < _poVeCObjectPtrs->size(); i++)
-//			{
-//				(*_poVeCObjectPtrs)[i]->GetTransform()->SetScaleMultiplier(1.0f);
-//			}
-//
-//			CameraSetup();
-//		}
-//
-//		//Orthographic
-//		else
-//		{
-//			for (size_t i = 0; i < _poVeCObjectPtrs->size(); i++)
-//			{
-//				(*_poVeCObjectPtrs)[i]->GetTransform()->SetScaleMultiplier(400.0f);
-//			}
-//
-//			CameraSetup();
-//		}
-//	}
-//}
-
 bool CCamera::GetProjectionSpace()
 {
 	return m_bIsPerspective;
@@ -107,8 +87,8 @@ void CCamera::SetCameraMode(ECameraMode _eCameraMode)
 
 	CInputManager::SetMouseCursorMode(CInputManager::ECursorMode::Disabled);
 
-	m_fPrevMouseX = CWindowManager::GetWidth() / 2;
-	m_fPrevMouseY = CWindowManager::GetHeight() / 2;
+	m_fPrevMouseX = (float)CWindowManager::GetWidth() / 2;
+	m_fPrevMouseY = (float)CWindowManager::GetHeight() / 2;
 }
 
 void CCamera::ToggleOrbitMovement()
@@ -139,6 +119,21 @@ glm::vec3* CCamera::GetForwardDirection()
 glm::vec3* CCamera::GetRightDirection()
 {
 	return &m_v3fCamRightDir;
+}
+
+void CCamera::UpdateFOV(double _dScrollDirection)
+{
+	if (_dScrollDirection == -1 && m_fFOV < m_fMaxFOV)
+	{
+		m_fFOV += 5.0f;
+	}
+
+	else if (_dScrollDirection == 1 && m_fFOV > m_fMinFOV)
+	{
+		m_fFOV -= 5.0f;
+	}
+
+	m_matProjection = glm::perspective(glm::radians(m_fFOV), (float)CWindowManager::GetWidth() / (float)CWindowManager::GetHeight(), 0.1f, 100.0f);
 }
 
 void CCamera::FreeCamControls()
@@ -212,10 +207,10 @@ void CCamera::FreeCamControls()
 
 void CCamera::OrbitalCamControls()
 {
-	if (CInputManager::GetKeyDown(GLFW_KEY_TAB) == true)
-	{
-		ToggleOrbitMovement();
-	}
+	//if (CInputManager::GetKeyDown(GLFW_KEY_TAB) == true)
+	//{
+	//	ToggleOrbitMovement();
+	//}
 
 	if (m_bEnableOrbitMovement == true)
 	{
@@ -262,7 +257,7 @@ void CCamera::CameraSetup()
 
 	if (m_bIsPerspective == true)
 	{
-		m_matProjection = glm::perspective(glm::radians(45.0f), (float)CWindowManager::GetWidth() / (float)CWindowManager::GetHeight(), 0.1f, 100.0f);
+		m_matProjection = glm::perspective(glm::radians(m_fFOV), (float)CWindowManager::GetWidth() / (float)CWindowManager::GetHeight(), 0.1f, 100.0f);
 	}
 
 	else

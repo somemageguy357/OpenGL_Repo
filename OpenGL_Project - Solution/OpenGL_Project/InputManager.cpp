@@ -17,12 +17,13 @@ std::vector<int> CInputManager::m_oVecKeysPressedThisFrame;
 std::vector<int> CInputManager::m_oVecKeysReleasedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsClickedThisFrame;
 std::vector<int> CInputManager::m_oVecButtonsReleasedThisFrame;
+double CInputManager::m_dScrollDirection = 0.0;
 glm::vec2 CInputManager::m_v2fMousePosition = { 0.0f, 0.0f };
 CInputManager::ECursorMode CInputManager::m_eCursorMode;
 
 bool CInputManager::GetKey(int _iKeyCode)
 {
-	if (glfwGetKey(CWindowManager::GetWindow(), _iKeyCode) == true)
+	if (glfwGetKey(CWindowManager::GetWindow(), _iKeyCode) == 1)
 	{
 		return true;
 	}
@@ -58,7 +59,7 @@ bool CInputManager::GetKeyUp(int _iKeyCode)
 
 bool CInputManager::GetButton(int _iButtonCode)
 {
-	if (glfwGetMouseButton(CWindowManager::GetWindow(), _iButtonCode) == true)
+	if (glfwGetMouseButton(CWindowManager::GetWindow(), _iButtonCode) == 1)
 	{
 		return true;
 	}
@@ -92,6 +93,16 @@ bool CInputManager::GetButtonUp(int _iButtonCode)
 	return false;
 }
 
+bool CInputManager::GetMouseScroll(double _dScrollValue)
+{
+	if (m_dScrollDirection == _dScrollValue)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 glm::vec2 CInputManager::GetMousePosition()
 {
 	return m_v2fMousePosition;
@@ -115,13 +126,13 @@ void CInputManager::SetMouseCursorMode(ECursorMode _eCursorMode)
 	{
 		glfwSetInputMode(CWindowManager::GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-		if (glfwRawMouseMotionSupported() == true)
+		if (glfwRawMouseMotionSupported() == 1)
 		{
 			glfwSetInputMode(CWindowManager::GetWindow(), GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		}
 
-		m_v2fMousePosition.x = CWindowManager::GetWidth() / 2;
-		m_v2fMousePosition.y = CWindowManager::GetHeight() / 2;
+		m_v2fMousePosition.x = (float)CWindowManager::GetWidth() / 2;
+		m_v2fMousePosition.y = (float)CWindowManager::GetHeight() / 2;
 	}
 }
 
@@ -136,14 +147,15 @@ void CInputManager::ClearInputs()
 	m_oVecKeysReleasedThisFrame.clear();
 	m_oVecButtonsClickedThisFrame.clear();
 	m_oVecButtonsReleasedThisFrame.clear();
+	m_dScrollDirection = 0.0;
 }
 
 void CInputManager::EnableCallbackFunctions()
 {
 	glfwSetKeyCallback(CWindowManager::GetWindow(), KeyInput);
 	glfwSetMouseButtonCallback(CWindowManager::GetWindow(), MouseInput);
+	glfwSetScrollCallback(CWindowManager::GetWindow(), MouseScroll);
 	glfwSetCursorPosCallback(CWindowManager::GetWindow(), MousePosition);
-	//glfwSetCharCallback(CWindowManager::GetWindow(), TextInput); //should enable via keybind in program settings.
 }
 
 void CInputManager::SetEnableTextInput(bool _bEnable)
@@ -188,6 +200,11 @@ void CInputManager::MouseInput(GLFWwindow* _poWindow, int _iButtonCode, int _iAc
 	{
 		m_oVecButtonsReleasedThisFrame.push_back(_iButtonCode);
 	}
+}
+
+void CInputManager::MouseScroll(GLFWwindow* _poWindow, double _dX, double _dY)
+{
+	m_dScrollDirection = _dY;
 }
 
 void CInputManager::MousePosition(GLFWwindow* _poWindow, double _dX, double _dY)

@@ -17,7 +17,7 @@ const float CMath::m_kfRadToDeg = 57.2958f;
 
 glm::vec3 CMath::Normalize(const glm::vec3 _kv3fVector)
 {
-	float fMag = sqrt(pow(_kv3fVector.x, 2) + pow(_kv3fVector.y, 2) + pow(_kv3fVector.z, 2));
+	float fMag = (float)sqrt(pow(_kv3fVector.x, 2) + pow(_kv3fVector.y, 2) + pow(_kv3fVector.z, 2));
 
 	if (fMag == 0)
 	{

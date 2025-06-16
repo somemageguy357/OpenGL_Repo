@@ -17,6 +17,10 @@ public:
 		Skybox,
 	};
 
+	/// <summary>
+	/// Used for model rendering. Lets the rendering process know if the model should be taking reflections and lighting into
+	/// consideration, as well as providing it with the GLuint program ID.
+	/// </summary>
 	struct ShaderProgram
 	{
 		GLuint uiID;

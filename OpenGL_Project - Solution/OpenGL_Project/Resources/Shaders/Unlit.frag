@@ -5,10 +5,7 @@ Auckland
 New Zealand
 (c) 2025 Media Design School
 File Name : Unlit.frag
-Description : 
-
-
-
+Description : Renders an object that is unaffected by any lighting values.
 Author : Connor Galvin
 Mail : Connor.Galvin@mds.ac.nz
 **************************************************************************/

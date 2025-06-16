@@ -62,10 +62,24 @@ public:
 	/// <returns>The Object's transform.</returns>
 	CTransform* GetTransform();
 
+	/// <summary>
+	/// Gets a pointer to the mesh of the object.
+	/// </summary>
+	/// <returns>A pointer to the mesh of the object.</returns>
 	CMesh* GetMesh();
 
+	/// <summary>
+	/// Adds a texture to the vector containing this objects textures. Uses the file path of the texture, as it checks to see
+	/// if there is an existing texture already using the filepath, where it will get a pointer to its ID. Otherwise, a new
+	/// texture will be created.
+	/// </summary>
+	/// <param name="_sTextureFilePath:">The file path of the texture.</param>
 	void AddTexture(std::string _sTextureFilePath);
 
+	/// <summary>
+	/// Gets a copy of the vector containing the objects texture IDs.
+	/// </summary>
+	/// <returns>A copy of the vector containing the objects texture IDs.</returns>
 	std::vector<GLuint> GetTextureIDs();
 
 	/// <summary>
@@ -74,6 +88,11 @@ public:
 	/// <param name="_uiProgram:">The program that the textures are to use.</param>
 	void BindTextures(GLuint _uiProgram);
 
+	/// <summary>
+	/// Adds a component behaviour to this object. Component behaviours act only on the object they are attached to, and typically
+	/// contain only an Update() function, where its behaviour/logic will be performed.
+	/// </summary>
+	/// <param name="_poComponentBehaviour:">A pointer to the component behaviour.</param>
 	void AddComponentBehaviour(CComponentBehaviour* _poComponentBehaviour);
 
 protected:

@@ -67,7 +67,7 @@ void CModel::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 		RenderReflections(_poSkybox);
 	}
 
-	glDrawArrays(GL_TRIANGLES, 0, m_poMesh->GetTriIndices()->size());
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)m_poMesh->GetTriIndices()->size());
 
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -172,7 +172,7 @@ void CModel::RenderLighting()
 
 void CModel::RenderReflections(CSkybox* _poSkybox)
 {
-	glActiveTexture(GL_TEXTURE0 + m_oVecTextureIDs.size());
+	glActiveTexture(GL_TEXTURE0 + (GLenum)m_oVecTextureIDs.size());
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *_poSkybox->GetTextureID());
-	glUniform1i(glGetUniformLocation(m_poProgram->uiID, "oSkyboxTexture"), m_oVecTextureIDs.size());
+	glUniform1i(glGetUniformLocation(m_poProgram->uiID, "oSkyboxTexture"), (GLint)m_oVecTextureIDs.size());
 }

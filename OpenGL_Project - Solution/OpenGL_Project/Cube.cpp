@@ -58,7 +58,7 @@ void CCube::Render(CSkybox* _poSkybox, CCamera* _poCamera)
 	glUniform1f(glGetUniformLocation(m_poProgram->uiID, "fAmbientStrength"), CLightingSettings::GetAmbientStrength());
 	glUniform3fv(glGetUniformLocation(m_poProgram->uiID, "v3fAmbientColour"), 1, glm::value_ptr(*CLightingSettings::GetAmbientColour()));
 
-	glDrawElements(GL_TRIANGLES, m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_poMesh->GetTriIndices()->size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);

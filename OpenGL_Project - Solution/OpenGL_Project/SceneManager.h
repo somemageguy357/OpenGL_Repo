@@ -89,7 +89,7 @@ public:
 	static CSkybox* GetSkybox();
 
 	/// <summary>
-	/// Deletes the skybox and all model objects in the scene. Also calls the LightSettings DestroyLights() function.
+	/// Deletes the skybox and all model objects in the scene. Also calls LightSetting's DestroyLights() function.
 	/// </summary>
 	static void DestroyScene();
 
